@@ -20,6 +20,7 @@ export class IPAddressRanges {
     public static readonly imds: string[] = ["169.254.169.254/32"];
     public static readonly ipv4Ipv6Translat: string[] = ["64:ff9b::/96", "64:ff9b:1::/48"];
     public static readonly ipv4ServiceContinuity: string[] = ["192.0.0.0/29"];
+    public static readonly broadcast: string[] = ["255.255.255.255/32"];
     public static readonly linkLocal: string[] = ["169.254.0.0/16", "fe80::/10"];
     public static readonly loopback: string[] = ["127.0.0.0/8", "::1/128"];
     public static readonly multicast: string[] = ["224.0.0.0/4", "ff00::/8"];

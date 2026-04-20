@@ -23,6 +23,7 @@ namespace Microsoft.Security.AntiSSRF
         public static readonly string[] imds = { "169.254.169.254/32" };
         public static readonly string[] ipv4Ipv6Translat = { "64:ff9b::/96", "64:ff9b:1::/48" };
         public static readonly string[] ipv4ServiceContinuity = { "192.0.0.0/29" };
+        public static readonly string[] broadcast = { "255.255.255.255/32" };
         public static readonly string[] linkLocal = { "169.254.0.0/16", "fe80::/10" };
         public static readonly string[] loopback = { "127.0.0.0/8", "::1/128" };
         public static readonly string[] multicast = { "224.0.0.0/4", "ff00::/8" };

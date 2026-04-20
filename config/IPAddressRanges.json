@@ -191,7 +191,7 @@
         "cidr": [
             "255.255.255.255/32"
         ],
-        "standaloneVariable": false,
+        "standaloneVariable": true,
         "_sources": [
             "ianaIpv4"
         ]
