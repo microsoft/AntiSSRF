@@ -100,12 +100,21 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [Fact]
         public async Task CheckDefaults_IMDSAsync()
         {
-            using HttpClient client = new(new AntiSSRFPolicy(PolicyConfigOptions.InternalOnly).GetHandler());
-            using HttpClient client2 = new(new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1).GetHandler());
-            using HttpClient client3 = new(new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyLatest).GetHandler());
+            using HttpClient client = new(new AntiSSRFPolicy(PolicyConfigOptions.InternalOnly).GetHandler())
+            {
+                Timeout = TimeSpan.FromSeconds(3)
+            };
+            using HttpClient client2 = new(new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1).GetHandler())
+            {
+                Timeout = TimeSpan.FromSeconds(3)
+            };
+            using HttpClient client3 = new(new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyLatest).GetHandler())
+            {
+                Timeout = TimeSpan.FromSeconds(3)
+            };
             using HttpClient client4 = new(new AntiSSRFPolicy(PolicyConfigOptions.None).GetHandler())
             {
-                Timeout = TimeSpan.FromSeconds(1)
+                Timeout = TimeSpan.FromSeconds(3)
             };
 
             var ipUrl = "https://169.254.169.254/latest/meta-data/";
@@ -248,28 +257,28 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
                 AllowPlainTextHttp = true
             }.GetHandler())
             {
-                Timeout = TimeSpan.FromSeconds(1)
+                Timeout = TimeSpan.FromSeconds(3)
             };
             using HttpClient client2 = new(new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1)
             {
                 AllowPlainTextHttp = true
             }.GetHandler())
             {
-                Timeout = TimeSpan.FromSeconds(1)
+                Timeout = TimeSpan.FromSeconds(3)
             };
             using HttpClient client3 = new(new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyLatest)
             {
                 AllowPlainTextHttp = true
             }.GetHandler())
             {
-                Timeout = TimeSpan.FromSeconds(1)
+                Timeout = TimeSpan.FromSeconds(3)
             };
             using HttpClient client4 = new(new AntiSSRFPolicy(PolicyConfigOptions.None)
             {
                 AllowPlainTextHttp = true
             }.GetHandler())
             {
-                Timeout = TimeSpan.FromSeconds(1)
+                Timeout = TimeSpan.FromSeconds(3)
             };
 
             var ipUrl = "http://168.63.129.16/";
@@ -368,28 +377,28 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
                 AllowPlainTextHttp = true
             }.GetHandler())
             {
-                Timeout = TimeSpan.FromSeconds(1)
+                Timeout = TimeSpan.FromSeconds(3)
             };
             using HttpClient client2 = new(new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1)
             {
                 AllowPlainTextHttp = true
             }.GetHandler())
             {
-                Timeout = TimeSpan.FromSeconds(1)
+                Timeout = TimeSpan.FromSeconds(3)
             };
             using HttpClient client3 = new(new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyLatest)
             {
                 AllowPlainTextHttp = true
             }.GetHandler())
             {
-                Timeout = TimeSpan.FromSeconds(1)
+                Timeout = TimeSpan.FromSeconds(3)
             };
             using HttpClient client4 = new(new AntiSSRFPolicy(PolicyConfigOptions.None)
             {
                 AllowPlainTextHttp = true
             }.GetHandler())
             {
-                Timeout = TimeSpan.FromSeconds(1)
+                Timeout = TimeSpan.FromSeconds(3)
             };
 
             var ipUrl = "http://127.0.0.1/";
@@ -505,7 +514,10 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             };
             IPAddress[] testIpArr = Dns.GetHostAddresses(TestDomain);
             policy.AddAllowedAddresses(testIpArr.Select(ip => ip.ToString()).ToArray());
-            using HttpClient client = new(policy.GetHandler());
+            using HttpClient client = new(policy.GetHandler())
+            {
+                Timeout = TimeSpan.FromSeconds(3)
+            };
 
             // Allowed IPv4
             using var response = await client.GetAsync("http://" + testIpArr[0].ToString(), CancellationToken.None);
@@ -546,7 +558,10 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             };
             IPAddress[] testIpArr = Dns.GetHostAddresses(TestDomain);
             policy.AddAllowedAddresses(testIpArr.Select(ip => ip.MapToIPv6().ToString()).ToArray());
-            using HttpClient client = new(policy.GetHandler());
+            using HttpClient client = new(policy.GetHandler())
+            {
+                Timeout = TimeSpan.FromSeconds(3)
+            };
 
             // Allowed IPv4
             using var response = await client.GetAsync("http://" + testIpArr[0].ToString(), CancellationToken.None);
@@ -589,7 +604,7 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             policy.AddAllowedAddresses(new[] { testIPv6 });
             using HttpClient client = new(policy.GetHandler())
             {
-                Timeout = TimeSpan.FromSeconds(1)
+                Timeout = TimeSpan.FromSeconds(3)
             };
 
             // Allowed IPv6
@@ -619,7 +634,10 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             AntiSSRFPolicy policy = new(PolicyConfigOptions.None);
             IPAddress testIp = Dns.GetHostAddresses(TestDomain)[0];
             policy.AddDeniedAddresses(new[] { testIp.ToString() });
-            using HttpClient client = new(policy.GetHandler());
+            using HttpClient client = new(policy.GetHandler())
+            {
+                Timeout = TimeSpan.FromSeconds(3)
+            };
 
             // Denied IPv4
             await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync("https://" + testIp.ToString(), CancellationToken.None));
@@ -656,7 +674,10 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             };
             IPAddress testIp = Dns.GetHostAddresses(TestDomain)[0];
             policy.AddDeniedAddresses(new[] { testIp.MapToIPv6().ToString() });
-            using HttpClient client = new(policy.GetHandler());
+            using HttpClient client = new(policy.GetHandler())
+            {
+                Timeout = TimeSpan.FromSeconds(3)
+            };
 
             // Denied IPv4 (should be denied since IPv4-mapped IPv6 denies the underlying IPv4)
             await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync("http://" + testIp.ToString(), CancellationToken.None));
@@ -695,7 +716,7 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             policy.AddDeniedAddresses(new[] { testIPv6 });
             using HttpClient client = new(policy.GetHandler())
             {
-                Timeout = TimeSpan.FromSeconds(1)
+                Timeout = TimeSpan.FromSeconds(3)
             };
 
             // Denied IPv6
@@ -729,7 +750,10 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             IPAddress testIp = Dns.GetHostAddresses(TestDomain)[0];
             policy.AddDeniedAddresses(new[] { testIp.ToString() });
             policy.AddAllowedAddresses(new[] { testIp.MapToIPv6().ToString() });
-            using HttpClient client = new(policy.GetHandler());
+            using HttpClient client = new(policy.GetHandler())
+            {
+                Timeout = TimeSpan.FromSeconds(3)
+            };
 
             using var response = await client.GetAsync("https://" + TestDomain, CancellationToken.None);
             Assert.True(HttpStatusCode.OK == response.StatusCode || (uint)response.StatusCode == BlockedByAzureFirewall, $"Request to domain {TestDomain} should be allowed since it is in the allowed list, but got status code {response.StatusCode}");

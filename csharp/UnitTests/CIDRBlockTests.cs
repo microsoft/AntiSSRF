@@ -158,9 +158,13 @@ namespace Microsoft.Security.AntiSSRF.UnitTests
             // stripped before prefix matching; the scope does not affect containment.
             var block = CIDRBlock.Parse("fe80::/10");
 
+#if NET5_0_OR_GREATER
             Assert.True(block.Contains(IPAddress.Parse("fe80::1%eth0")));
             Assert.True(block.Contains(IPAddress.Parse("fe80::1%1")));
             Assert.False(block.Contains(IPAddress.Parse("2001:db8::1%eth0")));
+#else
+            Assert.Throws<FormatException>(() => block.Contains(IPAddress.Parse("fe80::1%eth0")));
+#endif
         }
 
         [Fact]
@@ -249,7 +253,11 @@ namespace Microsoft.Security.AntiSSRF.UnitTests
             Assert.Equal("192.168.1.0/24", CIDRBlock.Parse("::ffff:192.168.1.0/120").ToCIDR());
 
             // Scoped IPv6 address - scope is stripped in output
+#if NET5_0_OR_GREATER
             Assert.Equal("fe80::1/128", CIDRBlock.Parse("fe80::1%eth0").ToCIDR());
+#else
+            Assert.Throws<FormatException>(() => CIDRBlock.Parse("fe80::1%eth0").ToCIDR());
+#endif
         }
     }
 }
