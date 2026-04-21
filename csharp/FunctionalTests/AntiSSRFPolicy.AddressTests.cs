@@ -58,14 +58,12 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         public void AddDeniedAddresses_FromIPAddressRanges_PopulatesDeniedAddresses()
         {
             AntiSSRFPolicy policy = new(PolicyConfigOptions.None);
-            string[] deniedRanges =
-            [
-                ..IPAddressRanges.imds,
-                ..IPAddressRanges.wireserver,
-                ..IPAddressRanges.loopback
-            ];
+            List<string> deniedRanges = new();
+            deniedRanges.AddRange(IPAddressRanges.imds);
+            deniedRanges.AddRange(IPAddressRanges.wireserver);
+            deniedRanges.AddRange(IPAddressRanges.loopback);
 
-            policy.AddDeniedAddresses(deniedRanges);
+            policy.AddDeniedAddresses(deniedRanges.ToArray());
 
             IReadOnlyList<string> deniedAddresses = policy.DeniedAddresses;
             Assert.Contains("169.254.169.254/32", deniedAddresses);
@@ -81,13 +79,11 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             {
                 DenyAllUnspecifiedIPs = true
             };
-            string[] allowedRanges =
-            [
-                ..IPAddressRanges.privateUse,
-                ..IPAddressRanges.documentation
-            ];
+            List<string> allowedRanges = new();
+            allowedRanges.AddRange(IPAddressRanges.privateUse);
+            allowedRanges.AddRange(IPAddressRanges.documentation);
 
-            policy.AddAllowedAddresses(allowedRanges);
+            policy.AddAllowedAddresses(allowedRanges.ToArray());
 
             IReadOnlyList<string> allowedAddresses = policy.AllowedAddresses;
             Assert.Contains("10.0.0.0/8", allowedAddresses);
