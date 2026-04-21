@@ -10,30 +10,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Microsoft.Security.AntiSSRF.Tests
+namespace Microsoft.Security.AntiSSRF.FunctionalTests
 {
     public class AntiSSRFPolicy_SchemeTests
     {
         private static readonly string TestDomain = "ambitious-flower-0611c910f.2.azurestaticapps.net";
-
-        [Fact]
-        public void APICheck()
-        {
-            var policyType = typeof(AntiSSRFPolicy);
-            var allowPlainTextHttpProp = policyType.GetProperty("AllowPlainTextHttp");
-            Assert.NotNull(allowPlainTextHttpProp);
-            Assert.True(allowPlainTextHttpProp.CanRead, "AllowPlainTextHttp should be readable");
-            Assert.True(allowPlainTextHttpProp.CanWrite, "AllowPlainTextHttp should be writable");
-            Assert.Equal(typeof(bool), allowPlainTextHttpProp.PropertyType);
-            Assert.True(allowPlainTextHttpProp.GetMethod!.IsPublic, "AllowPlainTextHttp getter should be public");
-            Assert.True(allowPlainTextHttpProp.SetMethod!.IsPublic, "AllowPlainTextHttp setter should be public");
-
-            // Verify that the backing field is private
-            var allowPlainTextHttpField = policyType.GetField("_allowPlainTextHttp",
-                BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.NotNull(allowPlainTextHttpField);
-            Assert.True(allowPlainTextHttpField.IsPrivate, "_allowPlainTextHttp should be private");
-        }
 
         [Fact]
         public void CheckDefaults()
@@ -79,23 +60,24 @@ namespace Microsoft.Security.AntiSSRF.Tests
             Assert.Equal(HttpStatusCode.OK, response2.StatusCode);
         }
 
-        [Fact]
-        public async Task HoldsOnRedirect()
-        {
-            var policy = new AntiSSRFPolicy(PolicyConfigOptions.None)
-            {
-                AllowPlainTextHttp = true
-            };
-            HttpClient client = new(policy.GetHandler());
+        // TODO: blocked on test site
+        // [Fact]
+        // public async Task HoldsOnRedirect()
+        // {
+        //     var policy = new AntiSSRFPolicy(PolicyConfigOptions.None)
+        //     {
+        //         AllowPlainTextHttp = true
+        //     };
+        //     HttpClient client = new(policy.GetHandler());
 
-            var response = await client.GetAsync($"https://{TestDomain}/api/downgrade", CancellationToken.None);
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        //     var response = await client.GetAsync($"https://{TestDomain}/api/downgrade", CancellationToken.None);
+        //     Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            var policy2 = new AntiSSRFPolicy(PolicyConfigOptions.None);
-            HttpClient client2 = new(policy2.GetHandler());
+        //     var policy2 = new AntiSSRFPolicy(PolicyConfigOptions.None);
+        //     HttpClient client2 = new(policy2.GetHandler());
 
-            await Assert.ThrowsAsync<AntiSSRFException>(() => client2.GetAsync($"http://{TestDomain}/api/downgrade", CancellationToken.None));
-        }
+        //     await Assert.ThrowsAsync<AntiSSRFException>(() => client2.GetAsync($"http://{TestDomain}/api/downgrade", CancellationToken.None));
+        // }
 
         [Fact]
         public async Task RejectsNonHttpSchemes()

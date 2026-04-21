@@ -11,14 +11,14 @@ using System.Text.Json;
 #endif
 using Xunit;
 
-namespace Microsoft.Security.AntiSSRF.Tests
+namespace Microsoft.Security.AntiSSRF.FunctionalTests
 {
     public class AntiSSRFHandlerTests
     {
         private static readonly string testUrl = "https://ambitious-flower-0611c910f.2.azurestaticapps.net/";
 
         [Fact]
-        public async Task AllowAutoRedirect()
+        public async Task AllowAutoRedirect_Tests()
         {
             var policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1);
             using var handler = policy.GetHandler();
@@ -62,7 +62,7 @@ namespace Microsoft.Security.AntiSSRF.Tests
 
 #if NET5_0_OR_GREATER
         [Fact]
-        public async Task CookieContainer()
+        public async Task CookieContainer_Tests()
         {
             var policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1);
             using var handler = policy.GetHandler();
@@ -104,7 +104,7 @@ namespace Microsoft.Security.AntiSSRF.Tests
 #endif
 
         [Fact]
-        public async Task Credentials()
+        public async Task Credentials_Tests()
         {
             var policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1);
             using var handler = policy.GetHandler();
@@ -149,7 +149,7 @@ namespace Microsoft.Security.AntiSSRF.Tests
         }
 
         [Fact]
-        public async Task MaxConnectionsPerServer()
+        public async Task MaxConnectionsPerServer_Tests()
         {
             var policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1);
             using var handler = policy.GetHandler();
@@ -183,7 +183,7 @@ namespace Microsoft.Security.AntiSSRF.Tests
         }
 
         [Fact]
-        public async Task MaxAutomaticRedirections()
+        public async Task MaxAutomaticRedirections_Tests()
         {
             var policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1);
             using var handler = policy.GetHandler();
@@ -224,7 +224,7 @@ namespace Microsoft.Security.AntiSSRF.Tests
         }
 
         [Fact]
-        public async Task MaxResponseHeadersLength()
+        public async Task MaxResponseHeadersLength_Tests()
         {
             var policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1);
             using var handler = policy.GetHandler();
@@ -265,7 +265,7 @@ namespace Microsoft.Security.AntiSSRF.Tests
 
 #if NET5_0_OR_GREATER
         [Fact]
-        public async Task UseCookies()
+        public async Task UseCookies_Tests()
         {
             var policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1);
             using var handler = policy.GetHandler();
@@ -302,74 +302,24 @@ namespace Microsoft.Security.AntiSSRF.Tests
         }
 #endif
 
-//         // Roslyn strongly dislikes hardcoding SSL protocols, even in tests :)
-//         [TestMethod]
-//         public async Task SslProtocolsTests()
-//         {
-//             var policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1);
-//             using var handler = policy.GetHandler();
+        [Fact]
+        public async Task SslProtocols_Tests()
+        {
+            var policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1);
+            using var handler = policy.GetHandler();
 
-//             // 1. Default value: None
-// #if NET5_0_OR_GREATER
-//             Assert.Equal(SslProtocols.None, handler.SslOptions.EnabledSslProtocols, "Default SslProtocols should be None");
-// #else
-//             Assert.Equal(SslProtocols.None, handler.SslProtocols, "Default SslProtocols should be None");
-// #endif
+            // 1. Default value: None
+#if NET5_0_OR_GREATER
+            Assert.Equal(SslProtocols.None, handler.SslOptions.EnabledSslProtocols);
+#else
+            Assert.Equal(SslProtocols.None, handler.SslProtocols);
+#endif
 
-//             // 2. Can set property to a new value
-// #if NET5_0_OR_GREATER
-//             handler.SslOptions.EnabledSslProtocols = SslProtocols.Tls13;
-//             Assert.Equal(SslProtocols.Tls13, handler.SslOptions.EnabledSslProtocols);
-// #else
-//             handler.SslProtocols = SslProtocols.Tls13;
-//             Assert.Equal(SslProtocols.Tls13, handler.SslProtocols);
-// #endif
-
-//             // 3. Test actual functionality - verify HTTPS requests work with specific protocols
-//             // TODO: hard to test since old protocols are rejected in pipeline
-//             using var client = new HttpClient(handler);
-//             try
-//             {
-//                 await client.GetAsync("https://httpbin.org/get", TestContext.CancellationToken);
-//                 Assert.Fail("Request should have failed due to unsupported SSL protocol");
-//             }
-//             catch (Exception e) when (e is not AntiSSRFException)
-//             {
-//                 ;
-//             }
-
-//             // 4. Cannot be edited after a request is sent
-// #if NET5_0_OR_GREATER
-//             var options = new SslClientAuthenticationOptions() {
-//                 EnabledSslProtocols = SslProtocols.None
-//             };
-//             Assert.Throws<InvalidOperationException>(() => handler.SslOptions = options);
-// #else
-//             Assert.Throws<InvalidOperationException>(() => handler.SslProtocols = SslProtocols.None);
-// #endif
-
-//             // 5. One handler shouldn't affect another
-//             using var handler3 = policy.GetHandler();
-// #if NET5_0_OR_GREATER
-//             Assert.Equal(SslProtocols.None, handler3.SslOptions.EnabledSslProtocols, "New handler should have default value");
-// #else
-//             Assert.Equal(SslProtocols.None, handler3.SslProtocols, "New handler should have default value");
-// #endif
-
-//             // 6. Cannot be edited after disposed
-//             handler3.Dispose();
-// #if NET5_0_OR_GREATER
-//             var options2 = new SslClientAuthenticationOptions() {
-//                 EnabledSslProtocols = SslProtocols.Tls13
-//             };
-//             Assert.Throws<ObjectDisposedException>(() => handler3.SslOptions = options2);
-// #else
-//             Assert.Throws<ObjectDisposedException>(() => handler3.SslProtocols = SslProtocols.Tls13);
-// #endif
-//         }
+            // Roslyn doesn't like hardcoding the SslProtocols, even in tests
+        }
 
         [Fact]
-        public async Task CheckCertificateRevocationList()
+        public async Task CheckCertificateRevocationList_Tests()
         {
             var policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1);
             using var handler = policy.GetHandler();
@@ -437,7 +387,7 @@ namespace Microsoft.Security.AntiSSRF.Tests
 
 #if NET5_0_OR_GREATER
         [Fact]
-        public async Task ConnectTimeout()
+        public async Task ConnectTimeout_Tests()
         {
             var policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1);
             using var handler = policy.GetHandler();
@@ -470,7 +420,7 @@ namespace Microsoft.Security.AntiSSRF.Tests
         }
 
         [Fact]
-        public async Task ResponseDrainTimeout()
+        public async Task ResponseDrainTimeout_Tests()
         {
             var policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1);
             using var handler = policy.GetHandler();
@@ -502,7 +452,7 @@ namespace Microsoft.Security.AntiSSRF.Tests
         }
 
         [Fact]
-        public async Task PooledConnectionIdleTimeout()
+        public async Task PooledConnectionIdleTimeout_Tests()
         {
             var policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1);
             using var handler = policy.GetHandler();
@@ -536,7 +486,7 @@ namespace Microsoft.Security.AntiSSRF.Tests
         }
 
         [Fact]
-        public async Task PooledConnectionLifetime()
+        public async Task PooledConnectionLifetime_Tests()
         {
             var policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1);
             using var handler = policy.GetHandler();
@@ -573,7 +523,7 @@ namespace Microsoft.Security.AntiSSRF.Tests
 
 #pragma warning disable CA5359 // Do not disable certificate validation - intentionally testing SSL callback behavior
         [Fact]
-        public async Task RemoteCertificateValidationCallback()
+        public async Task RemoteCertificateValidationCallback_Tests()
         {
             var policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1);
             using var handler = policy.GetHandler();
@@ -619,7 +569,7 @@ namespace Microsoft.Security.AntiSSRF.Tests
 #else
 #pragma warning disable CA5359 // Do not disable certificate validation - intentionally testing SSL callback behavior
         [Fact]
-        public async Task ServerCertificateCustomValidationCallback()
+        public async Task ServerCertificateCustomValidationCallback_Tests()
         {
             var policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1);
             using var handler = policy.GetHandler();

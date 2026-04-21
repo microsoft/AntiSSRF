@@ -42,7 +42,7 @@ namespace Microsoft.Security.AntiSSRF
         private readonly List<string> _requiredHeaders;
         private readonly List<CIDRBlock> _allowedAddresses;
         private readonly List<CIDRBlock> _deniedAddresses;
-        private bool _editLock = false;
+        private volatile bool _editLock = false;
 
         /// <summary>
         /// Gets or sets whether plain text HTTP requests are allowed. If false, any request with the "http" scheme will be blocked by the handler.
@@ -128,22 +128,22 @@ namespace Microsoft.Security.AntiSSRF
             {
                 // Block all IPs by default. Users must add their intended internal ranges.
                 case PolicyConfigOptions.InternalOnly:
-                    this.DenyAllUnspecifiedIPs = true;
-                    this.AddXFFHeader = false;
+                    DenyAllUnspecifiedIPs = true;
+                    AddXFFHeader = false;
                     break;
                 // Block recommendedV1 IPs. Blocks IMDS, so add XFF.
                 case PolicyConfigOptions.ExternalOnlyV1:
-                    this.AddDeniedAddresses(IPAddressRanges.recommendedV1);
-                    this.AddXFFHeader = true;
+                    AddDeniedAddresses(IPAddressRanges.recommendedV1);
+                    AddXFFHeader = true;
                     break;
                 // Block recommendedLatest IPs. Blocks IMDS, so add XFF.
                 case PolicyConfigOptions.ExternalOnlyLatest:
-                    this.AddDeniedAddresses(IPAddressRanges.recommendedLatest);
-                    this.AddXFFHeader = true;
+                    AddDeniedAddresses(IPAddressRanges.recommendedLatest);
+                    AddXFFHeader = true;
                     break;
                 // No restrictions by default.
                 case PolicyConfigOptions.None:
-                    this.AddXFFHeader = false;
+                    AddXFFHeader = false;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(config), config, "Invalid policy option");
@@ -166,10 +166,14 @@ namespace Microsoft.Security.AntiSSRF
             if (_editLock)
                 throw new AntiSSRFException("Can't AddAllowedAddresses after policy is used to create a handler");
 
+            List<CIDRBlock> parsedNetworks = new List<CIDRBlock>(networks.Length);
+
             foreach (string network in networks)
             {
-                _allowedAddresses.Add(CIDRBlock.Parse(network));
+                parsedNetworks.Add(CIDRBlock.Parse(network));
             }
+
+            _allowedAddresses.AddRange(parsedNetworks);
         }
 
         /// <summary>
@@ -191,10 +195,14 @@ namespace Microsoft.Security.AntiSSRF
             if (DenyAllUnspecifiedIPs)
                 throw new AntiSSRFException("Can't add denied networks when DenyAllUnspecifiedIPs is true");
 
+            List<CIDRBlock> parsedNetworks = new List<CIDRBlock>(networks.Length);
+
             foreach (string network in networks)
             {
-                _deniedAddresses.Add(CIDRBlock.Parse(network));
+                parsedNetworks.Add(CIDRBlock.Parse(network));
             }
+
+            _deniedAddresses.AddRange(parsedNetworks);
         }
 
         /// <summary>

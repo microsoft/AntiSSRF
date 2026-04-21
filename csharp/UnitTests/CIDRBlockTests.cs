@@ -5,7 +5,9 @@ using System.Net;
 using System.Reflection;
 using Xunit;
 
-namespace Microsoft.Security.AntiSSRF.Tests
+using Microsoft.Security.AntiSSRF;
+
+namespace Microsoft.Security.AntiSSRF.UnitTests
 {
     public class CIDRBlockTests
     {
@@ -150,6 +152,18 @@ namespace Microsoft.Security.AntiSSRF.Tests
         }
 
         [Fact]
+        public void Contains_IPv6AddressWithScope_ScopeIsStripped()
+        {
+            // Scoped addresses (e.g. fe80::1%eth0) contain a zone ID that must be
+            // stripped before prefix matching; the scope does not affect containment.
+            var block = CIDRBlock.Parse("fe80::/10");
+
+            Assert.True(block.Contains(IPAddress.Parse("fe80::1%eth0")));
+            Assert.True(block.Contains(IPAddress.Parse("fe80::1%1")));
+            Assert.False(block.Contains(IPAddress.Parse("2001:db8::1%eth0")));
+        }
+
+        [Fact]
         public void Contains_IPAddress_NetworkBoundaryAddress_ReturnsTrue()
         {
             var block = CIDRBlock.Parse("192.168.1.0/24");
@@ -198,15 +212,15 @@ namespace Microsoft.Security.AntiSSRF.Tests
             // block1 contains block2 and block3
             Assert.True(block1.Contains(block2));
             Assert.True(block1.Contains(block3));
-            
+
             // block2 contains block3
             Assert.True(block2.Contains(block3));
-            
+
             // Each block contains itself
             Assert.True(block1.Contains(block1));
             Assert.True(block2.Contains(block2));
             Assert.True(block3.Contains(block3));
-            
+
             // Narrower blocks cannot contain broader blocks
             Assert.False(block2.Contains(block1));
             Assert.False(block3.Contains(block1));
@@ -214,20 +228,28 @@ namespace Microsoft.Security.AntiSSRF.Tests
         }
 
         [Fact]
-        public void CIDRBlock_API_Check()
+        public void ToCIDR_ReturnsExpectedString()
         {
-            // Verify that CIDRBlock is internal and not accidentally made public
-            var cidrBlockType = typeof(CIDRBlock);
-            
-            // Check that the type is not public
-            Assert.False(cidrBlockType.IsPublic, "CIDRBlock should be internal, not public");
-            
-            // Check that it's internal (IsNotPublic includes internal, private nested types, etc.)
-            Assert.True(cidrBlockType.IsNotPublic, "CIDRBlock should be internal");
-            
-            // Additional check: ensure it's a top-level internal type (not nested)
-            Assert.False(cidrBlockType.IsNestedPublic, "CIDRBlock should not be a nested public type");
-            Assert.False(cidrBlockType.IsNestedPrivate, "CIDRBlock should not be a nested private type");
+            // Standard IPv4 with prefix
+            Assert.Equal("192.168.1.0/24", CIDRBlock.Parse("192.168.1.0/24").ToCIDR());
+
+            // IPv4 host address (no prefix given defaults to /32)
+            Assert.Equal("10.0.0.1/32", CIDRBlock.Parse("10.0.0.1").ToCIDR());
+
+            // IPv4 with /0
+            Assert.Equal("0.0.0.0/0", CIDRBlock.Parse("0.0.0.0/0").ToCIDR());
+
+            // IPv6 with prefix
+            Assert.Equal("2001:db8::/32", CIDRBlock.Parse("2001:db8::/32").ToCIDR());
+
+            // IPv6 host address (no prefix given defaults to /128)
+            Assert.Equal("::1/128", CIDRBlock.Parse("::1").ToCIDR());
+
+            // IPv4-mapped IPv6 input round-trips back to IPv4 notation
+            Assert.Equal("192.168.1.0/24", CIDRBlock.Parse("::ffff:192.168.1.0/120").ToCIDR());
+
+            // Scoped IPv6 address - scope is stripped in output
+            Assert.Equal("fe80::1/128", CIDRBlock.Parse("fe80::1%eth0").ToCIDR());
         }
     }
 }

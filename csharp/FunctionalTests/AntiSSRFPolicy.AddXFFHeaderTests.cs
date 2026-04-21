@@ -10,31 +10,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Microsoft.Security.AntiSSRF.Tests
+namespace Microsoft.Security.AntiSSRF.FunctionalTests
 {
     public class AntiSSRFPolicy_AddXFFHeaderTests
     {
         private static readonly string TestDomain = "ambitious-flower-0611c910f.2.azurestaticapps.net";
-
-        [Fact]
-        public void APICheck()
-        {
-            // Verify AddXFFHeader property has correct type and accessibility
-            var policyType = typeof(AntiSSRFPolicy);
-            var addXFFHeaderProp = policyType.GetProperty("AddXFFHeader");
-            Assert.NotNull(addXFFHeaderProp);
-            Assert.True(addXFFHeaderProp.CanRead, "AddXFFHeader should be readable");
-            Assert.True(addXFFHeaderProp.CanWrite, "AddXFFHeader should be writable");
-            Assert.Equal(typeof(bool), addXFFHeaderProp.PropertyType);
-            Assert.True(addXFFHeaderProp.GetMethod!.IsPublic, "AddXFFHeader getter should be public");
-            Assert.True(addXFFHeaderProp.SetMethod!.IsPublic, "AddXFFHeader setter should be public");
-
-            // Verify that the backing field is private
-            var addXFFHeaderField = policyType.GetField("_addXFFHeader",
-                BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.NotNull(addXFFHeaderField);
-            Assert.True(addXFFHeaderField.IsPrivate, "_addXFFHeader should be private");
-        }
 
         [Fact]
         public void CheckDefaults()

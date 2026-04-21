@@ -7,7 +7,6 @@ using System.Net.Http;
 using System.Net.Security;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Internal.AntiSSRF.PolicyHelpers;
 
 #if NET5_0_OR_GREATER
 #else

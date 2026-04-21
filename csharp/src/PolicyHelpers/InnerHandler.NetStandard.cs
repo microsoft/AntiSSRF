@@ -9,9 +9,8 @@ using System.Net.Http;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Security.AntiSSRF;
 
-namespace Microsoft.Internal.AntiSSRF.PolicyHelpers
+namespace Microsoft.Security.AntiSSRF
 {
     internal sealed class InnerHandler : HttpClientHandler
     {

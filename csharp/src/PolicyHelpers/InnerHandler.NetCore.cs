@@ -6,9 +6,8 @@
 using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
-using Microsoft.Security.AntiSSRF;
 
-namespace Microsoft.Internal.AntiSSRF.PolicyHelpers
+namespace Microsoft.Security.AntiSSRF
 {
     internal class InnerHandler
     {
@@ -29,7 +28,7 @@ namespace Microsoft.Internal.AntiSSRF.PolicyHelpers
                     Socket socket = new(SocketType.Stream, ProtocolType.Tcp) { NoDelay = true };
                     try
                     {
-                        await socket.ConnectAsync(resolvedIPs, ConnectionContext.DnsEndPoint.Port, CancellationToken); // TODO: test with all resolved IPs
+                        await socket.ConnectAsync(resolvedIPs, ConnectionContext.DnsEndPoint.Port, CancellationToken);
                         return new NetworkStream(socket, ownsSocket: true);
                     }
                     catch

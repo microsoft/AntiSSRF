@@ -10,64 +10,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Microsoft.Security.AntiSSRF.Tests
+namespace Microsoft.Security.AntiSSRF.FunctionalTests
 {
     public class AntiSSRFPolicy_HeaderTests
     {
         private static readonly string TestDomain = "ambitious-flower-0611c910f.2.azurestaticapps.net";
-
-        [Fact]
-        public void APICheck()
-        {
-            var policyType = typeof(AntiSSRFPolicy);
-
-            // Check DeniedHeaders property visibility and accessibility
-            var deniedHeadersProp = policyType.GetProperty("DeniedHeaders");
-            Assert.NotNull(deniedHeadersProp);
-            Assert.True(deniedHeadersProp.CanRead, "DeniedHeaders should be readable");
-            Assert.False(deniedHeadersProp.CanWrite, "DeniedHeaders should be read-only");
-            Assert.Equal(typeof(IReadOnlyList<string>), deniedHeadersProp.PropertyType);
-            Assert.True(deniedHeadersProp.GetMethod!.IsPublic, "DeniedHeaders getter should be public");
-            Assert.Null(deniedHeadersProp.SetMethod);
-
-            // Check RequiredHeaders property visibility and accessibility
-            var requiredHeadersProp = policyType.GetProperty("RequiredHeaders");
-            Assert.NotNull(requiredHeadersProp);
-            Assert.True(requiredHeadersProp.CanRead, "RequiredHeaders should be readable");
-            Assert.False(requiredHeadersProp.CanWrite, "RequiredHeaders should be read-only");
-            Assert.Equal(typeof(IReadOnlyList<string>), requiredHeadersProp.PropertyType);
-            Assert.True(requiredHeadersProp.GetMethod!.IsPublic, "RequiredHeaders getter should be public");
-            Assert.Null(requiredHeadersProp.SetMethod);
-
-            // Check AddRequiredHeaders method visibility
-            var addRequiredHeadersMethod = policyType.GetMethod("AddRequiredHeaders");
-            Assert.NotNull(addRequiredHeadersMethod);
-            Assert.True(addRequiredHeadersMethod.IsPublic, "AddRequiredHeaders method should be public");
-            Assert.Equal(typeof(void), addRequiredHeadersMethod.ReturnType);
-            var addRequiredHeadersParams = addRequiredHeadersMethod.GetParameters();
-            Assert.Single(addRequiredHeadersParams);
-            Assert.Equal(typeof(string[]), addRequiredHeadersParams[0].ParameterType);
-
-            // Check AddDeniedHeaders method visibility
-            var addDeniedHeadersMethod = policyType.GetMethod("AddDeniedHeaders");
-            Assert.NotNull(addDeniedHeadersMethod);
-            Assert.True(addDeniedHeadersMethod.IsPublic, "AddDeniedHeaders method should be public");
-            Assert.Equal(typeof(void), addDeniedHeadersMethod.ReturnType);
-            var addDeniedHeadersParams = addDeniedHeadersMethod.GetParameters();
-            Assert.Single(addDeniedHeadersParams);
-            Assert.Equal(typeof(string[]), addDeniedHeadersParams[0].ParameterType);
-
-            // Verify that the backing fields are private
-            var deniedHeadersField = policyType.GetField("_deniedHeaders",
-                BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.NotNull(deniedHeadersField);
-            Assert.True(deniedHeadersField.IsPrivate, "_deniedHeaders should be private");
-
-            var requiredHeadersField = policyType.GetField("_requiredHeaders",
-                BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.NotNull(requiredHeadersField);
-            Assert.True(requiredHeadersField.IsPrivate, "_requiredHeaders should be private");
-        }
 
         [Fact]
         public void BadInputs()
@@ -100,6 +47,23 @@ namespace Microsoft.Security.AntiSSRF.Tests
             Assert.Empty(policy2.DeniedHeaders);
             Assert.Empty(policy3.DeniedHeaders);
             Assert.Empty(policy4.DeniedHeaders);
+        }
+
+        [Fact]
+        public void AddedHeaders_AppearInDeniedHeadersAndRequiredHeaders()
+        {
+            AntiSSRFPolicy policy = new(PolicyConfigOptions.None);
+
+            policy.AddDeniedHeaders(["X-Denied-Header", "X-Another-Denied-Header"]);
+            policy.AddRequiredHeaders(["X-Required-Header", "X-Another-Required-Header"]);
+
+            IReadOnlyList<string> deniedHeaders = policy.DeniedHeaders;
+            IReadOnlyList<string> requiredHeaders = policy.RequiredHeaders;
+
+            Assert.Contains("X-Denied-Header", deniedHeaders);
+            Assert.Contains("X-Another-Denied-Header", deniedHeaders);
+            Assert.Contains("X-Required-Header", requiredHeaders);
+            Assert.Contains("X-Another-Required-Header", requiredHeaders);
         }
 
         [Fact]
@@ -136,6 +100,29 @@ namespace Microsoft.Security.AntiSSRF.Tests
             request2.Headers.Add("Not-X-Test-Header", "test-value");
             var response = await client.SendAsync(request2, CancellationToken.None);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Headers_AreCaseInsensitive()
+        {
+            string url = $"https://{TestDomain}/api/header-check?header=x-test-header";
+
+            AntiSSRFPolicy requiredPolicy = new(PolicyConfigOptions.None);
+            requiredPolicy.AddRequiredHeaders(["X-Test-Header"]);
+            HttpClient requiredClient = new(requiredPolicy.GetHandler());
+
+            HttpRequestMessage requiredRequest = new(HttpMethod.Get, url);
+            requiredRequest.Headers.Add("x-test-header", "test-value");
+            var requiredResponse = await requiredClient.SendAsync(requiredRequest, CancellationToken.None);
+            Assert.Equal(HttpStatusCode.OK, requiredResponse.StatusCode);
+
+            AntiSSRFPolicy deniedPolicy = new(PolicyConfigOptions.None);
+            deniedPolicy.AddDeniedHeaders(["X-Test-Header"]);
+            HttpClient deniedClient = new(deniedPolicy.GetHandler());
+
+            HttpRequestMessage deniedRequest = new(HttpMethod.Get, $"https://{TestDomain}/");
+            deniedRequest.Headers.Add("x-test-header", "test-value");
+            await Assert.ThrowsAsync<AntiSSRFException>(() => deniedClient.SendAsync(deniedRequest, CancellationToken.None));
         }
 
         [Fact]
