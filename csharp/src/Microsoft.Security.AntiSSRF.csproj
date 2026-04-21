@@ -82,7 +82,7 @@
 
     <!-- PACKAGE ASSETS -->
     <ItemGroup>
-        <None Include="icon.svg" Pack="true" PackagePath="" />
+        <None Include="microsoft.png" Pack="true" PackagePath="" />
         <None Include="README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 
