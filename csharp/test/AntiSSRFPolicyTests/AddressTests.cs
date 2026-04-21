@@ -1,0 +1,774 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
+using Xunit;
+
+namespace Microsoft.Security.AntiSSRF.Tests
+{
+    public class AntiSSRFPolicy_AddressTests
+    {
+        private static readonly string TestDomain = "ambitious-flower-0611c910f.2.azurestaticapps.net";
+        private static readonly uint BlockedByAzureFirewall = 470;
+
+        [Fact]
+        public void APICheck()
+        {
+            var policyType = typeof(AntiSSRFPolicy);
+
+            // Check AllowedAddresses property visibility and accessibility
+            var allowedAddressesProp = policyType.GetProperty("AllowedAddresses");
+            Assert.NotNull(allowedAddressesProp);
+            Assert.True(allowedAddressesProp.CanRead, "AllowedAddresses should be readable");
+            Assert.False(allowedAddressesProp.CanWrite, "AllowedAddresses should be read-only");
+            Assert.Equal(typeof(IReadOnlyList<string>), allowedAddressesProp.PropertyType);
+            Assert.True(allowedAddressesProp.GetMethod!.IsPublic, "AllowedAddresses getter should be public");
+            Assert.Null(allowedAddressesProp.SetMethod);
+
+            // Check DeniedAddresses property visibility and accessibility
+            var deniedAddressesProp = policyType.GetProperty("DeniedAddresses");
+            Assert.NotNull(deniedAddressesProp);
+            Assert.True(deniedAddressesProp.CanRead, "DeniedAddresses should be readable");
+            Assert.False(deniedAddressesProp.CanWrite, "DeniedAddresses should be read-only");
+            Assert.Equal(typeof(IReadOnlyList<string>), deniedAddressesProp.PropertyType);
+            Assert.True(deniedAddressesProp.GetMethod!.IsPublic, "DeniedAddresses getter should be public");
+            Assert.Null(deniedAddressesProp.SetMethod);
+
+            // Check DenyAllUnspecifiedIPs property visibility and accessibility
+            var denyAllUnspecifiedIPsProp = policyType.GetProperty("DenyAllUnspecifiedIPs");
+            Assert.NotNull(denyAllUnspecifiedIPsProp);
+            Assert.True(denyAllUnspecifiedIPsProp.CanRead, "DenyAllUnspecifiedIPs should be readable");
+            Assert.True(denyAllUnspecifiedIPsProp.CanWrite, "DenyAllUnspecifiedIPs should be writable");
+            Assert.Equal(typeof(bool), denyAllUnspecifiedIPsProp.PropertyType);
+            Assert.True(denyAllUnspecifiedIPsProp.GetMethod!.IsPublic, "DenyAllUnspecifiedIPs getter should be public");
+            Assert.True(denyAllUnspecifiedIPsProp.SetMethod!.IsPublic, "DenyAllUnspecifiedIPs setter should be public");
+
+            // Check AddAllowedAddresses method visibility
+            var addAllowedAddressesMethod = policyType.GetMethod("AddAllowedAddresses");
+            Assert.NotNull(addAllowedAddressesMethod);
+            Assert.True(addAllowedAddressesMethod.IsPublic, "AddAllowedAddresses method should be public");
+            Assert.Equal(typeof(void), addAllowedAddressesMethod.ReturnType);
+            var addAllowedAddressesParams = addAllowedAddressesMethod.GetParameters();
+            Assert.Single(addAllowedAddressesParams);
+            Assert.Equal(typeof(string[]), addAllowedAddressesParams[0].ParameterType);
+
+            // Check AddDeniedAddresses method visibility
+            var addDeniedAddressesMethod = policyType.GetMethod("AddDeniedAddresses");
+            Assert.NotNull(addDeniedAddressesMethod);
+            Assert.True(addDeniedAddressesMethod.IsPublic, "AddDeniedAddresses method should be public");
+            Assert.Equal(typeof(void), addDeniedAddressesMethod.ReturnType);
+            var addDeniedAddressesParams = addDeniedAddressesMethod.GetParameters();
+            Assert.Single(addDeniedAddressesParams);
+            Assert.Equal(typeof(string[]), addDeniedAddressesParams[0].ParameterType);
+
+            // Verify that the backing fields are private
+            var allowedAddressesField = policyType.GetField("_allowedAddresses",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            Assert.NotNull(allowedAddressesField);
+            Assert.True(allowedAddressesField.IsPrivate, "_allowedAddresses should be private");
+
+            var deniedAddressesField = policyType.GetField("_deniedAddresses",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            Assert.NotNull(deniedAddressesField);
+            Assert.True(deniedAddressesField.IsPrivate, "_deniedAddresses should be private");
+
+            var denyAllUnspecifiedIPsField = policyType.GetField("_denyAllUnspecifiedIPs",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            Assert.NotNull(denyAllUnspecifiedIPsField);
+            Assert.True(denyAllUnspecifiedIPsField.IsPrivate, "_denyAllUnspecifiedIPs should be private");
+        }
+
+        [Fact]
+        public void BadInputs()
+        {
+            AntiSSRFPolicy policy = new(PolicyConfigOptions.None)
+            {
+                DenyAllUnspecifiedIPs = true
+            };
+            Assert.Throws<AntiSSRFException>(() => policy.AddDeniedAddresses(["1.2.3.4"]));
+
+            // Test null arrays
+            AntiSSRFPolicy policy2 = new(PolicyConfigOptions.None);
+            Assert.Throws<ArgumentNullException>(() => policy2.AddAllowedAddresses(null));
+            Assert.Throws<ArgumentNullException>(() => policy2.AddDeniedAddresses(null));
+
+            // Test empty arrays - these should be allowed (no-op)
+            policy2.AddAllowedAddresses([]);
+            policy2.AddDeniedAddresses([]);
+
+            // Test invalid IP address formats
+            Assert.Throws<FormatException>(() => policy2.AddDeniedAddresses(["invalid.ip.address"]));
+            Assert.Throws<FormatException>(() => policy2.AddDeniedAddresses(["256.256.256.256/24"]));
+            Assert.Throws<FormatException>(() => policy2.AddDeniedAddresses(["192.168.1.1/33"])); // Invalid subnet mask
+            Assert.Throws<FormatException>(() => policy2.AddAllowedAddresses(["not-an-ip"]));
+
+            // Test array containing null addresses
+            AntiSSRFPolicy policy3 = new(PolicyConfigOptions.None);
+            Assert.Throws<ArgumentNullException>(() => policy3.AddDeniedAddresses(["192.168.1.0/24", null!, "10.0.0.0/8"]));
+            Assert.Throws<ArgumentNullException>(() => policy3.AddAllowedAddresses([null!]));
+        }
+
+        [Fact]
+        public async Task CheckDefaults_IMDSAsync()
+        {
+            using HttpClient client = new(new AntiSSRFPolicy(PolicyConfigOptions.InternalOnly).GetHandler())
+            {
+                Timeout = TimeSpan.FromSeconds(1)
+            };
+            using HttpClient client2 = new(new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1).GetHandler())
+            {
+                Timeout = TimeSpan.FromSeconds(1)
+            };
+            using HttpClient client3 = new(new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyLatest).GetHandler())
+            {
+                Timeout = TimeSpan.FromSeconds(1)
+            };
+            using HttpClient client4 = new(new AntiSSRFPolicy(PolicyConfigOptions.None).GetHandler())
+            {
+                Timeout = TimeSpan.FromSeconds(1)
+            };
+
+            var ipUrl = "https://169.254.169.254/latest/meta-data/";
+            using (var cts1 = new CancellationTokenSource(TimeSpan.FromSeconds(1)))
+                await Assert.ThrowsAsync<AntiSSRFException>(async () => await client.GetAsync(ipUrl, cts1.Token));
+            using (var cts2 = new CancellationTokenSource(TimeSpan.FromSeconds(1)))
+                await Assert.ThrowsAsync<AntiSSRFException>(async () => await client2.GetAsync(ipUrl, cts2.Token));
+            using (var cts3 = new CancellationTokenSource(TimeSpan.FromSeconds(1)))
+                await Assert.ThrowsAsync<AntiSSRFException>(async () => await client3.GetAsync(ipUrl, cts3.Token));
+            try
+            {
+                using var cts4 = new CancellationTokenSource(TimeSpan.FromMilliseconds(500));
+                var response4 = await client4.GetAsync(ipUrl, cts4.Token);
+                // If we get here, the call succeeded (no AntiSSRFException thrown as expected)
+                Assert.True(true, "Call completed successfully without throwing AntiSSRFException as expected");
+            }
+            catch (Exception ex) when (ex is not AntiSSRFException)
+            {
+                // Expected: timeout, socket exception, etc. - but not AntiSSRFException
+                Assert.True(true, "Call failed with expected non-AntiSSRF exception: " + ex.GetType().Name);
+            }
+            catch (AntiSSRFException)
+            {
+                Assert.Fail("AntiSSRFException should not be thrown for localhost since it is not in the denied list");
+            }
+
+            // var nonStandardIpUrl = "https://0xA9.0xFE.0xA9.0xFE/latest/meta-data/";
+            // using (var cts1 = new CancellationTokenSource(TimeSpan.FromSeconds(1)))
+            //     await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync(nonStandardIpUrl, cts1.Token));
+            // using (var cts2 = new CancellationTokenSource(TimeSpan.FromSeconds(1)))
+            //     await Assert.ThrowsAsync<AntiSSRFException>(() => client2.GetAsync(nonStandardIpUrl, cts2.Token));
+            // using (var cts3 = new CancellationTokenSource(TimeSpan.FromSeconds(1)))
+            //     await Assert.ThrowsAsync<AntiSSRFException>(() => client3.GetAsync(nonStandardIpUrl, cts3.Token));
+            // try
+            // {
+            //     using (var cts4 = new CancellationTokenSource(TimeSpan.FromSeconds(1)))
+            //         await client4.GetAsync(nonStandardIpUrl, cts4.Token);
+            // }
+            // catch (Exception ex) when (ex is not AntiSSRFException)
+            // {
+            //     // Expected: timeout, socket exception, etc. - but not AntiSSRFException
+            // }
+            // catch (AntiSSRFException)
+            // {
+            //     Assert.Fail("AntiSSRFException should not be thrown for localhost since it is not in the denied list");
+            // }
+
+            // var mappedIpUrl = "https://[::ffff:169.254.169.254]/latest/meta-data/";
+            // await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync(mappedIpUrl, new CancellationTokenSource(TimeSpan.FromSeconds(1)).Token));
+            // await Assert.ThrowsAsync<AntiSSRFException>(() => client2.GetAsync(mappedIpUrl, new CancellationTokenSource(TimeSpan.FromSeconds(1)).Token));
+            // await Assert.ThrowsAsync<AntiSSRFException>(() => client3.GetAsync(mappedIpUrl, new CancellationTokenSource(TimeSpan.FromSeconds(1)).Token));
+            // try
+            // {
+            //     await client4.GetAsync(mappedIpUrl, new CancellationTokenSource(TimeSpan.FromSeconds(1)).Token);
+            // }
+            // catch (Exception ex) when (ex is not AntiSSRFException)
+            // {
+            //     // Expected: timeout, socket exception, etc. - but not AntiSSRFException
+            // }
+            // catch (AntiSSRFException)
+            // {
+            //     Assert.Fail("AntiSSRFException should not be thrown for localhost since it is not in the denied list");
+            // }
+
+            // var mappedIpUrl2 = "https://[::ffff:A9FE:A9FE]/latest/meta-data/";
+            // await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync(mappedIpUrl2, CancellationToken.None));
+            // await Assert.ThrowsAsync<AntiSSRFException>(() => client2.GetAsync(mappedIpUrl2, CancellationToken.None));
+            // await Assert.ThrowsAsync<AntiSSRFException>(() => client3.GetAsync(mappedIpUrl2, CancellationToken.None));
+            // try
+            // {
+            //     await client4.GetAsync(mappedIpUrl2, CancellationToken.None);
+            // }
+            // catch (Exception ex) when (ex is not AntiSSRFException)
+            // {
+            //     // Expected: timeout, socket exception, etc. - but not AntiSSRFException
+            // }
+            // catch (AntiSSRFException)
+            // {
+            //     Assert.Fail("AntiSSRFException should not be thrown for localhost since it is not in the denied list");
+            // }
+
+            // var redirectUrl = $"https://{TestDomain}/api/imds-ip?code=301";
+            // await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync(redirectUrl, CancellationToken.None));
+            // await Assert.ThrowsAsync<AntiSSRFException>(() => client2.GetAsync(redirectUrl, CancellationToken.None));
+            // await Assert.ThrowsAsync<AntiSSRFException>(() => client3.GetAsync(redirectUrl, CancellationToken.None));
+            // try
+            // {
+            //     await client4.GetAsync(redirectUrl, CancellationToken.None);
+            // }
+            // catch (Exception ex) when (ex is not AntiSSRFException)
+            // {
+            //     // Expected: timeout, socket exception, etc. - but not AntiSSRFException
+            // }
+            // catch (AntiSSRFException)
+            // {
+            //     Assert.Fail("AntiSSRFException should not be thrown for localhost since it is not in the denied list");
+            // }
+
+            // var redirectUrl2 = $"https://{TestDomain}/api/imds-ip?code=302";
+            // await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync(redirectUrl2, CancellationToken.None));
+            // await Assert.ThrowsAsync<AntiSSRFException>(() => client2.GetAsync(redirectUrl2, CancellationToken.None));
+            // await Assert.ThrowsAsync<AntiSSRFException>(() => client3.GetAsync(redirectUrl2, CancellationToken.None));
+            // try
+            // {
+            //     await client4.GetAsync(redirectUrl2, CancellationToken.None);
+            // }
+            // catch (Exception ex) when (ex is not AntiSSRFException)
+            // {
+            //     // Expected: timeout, socket exception, etc. - but not AntiSSRFException
+            // }
+            // catch (AntiSSRFException)
+            // {
+            //     Assert.Fail("AntiSSRFException should not be thrown for localhost since it is not in the denied list");
+            // }
+
+            // var redirectUrl3 = $"https://{TestDomain}/api/imds?redirectNum=3";
+            // await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync(redirectUrl3, CancellationToken.None));
+            // await Assert.ThrowsAsync<AntiSSRFException>(() => client2.GetAsync(redirectUrl3, CancellationToken.None));
+
+            // await Assert.ThrowsAsync<AntiSSRFException>(() => client3.GetAsync(redirectUrl3, CancellationToken.None));
+            // try
+            // {
+            //     await client4.GetAsync(redirectUrl3, CancellationToken.None);
+            // }
+            // catch (Exception ex) when (ex is not AntiSSRFException)
+            // {
+            //     // Expected: timeout, socket exception, etc. - but not AntiSSRFException
+            // }
+            // catch (AntiSSRFException)
+            // {
+            //     Assert.Fail("AntiSSRFException should not be thrown for localhost since it is not in the denied list");
+            // }
+        }
+
+        [Fact]
+        public async Task CheckDefaults_WireServerAsync()
+        {
+            HttpClient client = new(new AntiSSRFPolicy(PolicyConfigOptions.InternalOnly)
+            {
+                AllowPlainTextHttp = true
+            }.GetHandler())
+            {
+                Timeout = TimeSpan.FromSeconds(1)
+            };
+            HttpClient client2 = new(new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1)
+            {
+                AllowPlainTextHttp = true
+            }.GetHandler())
+            {
+                Timeout = TimeSpan.FromSeconds(1)
+            };
+            HttpClient client3 = new(new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyLatest)
+            {
+                AllowPlainTextHttp = true
+            }.GetHandler())
+            {
+                Timeout = TimeSpan.FromSeconds(1)
+            };
+            HttpClient client4 = new(new AntiSSRFPolicy(PolicyConfigOptions.None)
+            {
+                AllowPlainTextHttp = true
+            }.GetHandler())
+            {
+                Timeout = TimeSpan.FromSeconds(1)
+            };
+
+            var ipUrl = "http://168.63.129.16/";
+            await Assert.ThrowsAsync<AntiSSRFException>(async () => await client.GetAsync(ipUrl, new CancellationTokenSource(TimeSpan.FromSeconds(1)).Token));
+            await Assert.ThrowsAsync<AntiSSRFException>(async () => await client2.GetAsync(ipUrl, new CancellationTokenSource(TimeSpan.FromSeconds(1)).Token));
+            await Assert.ThrowsAsync<AntiSSRFException>(async () => await client3.GetAsync(ipUrl, new CancellationTokenSource(TimeSpan.FromSeconds(1)).Token));
+            try
+            {
+                await client4.GetAsync(ipUrl, new CancellationTokenSource(TimeSpan.FromSeconds(1)).Token);
+            }
+            catch (Exception ex) when (ex is not AntiSSRFException)
+            {
+                // Expected: timeout, socket exception, etc. - but not AntiSSRFException
+            }
+            catch (AntiSSRFException)
+            {
+                Assert.Fail("AntiSSRFException should not be thrown for localhost since it is not in the denied list");
+            }
+
+            var nonStandardIpUrl = "http://0xA8.0x3F.0x81.0x10/";
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync(nonStandardIpUrl, new CancellationTokenSource(TimeSpan.FromSeconds(1)).Token));
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client2.GetAsync(nonStandardIpUrl, new CancellationTokenSource(TimeSpan.FromSeconds(1)).Token));
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client3.GetAsync(nonStandardIpUrl, new CancellationTokenSource(TimeSpan.FromSeconds(1)).Token));
+            try
+            {
+                await client4.GetAsync(nonStandardIpUrl, new CancellationTokenSource(TimeSpan.FromSeconds(1)).Token);
+            }
+            catch (Exception ex) when (ex is not AntiSSRFException)
+            {
+                // Expected: timeout, socket exception, etc. - but not AntiSSRFException
+            }
+            catch (AntiSSRFException)
+            {
+                Assert.Fail("AntiSSRFException should not be thrown for localhost since it is not in the denied list");
+            }
+
+
+            var mappedIpUrl = "http://[::ffff:168.63.129.16]/";
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync(mappedIpUrl, new CancellationTokenSource(TimeSpan.FromSeconds(1)).Token));
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client2.GetAsync(mappedIpUrl, new CancellationTokenSource(TimeSpan.FromSeconds(1)).Token));
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client3.GetAsync(mappedIpUrl, new CancellationTokenSource(TimeSpan.FromSeconds(1)).Token));
+            try
+            {
+                await client4.GetAsync(mappedIpUrl, new CancellationTokenSource(TimeSpan.FromSeconds(1)).Token);
+            }
+            catch (Exception ex) when (ex is not AntiSSRFException)
+            {
+                // Expected: timeout, socket exception, etc. - but not AntiSSRFException
+            }
+            catch (AntiSSRFException)
+            {
+                Assert.Fail("AntiSSRFException should not be thrown for localhost since it is not in the denied list");
+            }
+
+
+            var mappedIpUrl2 = "http://[::ffff:A83F:8110]/";
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync(mappedIpUrl2, new CancellationTokenSource(TimeSpan.FromSeconds(1)).Token));
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client2.GetAsync(mappedIpUrl2, new CancellationTokenSource(TimeSpan.FromSeconds(1)).Token));
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client3.GetAsync(mappedIpUrl2, new CancellationTokenSource(TimeSpan.FromSeconds(1)).Token));
+            try
+            {
+                await client4.GetAsync(mappedIpUrl2, new CancellationTokenSource(TimeSpan.FromSeconds(1)).Token);
+            }
+            catch (Exception ex) when (ex is not AntiSSRFException)
+            {
+                // Expected: timeout, socket exception, etc. - but not AntiSSRFException
+            }
+            catch (AntiSSRFException)
+            {
+                Assert.Fail("AntiSSRFException should not be thrown for localhost since it is not in the denied list");
+            }
+
+            var redirectUrl = $"https://{TestDomain}/api/wireserver";
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync(redirectUrl, new CancellationTokenSource(TimeSpan.FromSeconds(1)).Token));
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client2.GetAsync(redirectUrl, new CancellationTokenSource(TimeSpan.FromSeconds(1)).Token));
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client3.GetAsync(redirectUrl, new CancellationTokenSource(TimeSpan.FromSeconds(1)).Token));
+            try
+            {
+                await client4.GetAsync(redirectUrl, new CancellationTokenSource(TimeSpan.FromSeconds(1)).Token);
+            }
+            catch (Exception ex) when (ex is not AntiSSRFException)
+            {
+                // Expected: timeout, socket exception, etc. - but not AntiSSRFException
+            }
+            catch (AntiSSRFException)
+            {
+                Assert.Fail("AntiSSRFException should not be thrown for localhost since it is not in the denied list");
+            }
+        }
+
+        [Fact]
+        public async Task CheckDefaults_LocalHostAsync()
+        {
+            HttpClient client = new(new AntiSSRFPolicy(PolicyConfigOptions.InternalOnly)
+            {
+                AllowPlainTextHttp = true
+            }.GetHandler())
+            {
+                Timeout = TimeSpan.FromSeconds(1)
+            };
+            HttpClient client2 = new(new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1)
+            {
+                AllowPlainTextHttp = true
+            }.GetHandler())
+            {
+                Timeout = TimeSpan.FromSeconds(1)
+            };
+            HttpClient client3 = new(new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyLatest)
+            {
+                AllowPlainTextHttp = true
+            }.GetHandler())
+            {
+                Timeout = TimeSpan.FromSeconds(1)
+            };
+            HttpClient client4 = new(new AntiSSRFPolicy(PolicyConfigOptions.None)
+            {
+                AllowPlainTextHttp = true
+            }.GetHandler())
+            {
+                Timeout = TimeSpan.FromSeconds(1)
+            };
+
+            var ipUrl = "http://127.0.0.1/";
+            await Assert.ThrowsAsync<AntiSSRFException>(async () => await client.GetAsync(ipUrl, CancellationToken.None));
+            await Assert.ThrowsAsync<AntiSSRFException>(async () => await client2.GetAsync(ipUrl, CancellationToken.None));
+            await Assert.ThrowsAsync<AntiSSRFException>(async () => await client3.GetAsync(ipUrl, CancellationToken.None));
+            try
+            {
+                await client4.GetAsync(ipUrl, CancellationToken.None);
+            }
+            catch (Exception ex) when (ex is not AntiSSRFException)
+            {
+                // Expected: timeout, socket exception, etc. - but not AntiSSRFException
+            }
+            catch (AntiSSRFException)
+            {
+                Assert.Fail("AntiSSRFException should not be thrown for localhost since it is not in the denied list");
+            }
+
+            var nonStandardIpUrl = "http://0x7F.0x0.0x0.0x1/";
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync(nonStandardIpUrl, CancellationToken.None));
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client2.GetAsync(nonStandardIpUrl, CancellationToken.None));
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client3.GetAsync(nonStandardIpUrl, CancellationToken.None));
+            try
+            {
+                await client4.GetAsync(nonStandardIpUrl, CancellationToken.None);
+            }
+            catch (Exception ex) when (ex is not AntiSSRFException)
+            {
+                // Expected: timeout, socket exception, etc. - but not AntiSSRFException
+            }
+            catch (AntiSSRFException)
+            {
+                Assert.Fail("AntiSSRFException should not be thrown for localhost since it is not in the denied list");
+            }
+
+            var mappedIpUrl = "http://[::ffff:127.0.0.1]/";
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync(mappedIpUrl, CancellationToken.None));
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client2.GetAsync(mappedIpUrl, CancellationToken.None));
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client3.GetAsync(mappedIpUrl, CancellationToken.None));
+            try
+            {
+                await client4.GetAsync(mappedIpUrl, CancellationToken.None);
+            }
+            catch (Exception ex) when (ex is not AntiSSRFException)
+            {
+                // Expected: timeout, socket exception, etc. - but not AntiSSRFException
+            }
+            catch (AntiSSRFException)
+            {
+                Assert.Fail("AntiSSRFException should not be thrown for localhost since it is not in the denied list");
+            }
+
+            var mappedIpUrl2 = "http://[::ffff:7F00:1]/";
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync(mappedIpUrl2, CancellationToken.None));
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client2.GetAsync(mappedIpUrl2, CancellationToken.None));
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client3.GetAsync(mappedIpUrl2, CancellationToken.None));
+            try
+            {
+                await client4.GetAsync(mappedIpUrl2, CancellationToken.None);
+            }
+            catch (Exception ex) when (ex is not AntiSSRFException)
+            {
+                // Expected: timeout, socket exception, etc. - but not AntiSSRFException
+            }
+            catch (AntiSSRFException)
+            {
+                Assert.Fail("AntiSSRFException should not be thrown for localhost since it is not in the denied list");
+            }
+
+            var redirectUrl = $"https://{TestDomain}/api/localhost";
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync(redirectUrl, CancellationToken.None));
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client2.GetAsync(redirectUrl, CancellationToken.None));
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client3.GetAsync(redirectUrl, CancellationToken.None));
+            try
+            {
+                await client4.GetAsync(redirectUrl, CancellationToken.None);
+            }
+            catch (Exception ex) when (ex is not AntiSSRFException)
+            {
+                // Expected: timeout, socket exception, etc. - but not AntiSSRFException
+            }
+            catch (AntiSSRFException)
+            {
+                Assert.Fail("AntiSSRFException should not be thrown for localhost since it is not in the denied list");
+            }
+
+            var localhostUrl = "http://localhost/";
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync(localhostUrl, CancellationToken.None));
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client2.GetAsync(localhostUrl, CancellationToken.None));
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client3.GetAsync(localhostUrl, CancellationToken.None));
+            try
+            {
+                await client4.GetAsync(localhostUrl, CancellationToken.None);
+            }
+            catch (Exception ex) when (ex is not AntiSSRFException)
+            {
+                // Expected: timeout, socket exception, etc. - but not AntiSSRFException
+            }
+            catch (AntiSSRFException)
+            {
+                Assert.Fail("AntiSSRFException should not be thrown for localhost since it is not in the denied list");
+            }
+        }
+
+        [Fact]
+        public async Task Allow_IPv4()
+        {
+            AntiSSRFPolicy policy = new(PolicyConfigOptions.None)
+            {
+                AllowPlainTextHttp = true,
+                DenyAllUnspecifiedIPs = true
+            };
+            IPAddress[] testIpArr = Dns.GetHostAddresses(TestDomain);
+            policy.AddAllowedAddresses(testIpArr.Select(ip => ip.ToString()).ToArray());
+            HttpClient client = new(policy.GetHandler());
+
+            // Allowed IPv4
+            var response = await client.GetAsync("http://" + testIpArr[0].ToString(), CancellationToken.None);
+            Assert.True(response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.NotFound || (uint)response.StatusCode == BlockedByAzureFirewall, $"Request to IPv4 address {testIpArr[0]} should be allowed since it is in the allowed list, but got status code {response.StatusCode}");
+
+            // Allowed IPv4-mapped IPv6
+            try
+            {
+                var response2 = await client.GetAsync("http://[" + testIpArr[0].MapToIPv6().ToString() + "]:80", CancellationToken.None);
+                Assert.True(response2.StatusCode == HttpStatusCode.OK || response2.StatusCode == HttpStatusCode.NotFound || (uint)response2.StatusCode == BlockedByAzureFirewall, $"Request to IPv4-mapped IPv6 address {testIpArr[0].MapToIPv6()} should be allowed since it is in the allowed list, but got status code {response2.StatusCode}");
+            }
+            catch (Exception ex) when (ex is not AntiSSRFException)
+            {
+                // Pipeline struggles with some IPv6 addresses, so we catch exceptions that are not AntiSSRFException
+            }
+            catch (AntiSSRFException)
+            {
+                Assert.Fail("AntiSSRFException should not be thrown for IPv4-mapped IPv6 address since it is in the allowed list");
+            }
+
+            // Disallowed IPv4
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync("http://1.2.3.4", CancellationToken.None));
+
+            // Disallowed IPv6
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync("http://[1:2:3:4:5:6:7:8]", CancellationToken.None));
+
+            var response3 = await client.GetAsync("http://" + TestDomain, CancellationToken.None);
+            Assert.True(response3.StatusCode == HttpStatusCode.OK || response3.StatusCode == HttpStatusCode.NotFound || (uint)response3.StatusCode == BlockedByAzureFirewall, $"Request to domain {TestDomain} should be allowed since it is in the allowed list, but got status code {response3.StatusCode}");
+        }
+
+        [Fact]
+        public async Task Allow_IPv4MappedIPv6()
+        {
+            AntiSSRFPolicy policy = new(PolicyConfigOptions.None)
+            {
+                AllowPlainTextHttp = true,
+                DenyAllUnspecifiedIPs = true
+            };
+            IPAddress[] testIpArr = Dns.GetHostAddresses(TestDomain);
+            policy.AddAllowedAddresses(testIpArr.Select(ip => ip.MapToIPv6().ToString()).ToArray());
+            HttpClient client = new(policy.GetHandler());
+
+            // Allowed IPv4
+            var response = await client.GetAsync("http://" + testIpArr[0].ToString(), CancellationToken.None);
+            Assert.True(response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.NotFound || (uint)response.StatusCode == BlockedByAzureFirewall, $"Request to IPv4 address {testIpArr[0]} should be allowed since its IPv4-mapped IPv6 address is in the allowed list, but got status code {response.StatusCode}");
+
+            // Allowed IPv4-mapped IPv6
+            try
+            {
+                var response2 = await client.GetAsync("http://[" + testIpArr[0].MapToIPv6().ToString() + "]:80", CancellationToken.None);
+                Assert.True(response2.StatusCode == HttpStatusCode.OK || response2.StatusCode == HttpStatusCode.NotFound || (uint)response2.StatusCode == BlockedByAzureFirewall, $"Request to IPv4-mapped IPv6 address {testIpArr[0].MapToIPv6()} should be allowed since it is in the allowed list, but got status code {response2.StatusCode}");
+            }
+            catch (Exception ex) when (ex is not AntiSSRFException)
+            {
+                // Pipeline struggles with some IPv6 addresses, so we catch exceptions that are not AntiSSRFException
+            }
+            catch (AntiSSRFException)
+            {
+                Assert.Fail("AntiSSRFException should not be thrown for IPv4-mapped IPv6 address since it is in the allowed list");
+            }
+
+            var response3 = await client.GetAsync("https://" + TestDomain, CancellationToken.None);
+            Assert.True(response3.StatusCode == HttpStatusCode.OK || response3.StatusCode == HttpStatusCode.NotFound || (uint)response3.StatusCode == BlockedByAzureFirewall, $"Request to domain {TestDomain} should be allowed since its IPv4-mapped IPv6 address is in the allowed list, but got status code {response3.StatusCode}");
+
+            // Disallowed IPv4
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync("http://1.2.3.4", CancellationToken.None));
+
+            // Disallowed IPv6
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync("http://[1:2:3:4:5:6:7:8]", CancellationToken.None));
+        }
+
+        [Fact]
+        public async Task Allow_IPv6()
+        {
+            AntiSSRFPolicy policy = new(PolicyConfigOptions.None)
+            {
+                AllowPlainTextHttp = true,
+                DenyAllUnspecifiedIPs = true
+            };
+            string testIPv6 = "::1";
+            policy.AddAllowedAddresses(new[] { testIPv6 });
+            HttpClient client = new(policy.GetHandler())
+            {
+                Timeout = TimeSpan.FromSeconds(1)
+            };
+
+            // Allowed IPv6
+            try
+            {
+                await client.GetAsync($"http://[{testIPv6}]", CancellationToken.None);
+            }
+            catch (Exception ex) when (ex is not AntiSSRFException)
+            {
+                // Pipeline struggles with some IPv6 addresses, so we catch exceptions that are not AntiSSRFException
+            }
+            catch (AntiSSRFException)
+            {
+                Assert.Fail("AntiSSRFException should not be thrown for client3 since defaults are not used, but a timeout or socket exception may occur instead");
+            }
+
+            // Disallowed IPv4  
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync("https://1.2.3.4", CancellationToken.None));
+
+            // Disallowed different IPv6
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync("https://[2606:4700:4700::1111]", CancellationToken.None));
+        }
+
+        [Fact]
+        public async Task Deny_IPv4()
+        {
+            AntiSSRFPolicy policy = new(PolicyConfigOptions.None);
+            IPAddress testIp = Dns.GetHostAddresses(TestDomain)[0];
+            policy.AddDeniedAddresses(new[] { testIp.ToString() });
+            HttpClient client = new(policy.GetHandler());
+
+            // Denied IPv4
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync("https://" + testIp.ToString(), CancellationToken.None));
+
+            // Denied IPv4-mapped IPv6 (should also be denied since it's the same address)
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync("https://[" + testIp.MapToIPv6().ToString() + "]", CancellationToken.None));
+
+            // Allowed different IPv4
+            var response = await client.GetAsync("https://github.com", CancellationToken.None);
+            Assert.True(HttpStatusCode.OK == response.StatusCode || (uint)response.StatusCode == BlockedByAzureFirewall, $"Request to different IPv4 address should be allowed since only {testIp} is in the denied list, but got status code {response.StatusCode}");
+
+            // Allowed IPv6
+            try
+            {
+                var response2 = await client.GetAsync("https://ipv6.google.com", CancellationToken.None);
+                Assert.True(HttpStatusCode.OK == response2.StatusCode || (uint)response2.StatusCode == BlockedByAzureFirewall, $"Request to IPv6 address should be allowed since it is not in the denied list, but got status code {response2.StatusCode}");
+            }
+            catch (Exception ex) when (ex is not AntiSSRFException)
+            {
+                // Pipeline struggles with some IPv6 addresses
+            }
+            catch (AntiSSRFException)
+            {
+                Assert.Fail("AntiSSRFException should not be thrown for IPv6 address since it is not in the denied list");
+            }
+        }
+
+        [Fact]
+        public async Task Deny_IPv4MappedIPv6()
+        {
+            AntiSSRFPolicy policy = new(PolicyConfigOptions.None)
+            {
+                AllowPlainTextHttp = true
+            };
+            IPAddress testIp = Dns.GetHostAddresses(TestDomain)[0];
+            policy.AddDeniedAddresses(new[] { testIp.MapToIPv6().ToString() });
+            HttpClient client = new(policy.GetHandler());
+
+            // Denied IPv4 (should be denied since IPv4-mapped IPv6 denies the underlying IPv4)
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync("http://" + testIp.ToString(), CancellationToken.None));
+
+            // Denied IPv4-mapped IPv6
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync("http://[" + testIp.MapToIPv6().ToString() + "]", CancellationToken.None));
+
+            // Allowed different IPv4
+            var response = await client.GetAsync($"https://github.com", CancellationToken.None);
+            Assert.True(HttpStatusCode.OK == response.StatusCode || (uint)response.StatusCode == BlockedByAzureFirewall, $"Request to different IPv4 address should be allowed since it is not in the denied list, but got status code {response.StatusCode}");
+
+            // Allowed IPv6
+            try
+            {
+                var response2 = await client.GetAsync("https://ipv6.google.com", CancellationToken.None);
+                Assert.True(HttpStatusCode.OK == response2.StatusCode || (uint)response2.StatusCode == BlockedByAzureFirewall, $"Request to IPv6 address should be allowed since it is not in the denied list, but got status code {response2.StatusCode}");
+            }
+            catch (Exception ex) when (ex is not AntiSSRFException)
+            {
+                // Pipeline struggles with some IPv6 addresses
+            }
+            catch (AntiSSRFException)
+            {
+                Assert.Fail("AntiSSRFException should not be thrown for IPv6 address since it is not in the denied list");
+            }
+        }
+
+        [Fact]
+        public async Task Deny_IPv6Async()
+        {
+            AntiSSRFPolicy policy = new(PolicyConfigOptions.None)
+            {
+                AllowPlainTextHttp = true
+            };
+            string testIPv6 = "2001:4860:4860::8888";
+            policy.AddDeniedAddresses(new[] { testIPv6 });
+            HttpClient client = new(policy.GetHandler())
+            {
+                Timeout = TimeSpan.FromSeconds(1)
+            };
+
+            // Denied IPv6
+            await Assert.ThrowsAsync<AntiSSRFException>(async () => await client.GetAsync($"http://[{testIPv6}]", CancellationToken.None));
+
+            // Allowed IPv4
+            var response = await client.GetAsync($"https://{TestDomain}", CancellationToken.None);
+            Assert.True(HttpStatusCode.OK == response.StatusCode || (uint)response.StatusCode == BlockedByAzureFirewall, $"Request to domain {TestDomain} should be allowed since it is not in the denied list, but got status code {response.StatusCode}");
+
+            // Allowed different IPv6
+            try
+            {
+                var response2 = await client.GetAsync("http://[2606:4700:4700::1111]", CancellationToken.None);
+                Assert.True(HttpStatusCode.OK == response2.StatusCode || (uint)response2.StatusCode == BlockedByAzureFirewall, $"Request to different IPv6 address should be allowed since it is not in the denied list, but got status code {response2.StatusCode}");
+            }
+            catch (Exception ex) when (ex is not AntiSSRFException)
+            {
+                // Pipeline struggles with some IPv6 addresses, so we catch exceptions that are not AntiSSRFException
+            }
+            catch (AntiSSRFException)
+            {
+                Assert.Fail("AntiSSRFException should not be thrown for different IPv6 address since it is not in the denied list");
+            }
+
+        }
+
+        [Fact]
+        public async Task BothAllowAndDeny()
+        {
+            AntiSSRFPolicy policy = new(PolicyConfigOptions.None);
+            IPAddress testIp = Dns.GetHostAddresses(TestDomain)[0];
+            policy.AddDeniedAddresses(new[] { testIp.ToString() });
+            policy.AddAllowedAddresses(new[] { testIp.MapToIPv6().ToString() });
+            HttpClient client = new(policy.GetHandler());
+
+            var response = await client.GetAsync("https://" + TestDomain, CancellationToken.None);
+            Assert.True(HttpStatusCode.OK == response.StatusCode || (uint)response.StatusCode == BlockedByAzureFirewall, $"Request to domain {TestDomain} should be allowed since it is in the allowed list, but got status code {response.StatusCode}");
+        }
+
+        [Fact]
+        public void NoEditsAfterHandler()
+        {
+            var policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1);
+            var handler = policy.GetHandler();
+
+            Assert.Throws<AntiSSRFException>(() => policy.AddAllowedAddresses(["1.2.3.4"]));
+            Assert.Throws<AntiSSRFException>(() => policy.AddDeniedAddresses(["1.2.3.4"]));
+        }
+    }
+}

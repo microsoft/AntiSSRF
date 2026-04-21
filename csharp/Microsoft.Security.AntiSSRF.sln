@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Security.AntiSSRF", "src\Microsoft.Security.AntiSSRF.csproj", "{1E54F5AE-BEE8-4E3F-B0D0-ECC5172A911B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Security.AntiSSRF.Tests", "test\Microsoft.Security.AntiSSRF.Tests.csproj", "{858A81CE-4740-4335-9128-B86032EC6D43}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1E54F5AE-BEE8-4E3F-B0D0-ECC5172A911B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E54F5AE-BEE8-4E3F-B0D0-ECC5172A911B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E54F5AE-BEE8-4E3F-B0D0-ECC5172A911B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E54F5AE-BEE8-4E3F-B0D0-ECC5172A911B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{858A81CE-4740-4335-9128-B86032EC6D43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{858A81CE-4740-4335-9128-B86032EC6D43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{858A81CE-4740-4335-9128-B86032EC6D43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{858A81CE-4740-4335-9128-B86032EC6D43}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
