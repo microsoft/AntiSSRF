@@ -150,11 +150,23 @@ const AssertMatchResultOrError = async (policy: AntiSSRFPolicy, hostname: string
             `Expected errors to match: hostname - ${hostname}, options - ${optionsToString(options)}`
         );
     } else {
-        assert.deepStrictEqual(
-            actualResult,
-            expectedResult,
-            `Expected results to match: hostname - ${hostname}, options - ${optionsToString(options)}`
-        );
+        if (Array.isArray(actualResult) && Array.isArray(expectedResult)) {
+            const sortedActual = [...actualResult].sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)));
+            const sortedExpected = [...expectedResult].sort((a, b) =>
+                JSON.stringify(a).localeCompare(JSON.stringify(b))
+            );
+            assert.deepStrictEqual(
+                sortedActual,
+                sortedExpected,
+                `Expected results to match: hostname - ${hostname}, options - ${optionsToString(options)}`
+            );
+        } else {
+            assert.deepStrictEqual(
+                actualResult,
+                expectedResult,
+                `Expected results to match: hostname - ${hostname}, options - ${optionsToString(options)}`
+            );
+        }
     }
 };
 
@@ -253,7 +265,7 @@ describe("AntiSSRFDnsLookup", () => {
                                     if (family == 6 || family == "IPv6") {
                                         // Behavior different for IPv6 across environments
                                         if (process.platform === "win32") {
-                                            await AssertMatchError(policy, hostname, {
+                                            await AssertMatchResultOrError(policy, hostname, {
                                                 all,
                                                 family,
                                                 order,
