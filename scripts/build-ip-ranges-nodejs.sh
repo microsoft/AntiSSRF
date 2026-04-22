@@ -11,7 +11,7 @@ set -e
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 JSON_FILE="$SCRIPT_DIR/../config/IPAddressRanges.json"
-TS_FILE="$SCRIPT_DIR/../nodejs/config/IPAddressRanges.ts"
+TS_FILE="$SCRIPT_DIR/../nodejs/src/IPAddressRanges.ts"
 
 # Check if jq is available
 if ! command -v jq &> /dev/null; then
