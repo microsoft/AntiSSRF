@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /**
  * The Axios library allows you to create an instance with custom configuration,
  * which can include custom headers, base URLs, Agents, timeouts, interceptors,

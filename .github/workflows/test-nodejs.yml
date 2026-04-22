@@ -1,7 +1,9 @@
-name: Test Node.js
+name: Run NodeJS Tests
 
 on:
   pull_request:
+    branches:
+      - main
     paths:
       - "nodejs/**"
       - ".github/workflows/test-nodejs.yml"

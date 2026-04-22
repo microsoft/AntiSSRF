@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { lookup, LookupAddress, LookupAllOptions, LookupOneOptions } from "dns";
 import { LookupFunction } from "net";
 

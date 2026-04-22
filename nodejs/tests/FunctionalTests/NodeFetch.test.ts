@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /**
  * Library: https://github.com/node-fetch/node-fetch/tree/2.x#readme
  *

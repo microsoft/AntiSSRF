@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import assert from "assert";
 import https from "https";
 import { lookup, LookupAddress, promises } from "dns";

@@ -5,8 +5,11 @@ name: Run .NET Tests
 
 on:
   pull_request:
-  push:
-    branches: [main]
+    branches:
+      - main
+    paths:
+      - "csharp/**"
+      - ".github/workflows/test-csharp.yml"
   workflow_dispatch:
 
 jobs:

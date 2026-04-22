@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { isIPv4, isIPv6, SocketAddress } from "net";
 
 import { AntiSSRFError } from "..";

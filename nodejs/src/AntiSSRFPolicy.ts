@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { ClientRequest, AgentOptions as HttpAgentOptions } from "http";
 import { AgentOptions as HttpsAgentOptions } from "https";
 import { BlockList } from "net";
