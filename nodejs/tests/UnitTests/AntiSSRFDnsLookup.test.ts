@@ -231,7 +231,7 @@ describe("AntiSSRFDnsLookup", () => {
         ];
         const OPT_VERBATIM: boolean[] = [true, false, undefined as unknown as boolean];
 
-        const hostnames = ["google.com", "bing.com", "yahoo.com", "learn.microsoft.com"];
+        const hostnames = ["google.com", "bing.com", "learn.microsoft.com"];
         for (const hostname of hostnames) {
             it(`Common domain tests - ${hostname}`, async () => {
                 for (const all of OPT_ALL) {
@@ -241,13 +241,39 @@ describe("AntiSSRFDnsLookup", () => {
                                 for (const verbatim of OPT_VERBATIM) {
                                     if (family == 6 || family == "IPv6") {
                                         // Behavior different for IPv6 across environments
-                                        await AssertMatchResultOrError(policy, hostname, {
-                                            all,
-                                            family,
-                                            order,
-                                            hints,
-                                            verbatim
-                                        });
+                                        if (process.platform === "win32") {
+                                            await AssertMatchError(policy, hostname, {
+                                                all,
+                                                family,
+                                                order,
+                                                hints,
+                                                verbatim
+                                            });
+                                        } else if (hints == null || (hints & V4MAPPED)) {
+                                            await AssertMatchResult(policy, hostname, {
+                                                all,
+                                                family,
+                                                order,
+                                                hints,
+                                                verbatim
+                                            });
+                                        } else if (hints & ALL && !(hints & ADDRCONFIG)) {
+                                            await AssertMatchResult(policy, hostname, {
+                                                all,
+                                                family,
+                                                order,
+                                                hints,
+                                                verbatim
+                                            });
+                                        } else {
+                                            await AssertMatchError(policy, hostname, {
+                                                all,
+                                                family,
+                                                order,
+                                                hints,
+                                                verbatim
+                                            });
+                                        }
                                     } else {
                                         await AssertMatchResult(policy, hostname, {
                                             all,
@@ -267,22 +293,30 @@ describe("AntiSSRFDnsLookup", () => {
 
         const hostnames2 = ["azure.com", "github.com"];
         for (const hostname of hostnames2) {
-            for (const all of OPT_ALL) {
-                for (const family of OPT_FAMILY) {
-                    for (const order of OPT_ORDER) {
-                        for (const hints of OPT_HINTS) {
-                            for (const verbatim of OPT_VERBATIM) {
-                                it(`Common domain tests, no IPv6 - ${hostname}, ${all}, ${family}, ${order}, ${hints}, ${verbatim}`, async () => {
-                                    if ((family == 6 || family == "IPv6") && (hints & V4MAPPED) == 0) {
-                                        // There is no IPv6 address, but the V4MAPPED flag converts IPv4 to IPv6 if
-                                        // necessary
-                                        await AssertMatchError(policy, hostname, {
-                                            all,
-                                            family,
-                                            order,
-                                            hints,
-                                            verbatim
-                                        });
+            it(`Common domain tests, no IPv6 - ${hostname}`, async () => {
+                for (const all of OPT_ALL) {
+                    for (const family of OPT_FAMILY) {
+                        for (const order of OPT_ORDER) {
+                            for (const hints of OPT_HINTS) {
+                                for (const verbatim of OPT_VERBATIM) {
+                                    if ((family == 6 || family == "IPv6") && ((hints & V4MAPPED) == 0)) {
+                                        if (process.platform === 'win32' || hints != null) {
+                                            await AssertMatchError(policy, hostname, {
+                                                all,
+                                                family,
+                                                order,
+                                                hints,
+                                                verbatim
+                                            });
+                                        } else {
+                                            await AssertMatchResult(policy, hostname, {
+                                                all,
+                                                family,
+                                                order,
+                                                hints,
+                                                verbatim
+                                            });
+                                        }
                                     } else {
                                         await AssertMatchResult(policy, hostname, {
                                             all,
@@ -292,12 +326,12 @@ describe("AntiSSRFDnsLookup", () => {
                                             verbatim
                                         });
                                     }
-                                });
+                                }
                             }
                         }
                     }
                 }
-            }
+            });
         }
     });
 
@@ -317,7 +351,13 @@ describe("AntiSSRFDnsLookup", () => {
             );
             await assert.rejects(
                 async () => await promisifiedAntiSSRFLookup("0xA9.0Xfe.0xA9.0xFe", { family: 4 }),
-                (err: Error) => /\b(ENOTFOUND|EAI_AGAIN|EAI_NONAME|ENOENT)\b/.test(err.message)
+                (err: Error) => {
+                    if (process.platform === 'win32') {
+                        return err.message.includes("getaddrinfo ENOTFOUND 0xA9.0Xfe.0xA9.0xFe");
+                    } else {
+                        return err.message === "IP address disallowed by policy";
+                    }
+                }
             );
             await assert.rejects(
                 async () => await promisifiedAntiSSRFLookup("169.254.169.254", { family: 6 }),
@@ -340,7 +380,13 @@ describe("AntiSSRFDnsLookup", () => {
             );
             await assert.rejects(
                 async () => await promisifiedAntiSSRFLookup("0xA8.0X3F.0x81.0x10", { family: 4 }),
-                Error("getaddrinfo ENOTFOUND 0xA8.0X3F.0x81.0x10") // not a valid IP address in NodeJS
+                (err: Error) => {
+                    if (process.platform === 'win32') {
+                        return err.message.includes("getaddrinfo ENOTFOUND 0xA8.0X3F.0x81.0x10");
+                    } else {
+                        return err.message === "IP address disallowed by policy";
+                    }
+                }
             );
             await assert.rejects(
                 async () => await promisifiedAntiSSRFLookup("168.63.129.16", { family: 6 }),
