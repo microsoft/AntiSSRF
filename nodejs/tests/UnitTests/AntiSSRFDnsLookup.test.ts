@@ -263,40 +263,13 @@ describe("AntiSSRFDnsLookup", () => {
                             for (const hints of OPT_HINTS) {
                                 for (const verbatim of OPT_VERBATIM) {
                                     if (family == 6 || family == "IPv6") {
-                                        // Behavior different for IPv6 across environments
-                                        if (process.platform === "win32") {
-                                            await AssertMatchResultOrError(policy, hostname, {
-                                                all,
-                                                family,
-                                                order,
-                                                hints,
-                                                verbatim
-                                            });
-                                        } else if (hints == null || (hints & V4MAPPED)) {
-                                            await AssertMatchResult(policy, hostname, {
-                                                all,
-                                                family,
-                                                order,
-                                                hints,
-                                                verbatim
-                                            });
-                                        } else if (hints & ALL && !(hints & ADDRCONFIG)) {
-                                            await AssertMatchResult(policy, hostname, {
-                                                all,
-                                                family,
-                                                order,
-                                                hints,
-                                                verbatim
-                                            });
-                                        } else {
-                                            await AssertMatchError(policy, hostname, {
-                                                all,
-                                                family,
-                                                order,
-                                                hints,
-                                                verbatim
-                                            });
-                                        }
+                                        await AssertMatchResultOrError(policy, hostname, {
+                                            all,
+                                            family,
+                                            order,
+                                            hints,
+                                            verbatim
+                                        });
                                     } else {
                                         await AssertMatchResult(policy, hostname, {
                                             all,
