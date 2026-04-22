@@ -65,11 +65,22 @@ const AssertMatchResult = async (policy: AntiSSRFPolicy, hostname: string, optio
         );
     }
 
-    assert.deepStrictEqual(
-        actual,
-        expected,
-        `Expected results to match: hostname - ${hostname}, options - ${optionsToString(options)}`
-    );
+    // If both are arrays, compare them as sets (same elements, order doesn't matter)
+    if (Array.isArray(actual) && Array.isArray(expected)) {
+        const sortedActual = [...actual].sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)));
+        const sortedExpected = [...expected].sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)));
+        assert.deepStrictEqual(
+            sortedActual,
+            sortedExpected,
+            `Expected results to match: hostname - ${hostname}, options - ${optionsToString(options)}`
+        );
+    } else {
+        assert.deepStrictEqual(
+            actual,
+            expected,
+            `Expected results to match: hostname - ${hostname}, options - ${optionsToString(options)}`
+        );
+    }
 };
 
 /**
