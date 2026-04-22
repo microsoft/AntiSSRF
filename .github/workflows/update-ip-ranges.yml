@@ -8,13 +8,13 @@ on:
     paths:
       - 'config/IPAddressRanges.json'
       - 'nodejs/src/IPAddressRanges.ts'
-      - 'csharp/config/IPAddressRanges.cs'
+      - 'csharp/src/IPAddressRanges.cs'
   push:
     branches: [main]
     paths:
       - 'config/IPAddressRanges.json'
       - 'nodejs/src/IPAddressRanges.ts'
-      - 'csharp/config/IPAddressRanges.cs'
+      - 'csharp/src/IPAddressRanges.cs'
   workflow_dispatch: # Allow manual triggering
 
 jobs:
@@ -41,10 +41,10 @@ jobs:
     
     - name: Verify generated files are up-to-date
       run: |
-        if ! git diff --exit-code nodejs/src/IPAddressRanges.ts csharp/config/IPAddressRanges.cs; then
+        if ! git diff --exit-code nodejs/src/IPAddressRanges.ts csharp/src/IPAddressRanges.cs; then
           echo "❌ Generated IP address range files are out of sync!"
           echo "The following files need to be regenerated:"
-          git diff --name-only nodejs/src/IPAddressRanges.ts csharp/config/IPAddressRanges.cs
+          git diff --name-only nodejs/src/IPAddressRanges.ts csharp/src/IPAddressRanges.cs
           echo ""
           echo "Please run the following commands locally and commit the results:"
           echo "  ./scripts/build-ip-ranges-nodejs.sh"
