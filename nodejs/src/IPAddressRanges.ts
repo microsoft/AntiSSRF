@@ -9,12 +9,23 @@
  */
 export class IPAddressRanges {
     public static readonly amt: string[] = ["192.52.193.0/24", "2001:3::/32"];
-    public static readonly as112: string[] = ["192.31.196.0/24", "192.175.48.0/24", "2001:4:112::/48", "2620:4f:8000::/48"];
+    public static readonly as112: string[] = [
+        "192.31.196.0/24",
+        "192.175.48.0/24",
+        "2001:4:112::/48",
+        "2620:4f:8000::/48"
+    ];
     public static readonly benchmarking: string[] = ["198.18.0.0/15", "2001:2::/48"];
     public static readonly deprecated: string[] = ["192.88.99.0/24", "2001:10::/28"];
     public static readonly detsPrefix: string[] = ["2001:30::/28"];
     public static readonly discardOnly: string[] = ["100::/64"];
-    public static readonly documentation: string[] = ["192.0.2.0/24", "198.51.100.0/24", "203.0.113.0/24", "2001:db8::/32", "3fff::/20"];
+    public static readonly documentation: string[] = [
+        "192.0.2.0/24",
+        "198.51.100.0/24",
+        "203.0.113.0/24",
+        "2001:db8::/32",
+        "3fff::/20"
+    ];
     public static readonly dummy: string[] = ["192.0.0.8/32", "100:0:0:1::/64"];
     public static readonly ietfProtocol: string[] = ["192.0.0.0/24", "2001::/23"];
     public static readonly imds: string[] = ["169.254.169.254/32"];
@@ -35,7 +46,43 @@ export class IPAddressRanges {
     public static readonly uniqueLocal: string[] = ["fc00::/7"];
     public static readonly unspecified: string[] = ["0.0.0.0/8", "::/128"];
     public static readonly wireserver: string[] = ["168.63.129.16/32"];
-    public static readonly recommendedV1: string[] = ["0.0.0.0/8", "10.0.0.0/8", "100.64.0.0/10", "127.0.0.0/8", "168.63.129.16/32", "169.254.0.0/16", "172.16.0.0/12", "192.0.0.0/24", "192.0.2.0/24", "192.31.196.0/24", "192.52.193.0/24", "192.88.99.0/24", "192.168.0.0/16", "192.175.48.0/24", "198.18.0.0/15", "198.51.100.0/24", "203.0.113.0/24", "224.0.0.0/4", "240.0.0.0/4", "::1/128", "::/128", "64:ff9b::/96", "64:ff9b:1::/48", "100::/64", "100:0:0:1::/64", "2001::/23", "2001:db8::/32", "2002::/16", "2620:4f:8000::/48", "3fff::/20", "5f00::/16", "fc00::/7", "fe80::/10", "fec0::/10", "ff00::/8"];
+    public static readonly recommendedV1: string[] = [
+        "0.0.0.0/8",
+        "10.0.0.0/8",
+        "100.64.0.0/10",
+        "127.0.0.0/8",
+        "168.63.129.16/32",
+        "169.254.0.0/16",
+        "172.16.0.0/12",
+        "192.0.0.0/24",
+        "192.0.2.0/24",
+        "192.31.196.0/24",
+        "192.52.193.0/24",
+        "192.88.99.0/24",
+        "192.168.0.0/16",
+        "192.175.48.0/24",
+        "198.18.0.0/15",
+        "198.51.100.0/24",
+        "203.0.113.0/24",
+        "224.0.0.0/4",
+        "240.0.0.0/4",
+        "::1/128",
+        "::/128",
+        "64:ff9b::/96",
+        "64:ff9b:1::/48",
+        "100::/64",
+        "100:0:0:1::/64",
+        "2001::/23",
+        "2001:db8::/32",
+        "2002::/16",
+        "2620:4f:8000::/48",
+        "3fff::/20",
+        "5f00::/16",
+        "fc00::/7",
+        "fe80::/10",
+        "fec0::/10",
+        "ff00::/8"
+    ];
 
     /**
      * recommendedLatest always points to the latest version

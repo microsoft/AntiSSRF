@@ -1,4 +1,4 @@
-import { isIPv4, isIPv6 } from "net";
+import { isIPv4, isIPv6, SocketAddress } from "net";
 
 import { AntiSSRFError } from "..";
 
@@ -8,15 +8,15 @@ const decRegex = /^(0|[1-9][0-9]{0,2})$/;
 export class CIDRBlock {
     private _address: string;
     private _prefix: number;
-    
-    public getAddress(): string { 
-        return this._address; 
+
+    public getAddress(): string {
+        return this._address;
     }
-    
+
     public getPrefix(): number {
-        return this._prefix; 
+        return this._prefix;
     }
-    
+
     /**
      * @internal
      * @throws AntiSSRFError If arguments are null or prefix is invalid
@@ -33,7 +33,6 @@ export class CIDRBlock {
         this._address = address;
         this._prefix = prefix;
     }
-
 
     /**
      * @internal
@@ -85,7 +84,6 @@ export class CIDRBlock {
         }
     }
 
-
     /**
      * 1. x:x:x:x:x:x:x:x, where the 'x's are 1-4 hexadecimal digits
      * 2. The same as (1) with exactly 1 :: to compress 1+ consecutive groups
@@ -100,15 +98,20 @@ export class CIDRBlock {
         if (len > 2 && address[0] == "[" && address[len - 1] == "]") {
             address = address.substring(1, len - 1);
         }
-        
+
         if (isIPv6(address)) {
-            return address;
+            try {
+                const socketAddress = new SocketAddress({ address, family: "ipv6" });
+                return socketAddress.address;
+            } catch {
+                throw new AntiSSRFError(`Invalid IPv6 address: ${address}`);
+            }
         } else {
             throw new AntiSSRFError(`Invalid IPv6 address: ${address}`);
         }
     }
 
-    /** 
+    /**
      * Node.js requires IPv4 addresses to be in dotted-quad notation, with
      * exactly 4 sections, without any leading 0s.
      */

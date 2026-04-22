@@ -1,0 +1,40 @@
+name: Test Node.js
+
+on:
+  pull_request:
+    paths:
+      - "nodejs/**"
+      - ".github/workflows/test-nodejs.yml"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+    
+    steps:
+      - uses: actions/checkout@v5
+      
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: "nodejs/package-lock.json"
+      
+      - name: Install dependencies
+        working-directory: nodejs
+        run: npm ci
+      
+      - name: Run unit tests
+        working-directory: nodejs
+        run: npm run test:unit
+      
+      - name: Run functional tests
+        working-directory: nodejs
+        run: npm run test:functional

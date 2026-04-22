@@ -59,14 +59,12 @@ class LookupWithPolicy {
         return lookup(hostname, options, (err, address, family) => {
             // Errored in dns.lookup, forward error to callback
             if (err != null) {
-                // @ts-expect-error No address available
                 return callback(err, null, family);
             }
 
             // Handle the case where no valid address was found
             // null instead of error for dns.lookup backwards compatibility
             if (address == null) {
-                // @ts-expect-error No address available
                 return callback(null, null, family);
             }
 
@@ -76,7 +74,6 @@ class LookupWithPolicy {
             }
 
             // If the address is disallowed by policy, return error
-            // @ts-expect-error No address available
             return callback(new AntiSSRFError("IP address disallowed by policy"), null, family);
         });
     };

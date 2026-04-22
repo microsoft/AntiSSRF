@@ -28,7 +28,7 @@ export class AntiSSRFPolicy {
 
     /**
      * Creates a new AntiSSRF policy with the specified default configuration.
-     * 
+     *
      * @param config The policy configuration:
      * - `InternalOnly`: Denies all connections by default. Use `addAllowedAddresses()` to permit specific ranges.
      * - `ExternalOnlyV1`: Blocks recommendedV1 IP ranges. Adds the `X-Forwarded-For` header to requests when missing.
@@ -113,7 +113,7 @@ export class AntiSSRFPolicy {
             throw new AntiSSRFError("Null argument");
         }
 
-        const parsedNetworks = networks.map(n => CIDRBlock._parseCIDR(n));
+        const parsedNetworks = networks.map((n) => CIDRBlock._parseCIDR(n));
 
         for (const network of parsedNetworks) {
             this._allowedAddresses.addSubnet(network.getAddress(), network.getPrefix(), "ipv6");
@@ -144,7 +144,7 @@ export class AntiSSRFPolicy {
             throw new AntiSSRFError("Can't add denied networks when denyAllUnspecifiedIPs is true");
         }
 
-        const parsedNetworks = networks.map(n => CIDRBlock._parseCIDR(n));
+        const parsedNetworks = networks.map((n) => CIDRBlock._parseCIDR(n));
 
         for (const network of parsedNetworks) {
             this._deniedAddresses.addSubnet(network.getAddress(), network.getPrefix(), "ipv6");
@@ -219,7 +219,7 @@ export class AntiSSRFPolicy {
             }
         }
 
-        this._requiredHeaders.push(...headers.map(h => h.toLowerCase()));
+        this._requiredHeaders.push(...headers.map((h) => h.toLowerCase()));
     }
 
     /**
@@ -250,7 +250,7 @@ export class AntiSSRFPolicy {
             }
         }
 
-        this._deniedHeaders.push(...headers.map(h => h.toLowerCase()));
+        this._deniedHeaders.push(...headers.map((h) => h.toLowerCase()));
     }
 
     /**
