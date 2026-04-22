@@ -60,25 +60,6 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             Assert.Equal(HttpStatusCode.OK, response2.StatusCode);
         }
 
-        // TODO: blocked on test site
-        // [Fact]
-        // public async Task HoldsOnRedirect()
-        // {
-        //     var policy = new AntiSSRFPolicy(PolicyConfigOptions.None)
-        //     {
-        //         AllowPlainTextHttp = true
-        //     };
-        //     HttpClient client = new(policy.GetHandler());
-
-        //     var response = await client.GetAsync($"https://{TestDomain}/api/downgrade", CancellationToken.None);
-        //     Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-        //     var policy2 = new AntiSSRFPolicy(PolicyConfigOptions.None);
-        //     HttpClient client2 = new(policy2.GetHandler());
-
-        //     await Assert.ThrowsAsync<AntiSSRFException>(() => client2.GetAsync($"http://{TestDomain}/api/downgrade", CancellationToken.None));
-        // }
-
         [Fact]
         public async Task RejectsNonHttpSchemes()
         {

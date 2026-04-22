@@ -26,7 +26,7 @@
         <PackageProjectUrl>https://github.com/Microsoft/AntiSSRF</PackageProjectUrl>
         <RepositoryUrl>https://github.com/Microsoft/AntiSSRF</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageIcon>icon.svg</PackageIcon>
+        <PackageIcon>microsoft.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
@@ -67,11 +67,6 @@
         <DelaySign>true</DelaySign>
         <KeyFile>..\.config\35MSSharedLib1024.snk</KeyFile>
         <AssemblyOriginatorKeyFile>..\.config\35MSSharedLib1024.snk</AssemblyOriginatorKeyFile>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(ObpPostSigning)' == 'true' ">
-        <IsCleaning>false</IsCleaning>
-        <CopyRoleFilesDependsOn />
-        <AddRoleContentDependsOn />
     </PropertyGroup>
 
     <!-- FRAMEWORK SUPPORT -->

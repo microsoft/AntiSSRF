@@ -46,9 +46,10 @@ namespace Microsoft.Security.AntiSSRF
             Uri? redirectUri;
             for (int redirectCount = 0; redirectCount < MaxAutomaticRedirections && (redirectUri = GetRedirectUri(request.RequestUri!, response)) is not null; redirectCount++)
             {
+                HttpStatusCode statusCode = response.StatusCode;
                 response.Dispose();
                 request.RequestUri = redirectUri;
-                SetUpForRedirect(request, response.StatusCode);
+                SetUpForRedirect(request, statusCode);
 
                 if (!_policy.IsHttpRequestAllowed(request.RequestUri?.Scheme, request.Headers))
                     throw new AntiSSRFException("This request is not allowed per policy.");
@@ -93,9 +94,10 @@ namespace Microsoft.Security.AntiSSRF
             Uri? redirectUri;
             for (int redirectCount = 0; redirectCount < MaxAutomaticRedirections && (redirectUri = GetRedirectUri(request.RequestUri!, response)) is not null; redirectCount++)
             {
+                HttpStatusCode statusCode2 = response.StatusCode;
                 response.Dispose();
                 request.RequestUri = redirectUri;
-                SetUpForRedirect(request, response.StatusCode);
+                SetUpForRedirect(request, statusCode2);
 
                 if (!_policy.IsHttpRequestAllowed(request.RequestUri?.Scheme, request.Headers))
                     throw new AntiSSRFException("This request is not allowed per policy.");

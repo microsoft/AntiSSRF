@@ -275,28 +275,30 @@ namespace Microsoft.Security.AntiSSRF
 
         internal bool IsNetworkConnectionAllowed(IPAddress[]? dnsResolvedIPAddresses)
         {
-            if (dnsResolvedIPAddresses is not null)
+            if (dnsResolvedIPAddresses is null)
             {
-                foreach (IPAddress ipAddress in dnsResolvedIPAddresses)
-                {
-                    IPAddress ipv6Address = ipAddress.MapToIPv6();
+                return false;
+            }
 
-                    if (DenyAllUnspecifiedIPs)
+            foreach (IPAddress ipAddress in dnsResolvedIPAddresses)
+            {
+                IPAddress ipv6Address = ipAddress.MapToIPv6();
+
+                if (DenyAllUnspecifiedIPs)
+                {
+                    // If the address is not in an allow list, it's not allowed.
+                    if (!NetworksContainAddress(_allowedAddresses, ipv6Address))
                     {
-                        // If the address is not in an allow list, it's not allowed.
-                        if (!NetworksContainAddress(_allowedAddresses, ipv6Address))
-                        {
-                            return false;
-                        }
+                        return false;
                     }
-                    else if (_deniedAddresses != null && _deniedAddresses.Count > 0)
+                }
+                else if (_deniedAddresses != null && _deniedAddresses.Count > 0)
+                {
+                    // If the address is in a deny list and not in an allow list, it's not allowed.
+                    if (NetworksContainAddress(_deniedAddresses, ipv6Address) &&
+                        !NetworksContainAddress(_allowedAddresses, ipv6Address))
                     {
-                        // If the address is in a deny list and not in an allow list, it's not allowed.
-                        if (NetworksContainAddress(_deniedAddresses, ipv6Address) &&
-                            !NetworksContainAddress(_allowedAddresses, ipv6Address))
-                        {
-                            return false;
-                        }
+                        return false;
                     }
                 }
             }

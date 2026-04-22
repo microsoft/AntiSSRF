@@ -42,9 +42,6 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
-        // TODO: public void OnFalse()
-        // Having trouble not auto-adding XFF
-
         [Fact]
         public async Task DoesNotOverwriteHeader()
         {
@@ -62,9 +59,6 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             var contents = await response.Content.ReadAsStringAsync();
             Assert.Contains("1.2.3.4", contents);
         }
-
-        // TODO: public void HoldsOnRedirect()
-        // Having trouble not auto-adding XFF
 
         [Fact]
         public void NoEditsAfterHandler()
