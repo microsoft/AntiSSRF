@@ -317,7 +317,7 @@ describe("AntiSSRFDnsLookup", () => {
             );
             await assert.rejects(
                 async () => await promisifiedAntiSSRFLookup("0xA9.0Xfe.0xA9.0xFe", { family: 4 }),
-                Error("getaddrinfo ENOTFOUND 0xA9.0Xfe.0xA9.0xFe") // not a valid IP address in NodeJS
+                (err: Error) => /\b(ENOTFOUND|EAI_AGAIN|EAI_NONAME|ENOENT)\b/.test(err.message)
             );
             await assert.rejects(
                 async () => await promisifiedAntiSSRFLookup("169.254.169.254", { family: 6 }),

@@ -1,7 +1,7 @@
 {
     "arrowParens": "always",
     "bracketSpacing": true,
-    "endOfLine": "crlf",
+    "endOfLine": "lf",
     "printWidth": 120,
     "singleQuote": false,
     "tabWidth": 4,
