@@ -21,9 +21,9 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [Fact]
         public void Should_ReturnFalse_ForNullAndEmptyInputs()
         {
-            Assert.False(UriValidator.InAzureKeyVaultDomain((string)null!));
-            Assert.False(UriValidator.InAzureKeyVaultDomain((Uri)null!));
-            Assert.False(UriValidator.InAzureKeyVaultDomain(""));
+            Assert.False(URIValidator.InAzureKeyVaultDomain((string)null!));
+            Assert.False(URIValidator.InAzureKeyVaultDomain((Uri)null!));
+            Assert.False(URIValidator.InAzureKeyVaultDomain(""));
         }
 
         [Theory]
@@ -35,8 +35,8 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("https://securehsm.managedhsm.usgovcloudapi.net/")]
         public void Should_ReturnTrue_ForValidAzureKeyVaultDomains(string url)
         {
-            Assert.True(UriValidator.InAzureKeyVaultDomain(url));
-            Assert.True(UriValidator.InAzureKeyVaultDomain(new Uri(url)));
+            Assert.True(URIValidator.InAzureKeyVaultDomain(url));
+            Assert.True(URIValidator.InAzureKeyVaultDomain(new Uri(url)));
         }
 
         [Theory]
@@ -48,8 +48,8 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("https://securehsm.privatelink.managedhsm.usgovcloudapi.net")]
         public void Should_ReturnTrue_ForPrivateAzureKeyVaultDomains(string url)
         {
-            Assert.True(UriValidator.InAzureKeyVaultDomain(url));
-            Assert.True(UriValidator.InAzureKeyVaultDomain(new Uri(url)));
+            Assert.True(URIValidator.InAzureKeyVaultDomain(url));
+            Assert.True(URIValidator.InAzureKeyVaultDomain(new Uri(url)));
         }
 
         [Theory]
@@ -68,8 +68,8 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("https://contoso.vault.azure")]
         public void Should_ReturnFalse_ForInvalidAzureKeyVaultDomains(string url)
         {
-            Assert.False(UriValidator.InAzureKeyVaultDomain(url));
-            Assert.False(UriValidator.InAzureKeyVaultDomain(new Uri(url)));
+            Assert.False(URIValidator.InAzureKeyVaultDomain(url));
+            Assert.False(URIValidator.InAzureKeyVaultDomain(new Uri(url)));
         }
 
         [Theory]
@@ -87,12 +87,12 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("http://:accountname.vault.azure.net", false)]
         public void Should_ReturnCorrectResult_ForUrlsWithVariousComponents(string url, bool expectedResult)
         {
-            Assert.Equal(expectedResult, UriValidator.InAzureKeyVaultDomain(url));
+            Assert.Equal(expectedResult, URIValidator.InAzureKeyVaultDomain(url));
             
             // Only test Uri overload for valid URI formats
             try {
                 Uri parsedUri = new(url);
-                Assert.Equal(expectedResult, UriValidator.InAzureKeyVaultDomain(parsedUri));
+                Assert.Equal(expectedResult, URIValidator.InAzureKeyVaultDomain(parsedUri));
             }
             catch (UriFormatException)
             {
@@ -114,13 +114,13 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("https://файлы.managedhsm.usgovcloudapi.net")]
         public void Should_ReturnFalse_ForUnicodeCharactersInDomains(string url)
         {
-            Assert.False(UriValidator.InAzureKeyVaultDomain(url));
+            Assert.False(URIValidator.InAzureKeyVaultDomain(url));
             
             // Test Uri overload if the string can be parsed as a Uri
             try
             {
                 Uri parsedUri = new(url);
-                Assert.False(UriValidator.InAzureKeyVaultDomain(parsedUri));
+                Assert.False(URIValidator.InAzureKeyVaultDomain(parsedUri));
             }
             catch (UriFormatException)
             {
@@ -143,8 +143,8 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("https://GovVault1.Vault.Azure.Net")]
         public void Should_ReturnTrue_ForMixedCaseDomains(string url)
         {
-            Assert.True(UriValidator.InAzureKeyVaultDomain(url));
-            Assert.True(UriValidator.InAzureKeyVaultDomain(new Uri(url)));
+            Assert.True(URIValidator.InAzureKeyVaultDomain(url));
+            Assert.True(URIValidator.InAzureKeyVaultDomain(new Uri(url)));
         }
 
         [Theory]
@@ -161,12 +161,12 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("evil.com://accountname.vault.azure.net", false)]
         public void Should_ReturnCorrectResult_BasedOnProtocolScheme(string url, bool expectedResult)
         {
-            Assert.Equal(expectedResult, UriValidator.InAzureKeyVaultDomain(url));
+            Assert.Equal(expectedResult, URIValidator.InAzureKeyVaultDomain(url));
             
             // Only test Uri overload for schemes that can create valid Uris
             try {
                 Uri parsedUri = new(url);
-                Assert.Equal(expectedResult, UriValidator.InAzureKeyVaultDomain(parsedUri));
+                Assert.Equal(expectedResult, URIValidator.InAzureKeyVaultDomain(parsedUri));
             }
             catch (UriFormatException)
             {

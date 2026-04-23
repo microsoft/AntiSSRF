@@ -21,9 +21,9 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [Fact]
         public void Should_ReturnFalse_ForNullAndEmptyInputs()
         {
-            Assert.False(UriValidator.InAzureStorageDomain((string)null!));
-            Assert.False(UriValidator.InAzureStorageDomain((Uri)null!));
-            Assert.False(UriValidator.InAzureStorageDomain(""));
+            Assert.False(URIValidator.InAzureStorageDomain((string)null!));
+            Assert.False(URIValidator.InAzureStorageDomain((Uri)null!));
+            Assert.False(URIValidator.InAzureStorageDomain(""));
         }
 
         [Theory]
@@ -53,8 +53,8 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("https://metadata2.table.core.chinacloudapi.cn")]
         public void Should_ReturnTrue_ForValidAzureStorageDomains(string url)
         {
-            Assert.True(UriValidator.InAzureStorageDomain(url));
-            Assert.True(UriValidator.InAzureStorageDomain(new Uri(url)));
+            Assert.True(URIValidator.InAzureStorageDomain(url));
+            Assert.True(URIValidator.InAzureStorageDomain(new Uri(url)));
         }
 
         [Theory]
@@ -66,8 +66,8 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("https://backup-secondary.file.core.windows.net")]
         public void Should_ReturnTrue_ForSecondaryAzureStorageDomains(string url)
         {
-            Assert.True(UriValidator.InAzureStorageDomain(url));
-            Assert.True(UriValidator.InAzureStorageDomain(new Uri(url)));
+            Assert.True(URIValidator.InAzureStorageDomain(url));
+            Assert.True(URIValidator.InAzureStorageDomain(new Uri(url)));
         }
 
         [Theory]
@@ -79,8 +79,8 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("https://tables5-secondary.privatelink.table.storage.azure.net")]
         public void Should_ReturnTrue_ForPrivateAzureStorageDomains(string url)
         {
-            Assert.True(UriValidator.InAzureStorageDomain(url));
-            Assert.True(UriValidator.InAzureStorageDomain(new Uri(url)));
+            Assert.True(URIValidator.InAzureStorageDomain(url));
+            Assert.True(URIValidator.InAzureStorageDomain(new Uri(url)));
         }
 
         [Theory]
@@ -92,8 +92,8 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("https://demo-secondary.z0.web.core.windows.net")]
         public void Should_ReturnTrue_ForStaticSitesAndDNSZones(string url)
         {
-            Assert.True(UriValidator.InAzureStorageDomain(url));
-            Assert.True(UriValidator.InAzureStorageDomain(new Uri(url)));
+            Assert.True(URIValidator.InAzureStorageDomain(url));
+            Assert.True(URIValidator.InAzureStorageDomain(new Uri(url)));
         }
 
         [Theory]
@@ -120,8 +120,8 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("https://corp.file.core.usgovcloudapi.net.fake")]
         public void Should_ReturnFalse_ForInvalidAzureStorageDomains(string url)
         {
-            Assert.False(UriValidator.InAzureStorageDomain(url));
-            Assert.False(UriValidator.InAzureStorageDomain(new Uri(url)));
+            Assert.False(URIValidator.InAzureStorageDomain(url));
+            Assert.False(URIValidator.InAzureStorageDomain(new Uri(url)));
         }
 
         [Theory]
@@ -139,12 +139,12 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("http://:accountname.blob.core.windows.net", false)]
         public void Should_ReturnCorrectResult_ForUrlsWithVariousComponents(string url, bool expectedResult)
         {
-            Assert.Equal(expectedResult, UriValidator.InAzureStorageDomain(url));
+            Assert.Equal(expectedResult, URIValidator.InAzureStorageDomain(url));
             
             // Only test Uri overload for valid URI formats
             try {
                 Uri parsedUri = new(url);
-                Assert.Equal(expectedResult, UriValidator.InAzureStorageDomain(parsedUri));
+                Assert.Equal(expectedResult, URIValidator.InAzureStorageDomain(parsedUri));
             }
             catch (UriFormatException)
             {
@@ -163,13 +163,13 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("https://myapp.bløb.core.windows.net")]
         public void Should_ReturnFalse_ForUnicodeCharactersInDomains(string url)
         {
-            Assert.False(UriValidator.InAzureStorageDomain(url));
+            Assert.False(URIValidator.InAzureStorageDomain(url));
             
             // Test Uri overload if the string can be parsed as a Uri
             try
             {
                 Uri parsedUri = new(url);
-                Assert.False(UriValidator.InAzureStorageDomain(parsedUri));
+                Assert.False(URIValidator.InAzureStorageDomain(parsedUri));
             }
             catch (UriFormatException)
             {
@@ -189,8 +189,8 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("https://TABLES.table.core.WINDOWS.net")]
         public void Should_ReturnTrue_ForMixedCaseDomains(string url)
         {
-            Assert.True(UriValidator.InAzureStorageDomain(url));
-            Assert.True(UriValidator.InAzureStorageDomain(new Uri(url)));
+            Assert.True(URIValidator.InAzureStorageDomain(url));
+            Assert.True(URIValidator.InAzureStorageDomain(new Uri(url)));
         }
 
         [Theory]
@@ -207,12 +207,12 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("evil.com://accountname.blob.core.windows.net", false)]
         public void Should_ReturnCorrectResult_BasedOnProtocolScheme(string url, bool expectedResult)
         {
-            Assert.Equal(expectedResult, UriValidator.InAzureStorageDomain(url));
+            Assert.Equal(expectedResult, URIValidator.InAzureStorageDomain(url));
             
             // Only test Uri overload for schemes that can create valid Uris
             try {
                 Uri parsedUri = new(url);
-                Assert.Equal(expectedResult, UriValidator.InAzureStorageDomain(parsedUri));
+                Assert.Equal(expectedResult, URIValidator.InAzureStorageDomain(parsedUri));
             }
             catch (UriFormatException)
             {

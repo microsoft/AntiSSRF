@@ -25,20 +25,20 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             string nullString = null!;
             string[] nullStrings = null!;
 
-            Assert.False(UriValidator.InDomain(nullUri, "bing.com"));
-            Assert.False(UriValidator.InDomain(nullUri, ["bing.com"]));
-            Assert.False(UriValidator.InDomain(nullString, "bing.com"));
-            Assert.False(UriValidator.InDomain(nullString, ["bing.com"]));
+            Assert.False(URIValidator.InDomain(nullUri, "bing.com"));
+            Assert.False(URIValidator.InDomain(nullUri, ["bing.com"]));
+            Assert.False(URIValidator.InDomain(nullString, "bing.com"));
+            Assert.False(URIValidator.InDomain(nullString, ["bing.com"]));
 
-            Assert.False(UriValidator.InDomain("http://bing.com", (string)null!));
-            Assert.False(UriValidator.InDomain("http://bing.com", string.Empty));
-            Assert.False(UriValidator.InDomain(new Uri("http://bing.com"), (string)null!));
-            Assert.False(UriValidator.InDomain(new Uri("http://bing.com"), string.Empty));
+            Assert.False(URIValidator.InDomain("http://bing.com", (string)null!));
+            Assert.False(URIValidator.InDomain("http://bing.com", string.Empty));
+            Assert.False(URIValidator.InDomain(new Uri("http://bing.com"), (string)null!));
+            Assert.False(URIValidator.InDomain(new Uri("http://bing.com"), string.Empty));
 
-            Assert.False(UriValidator.InDomain("http://bing.com", nullStrings));
-            Assert.False(UriValidator.InDomain("http://bing.com", Array.Empty<string>()));
-            Assert.False(UriValidator.InDomain(new Uri("http://bing.com"), nullStrings));
-            Assert.False(UriValidator.InDomain(new Uri("http://bing.com"), Array.Empty<string>()));
+            Assert.False(URIValidator.InDomain("http://bing.com", nullStrings));
+            Assert.False(URIValidator.InDomain("http://bing.com", Array.Empty<string>()));
+            Assert.False(URIValidator.InDomain(new Uri("http://bing.com"), nullStrings));
+            Assert.False(URIValidator.InDomain(new Uri("http://bing.com"), Array.Empty<string>()));
         }
 
         [Theory]
@@ -49,8 +49,8 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("https://subdomain.microsoft.com", ".microsoft.com")]
         public void Should_ReturnTrue_ForValidSingleDomains(string url, string trustedDomain)
         {
-            Assert.True(UriValidator.InDomain(url, trustedDomain));
-            Assert.True(UriValidator.InDomain(new Uri(url), trustedDomain));
+            Assert.True(URIValidator.InDomain(url, trustedDomain));
+            Assert.True(URIValidator.InDomain(new Uri(url), trustedDomain));
         }
 
         [Theory]
@@ -60,8 +60,8 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("https://two.net", new[] { "one.com", ".two.net" })]
         public void Should_ReturnTrue_ForValidTrustedDomainArrays(string url, string[] trustedDomains)
         {
-            Assert.True(UriValidator.InDomain(url, trustedDomains));
-            Assert.True(UriValidator.InDomain(new Uri(url), trustedDomains));
+            Assert.True(URIValidator.InDomain(url, trustedDomains));
+            Assert.True(URIValidator.InDomain(new Uri(url), trustedDomains));
         }
 
         [Theory]
@@ -71,8 +71,8 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("https://subdomain.microsoft.com", "differentsubdomain.microsoft.com")]
         public void Should_ReturnFalse_ForInvalidSingleDomains(string url, string trustedDomain)
         {
-            Assert.False(UriValidator.InDomain(url, trustedDomain));
-            Assert.False(UriValidator.InDomain(new Uri(url), trustedDomain));
+            Assert.False(URIValidator.InDomain(url, trustedDomain));
+            Assert.False(URIValidator.InDomain(new Uri(url), trustedDomain));
         }
 
         [Theory]
@@ -82,8 +82,8 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("https://subdomain.microsoft.com", new[] { "differentsubdomain.microsoft.com" })]
         public void Should_ReturnFalse_ForInvalidTrustedDomainArrays(string url, string[] trustedDomains)
         {
-            Assert.False(UriValidator.InDomain(url, trustedDomains));
-            Assert.False(UriValidator.InDomain(new Uri(url), trustedDomains));
+            Assert.False(URIValidator.InDomain(url, trustedDomains));
+            Assert.False(URIValidator.InDomain(new Uri(url), trustedDomains));
         }
 
         [Theory]
@@ -97,10 +97,10 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("http:\\/bing.com")]
         public void Should_ReturnTrue_ForUrlsWithVariousComponents(string url)
         {
-            Assert.True(UriValidator.InDomain(url, "bing.com"));
-            Assert.True(UriValidator.InDomain(url, ["bing.com"]));
-            Assert.True(UriValidator.InDomain(new Uri(url), "bing.com"));
-            Assert.True(UriValidator.InDomain(new Uri(url), ["bing.com"]));
+            Assert.True(URIValidator.InDomain(url, "bing.com"));
+            Assert.True(URIValidator.InDomain(url, ["bing.com"]));
+            Assert.True(URIValidator.InDomain(new Uri(url), "bing.com"));
+            Assert.True(URIValidator.InDomain(new Uri(url), ["bing.com"]));
         }
 
         [Theory]
@@ -108,8 +108,8 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("http://:bing.com")]
         public void Should_ReturnFalse_ForStringOnlyInvalidUrlComponents(string url)
         {
-            Assert.False(UriValidator.InDomain(url, "bing.com"));
-            Assert.False(UriValidator.InDomain(url, ["bing.com"]));
+            Assert.False(URIValidator.InDomain(url, "bing.com"));
+            Assert.False(URIValidator.InDomain(url, ["bing.com"]));
         }
 
         [Theory]
@@ -123,8 +123,8 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("http://😉", "😉")]
         public void Should_ReturnTrue_ForUnicodeSingleDomains(string url, string trustedDomain)
         {
-            Assert.True(UriValidator.InDomain(url, trustedDomain));
-            Assert.True(UriValidator.InDomain(new Uri(url), trustedDomain));
+            Assert.True(URIValidator.InDomain(url, trustedDomain));
+            Assert.True(URIValidator.InDomain(new Uri(url), trustedDomain));
         }
 
         [Theory]
@@ -136,8 +136,8 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("http://test.你好/", new[] { "你好", "bing.com" })]
         public void Should_ReturnTrue_ForUnicodeTrustedDomainArrays(string url, string[] trustedDomains)
         {
-            Assert.True(UriValidator.InDomain(url, trustedDomains));
-            Assert.True(UriValidator.InDomain(new Uri(url), trustedDomains));
+            Assert.True(URIValidator.InDomain(url, trustedDomains));
+            Assert.True(URIValidator.InDomain(new Uri(url), trustedDomains));
         }
 
         [Theory]
@@ -146,8 +146,8 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("http://😉", "🔨")]
         public void Should_ReturnFalse_ForInvalidUnicodeSingleDomains(string url, string trustedDomain)
         {
-            Assert.False(UriValidator.InDomain(url, trustedDomain));
-            Assert.False(UriValidator.InDomain(new Uri(url), trustedDomain));
+            Assert.False(URIValidator.InDomain(url, trustedDomain));
+            Assert.False(URIValidator.InDomain(new Uri(url), trustedDomain));
         }
 
         [Theory]
@@ -156,15 +156,15 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("http://😉", new[] { "🔨", "" })]
         public void Should_ReturnFalse_ForInvalidUnicodeTrustedDomainArrays(string url, string[] trustedDomains)
         {
-            Assert.False(UriValidator.InDomain(url, trustedDomains));
-            Assert.False(UriValidator.InDomain(new Uri(url), trustedDomains));
+            Assert.False(URIValidator.InDomain(url, trustedDomains));
+            Assert.False(URIValidator.InDomain(new Uri(url), trustedDomains));
         }
 
         [Theory]
         [InlineData("http://evil.c℁.core.azure.net", "azure.net")]
         public void Should_ReturnFalse_ForStringOnlyInvalidUnicodeDomains(string url, string trustedDomain)
         {
-            Assert.False(UriValidator.InDomain(url, trustedDomain));
+            Assert.False(URIValidator.InDomain(url, trustedDomain));
         }
 
         [Theory]
@@ -176,8 +176,8 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("http://hello.COM", "HELLO.com")]
         public void Should_ReturnTrue_ForMixedCaseSingleDomains(string url, string trustedDomain)
         {
-            Assert.True(UriValidator.InDomain(url, trustedDomain));
-            Assert.True(UriValidator.InDomain(new Uri(url), trustedDomain));
+            Assert.True(URIValidator.InDomain(url, trustedDomain));
+            Assert.True(URIValidator.InDomain(new Uri(url), trustedDomain));
         }
 
         [Theory]
@@ -187,8 +187,8 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("http://hello.COM", new[] { "HELLO.com" })]
         public void Should_ReturnTrue_ForMixedCaseTrustedDomainArrays(string url, string[] trustedDomains)
         {
-            Assert.True(UriValidator.InDomain(url, trustedDomains));
-            Assert.True(UriValidator.InDomain(new Uri(url), trustedDomains));
+            Assert.True(URIValidator.InDomain(url, trustedDomains));
+            Assert.True(URIValidator.InDomain(new Uri(url), trustedDomains));
         }
 
         [Theory]
@@ -198,8 +198,8 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("wss://bing.com", "bing.com")]
         public void Should_ReturnTrue_ForAllowedProtocols(string url, string trustedDomain)
         {
-            Assert.True(UriValidator.InDomain(url, trustedDomain));
-            Assert.True(UriValidator.InDomain(new Uri(url), trustedDomain));
+            Assert.True(URIValidator.InDomain(url, trustedDomain));
+            Assert.True(URIValidator.InDomain(new Uri(url), trustedDomain));
         }
 
         [Theory]
@@ -212,8 +212,8 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("evil.com://bing.com", "bing.com")]
         public void Should_ReturnFalse_ForDisallowedProtocols(string url, string trustedDomain)
         {
-            Assert.False(UriValidator.InDomain(url, trustedDomain));
-            Assert.False(UriValidator.InDomain(new Uri(url), trustedDomain));
+            Assert.False(URIValidator.InDomain(url, trustedDomain));
+            Assert.False(URIValidator.InDomain(new Uri(url), trustedDomain));
         }
 
         [Theory]
@@ -226,7 +226,7 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("\\\\\\.\\a\\a\\a\\", "somedomain.com")]
         public void Should_ReturnFalse_ForFilePathStrings(string url, string trustedDomain)
         {
-            Assert.False(UriValidator.InDomain(url, trustedDomain));
+            Assert.False(URIValidator.InDomain(url, trustedDomain));
         }
     }
 }

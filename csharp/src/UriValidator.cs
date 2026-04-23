@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 
 namespace Microsoft.Security.AntiSSRF
 {
-    public static class UriValidator
+    public static class URIValidator
     {
         /// <summary>
         /// Validates if the given URI belongs to the specified domain.
