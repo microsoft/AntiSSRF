@@ -33,6 +33,10 @@ export class CIDRBlock {
             throw new AntiSSRFError("Invalid prefix");
         }
 
+        if (!isIPv6(address)) {
+            throw new AntiSSRFError(`Invalid IPv6 address: ${address}`);
+        }
+
         this._address = address;
         this._prefix = prefix;
     }
@@ -55,6 +59,7 @@ export class CIDRBlock {
 
     /**
      * @internal
+     * Returns a tuple with (IP address mapped to IPv6, the original IP version)
      * @throws AntiSSRFError If the CIDR string is null, malformed, or contains invalid components
      */
     public static _parseCIDR(cidr: string): CIDRBlock {
@@ -72,6 +77,7 @@ export class CIDRBlock {
                 if (decRegex.test(parts[1])) {
                     const prefixLength = parseInt(parts[1], 10);
                     if (oldVersion === 4) {
+                        // IPv4-mapped IPv6 address, adjust the prefix length accordingly
                         return new CIDRBlock(ipv6, prefixLength + 96);
                     } else {
                         return new CIDRBlock(ipv6, prefixLength);

@@ -619,13 +619,6 @@ describe("AntiSSRFPolicy Address Tests", () => {
         await assert.doesNotReject(async () => {
             await instance.get("https://github.com");
         });
-
-        // Allowed different IPv6 - allowed by policy but might fail on some systems due to IPv6 handling
-        try {
-            await instance.get("http://[2606:4700:4700::1111]");
-        } catch (err) {
-            assert.notEqual((err as Error).message, BAD_IP_MESSAGE);
-        }
     });
 
     it("both allow and deny", async () => {

@@ -146,7 +146,7 @@ namespace Microsoft.Security.AntiSSRF
                     AddXFFHeader = false;
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(config), config, "Invalid policy option");
+                    throw new ArgumentOutOfRangeException(nameof(config), config, "Argument must be a valid PolicyConfigOptions value");
             }
         }
 
@@ -224,10 +224,10 @@ namespace Microsoft.Security.AntiSSRF
             foreach (string headerName in deniedHeaders)
             {
                 if (headerName is null)
-                    throw new ArgumentNullException(nameof(deniedHeaders), "Header name cannot be null");
+                    throw new ArgumentNullException(nameof(deniedHeaders), "Headers cannot be null");
                 
                 if (string.IsNullOrWhiteSpace(headerName))
-                    throw new ArgumentException($"Header name cannot be empty or whitespace", nameof(deniedHeaders));
+                    throw new ArgumentException($"Headers cannot be empty or whitespace", nameof(deniedHeaders));
             }
 
             _deniedHeaders.AddRange(deniedHeaders);
@@ -252,10 +252,10 @@ namespace Microsoft.Security.AntiSSRF
             foreach (string headerName in requiredHeaders)
             {
                 if (headerName is null)
-                    throw new ArgumentNullException(nameof(requiredHeaders), "Header name cannot be null");
+                    throw new ArgumentNullException(nameof(requiredHeaders), "Headers cannot be null");
                 
                 if (string.IsNullOrWhiteSpace(headerName))
-                    throw new ArgumentException($"Header name cannot be empty or whitespace", nameof(requiredHeaders));
+                    throw new ArgumentException($"Headers cannot be empty or whitespace", nameof(requiredHeaders));
             }
 
             _requiredHeaders.AddRange(requiredHeaders);

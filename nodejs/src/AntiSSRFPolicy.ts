@@ -71,7 +71,7 @@ export class AntiSSRFPolicy {
             case PolicyConfigOptions.None:
                 break;
             default:
-                throw new AntiSSRFError("Invalid policy option");
+                throw new AntiSSRFError("Argument must be a valid PolicyConfigOptions value");
         }
     }
 
@@ -215,10 +215,10 @@ export class AntiSSRFPolicy {
 
         for (const header of headers) {
             if (header == null) {
-                throw new AntiSSRFError("Header cannot be null or undefined");
+                throw new AntiSSRFError("Headers cannot be null or undefined");
             }
             if (header.trim() === "") {
-                throw new AntiSSRFError("Header cannot be an empty string");
+                throw new AntiSSRFError("Headers cannot be an empty string");
             }
         }
 
@@ -246,10 +246,10 @@ export class AntiSSRFPolicy {
 
         for (const header of headers) {
             if (header == null) {
-                throw new AntiSSRFError("Header cannot be null or undefined");
+                throw new AntiSSRFError("Headers cannot be null or undefined");
             }
             if (header.trim() === "") {
-                throw new AntiSSRFError("Header cannot be an empty string");
+                throw new AntiSSRFError("Headers cannot be an empty string");
             }
         }
 
