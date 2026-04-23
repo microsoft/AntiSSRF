@@ -1,0 +1,46 @@
+{
+    "azureKeyVault": {
+        "domains": [
+
+        ],
+        "_sources": {
+            "keyVault": {
+                "title": "Azure Key Vault keys, secrets, and certificates overview",
+                "url": "https://learn.microsoft.com/en-us/azure/key-vault/general/about-keys-secrets-certificates",
+                "last_updated": "2026-04-09"
+            }
+        }
+    },
+    "azureStorage": {
+        "domains": [
+
+        ],
+        "_sources": {
+            "storageAccounts": {
+                "title": "Overview of storage accounts",
+                "url": "https://learn.microsoft.com/en-us/azure/storage/common/storage-account-overview",
+                "last_updated": "2026-02-03"
+            },
+            "privateEndpoints": {
+                "title": "Use private endpoints for Azure Storage",
+                "url": "https://learn.microsoft.com/en-us/azure/storage/common/storage-private-endpoints",
+                "last_updated": "2025-07-16"
+            },
+            "staticWebsite": {
+                "title": "Static website hosting in Azure Storage",
+                "url": "https://learn.microsoft.com/en-us/azure/storage/blobs/storage-blob-static-website",
+                "last_updated": "2025-04-14"
+            },
+            "azureGovernment": {
+                "title": "Develop with Storage API on Azure Government",
+                "url": "https://learn.microsoft.com/en-us/azure/azure-government/documentation-government-get-started-connect-to-storage",
+                "last_updated": "2024-10-16"
+            },
+            "azureChina": {
+                "title": "Overview of storage accounts",
+                "url": "https://docs.azure.cn/en-us/storage/common/storage-account-overview",
+                "last_updated": "2026-02-26"
+            }
+        }
+    }
+}
