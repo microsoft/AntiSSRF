@@ -36,10 +36,6 @@ jobs:
         working-directory: nodejs
         run: npm ci
       
-      - name: Run unit tests
+      - name: Run tests
         working-directory: nodejs
-        run: npm run test:unit
-      
-      - name: Run functional tests
-        working-directory: nodejs
-        run: npm run test:functional
+        run: npm run test
