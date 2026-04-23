@@ -39,7 +39,8 @@ jobs:
           -not -path "./.git/*" \
           -not -path "./node_modules/*" \
           -not -path "./**/bin/*" \
-          -not -path "./**/obj/*")
+          -not -path "./**/obj/*" \
+          -not -path "./docs/*")
         
         missing_headers=()
         

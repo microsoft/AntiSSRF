@@ -4,30 +4,65 @@ Thank you for your interest in contributing to the AntiSSRF project! This guide 
 
 ## Development Setup
 
-1. Clone the repository
-2. Install dependencies for your target language (C# or Node.js)
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+### C# AntiSSRF Library
 
-## Updating IP Address Ranges
+From the `./csharp` directory:
+
+**Prerequisites:**
+- .NET 8.0 SDK or later
+
+**Commands:**
+- **Build:** `dotnet build Microsoft.Security.AntiSSRF.sln`
+- **Unit tests:** `dotnet test`
+
+### Node.js (TypeScript)
+
+From the `./nodejs` directory:
+
+**Prerequisites:**
+- Node.js 20+
+
+**Commands:**
+- **Install dependencies:** `npm install`
+- **Build TypeScript:** `npm run build`
+- **Unit tests:** `npm test`
+- **Lint code:** `npm run lint`
+- **Format code:** `npm run format`
+
+## Updating IP Address Ranges or Domains
 
 The IP address ranges are maintained in [`config/IPAddressRanges.json`](config/IPAddressRanges.json) and automatically generated into language-specific files.
 
-### Prerequisites
-Install `jq`: `brew install jq` (macOS) or `sudo apt-get install jq` (Linux)
+The Azure SDK domains are maintained in [`config/Domains.json`](config/Domains.json) and automatically generated into language-specific files.
 
-### Process
-1. **Edit** [`config/IPAddressRanges.json`](config/IPAddressRanges.json)
-2. **Regenerate** the code files:
-   ```bash
-   ./scripts/build-ip-ranges-nodejs.sh
-   ./scripts/build-ip-ranges-cs.sh
-   ```
-3. **Commit** all changes (JSON + generated files):
-   ```bash
-   git add config/IPAddressRanges.json nodejs/config/IPAddressRanges.ts csharp/config/IPAddressRanges.cs
-   git commit -m "Update IP address ranges"
-   ```
+**Prerequisites:**
+- `jq`: `brew install jq` (macOS) or `sudo apt-get install jq` (Linux)
+
+**Commands:**
+- **Regenerate IP Address Ranges:**
+```bash
+./scripts/build-ip-ranges-cs.sh
+./scripts/build-ip-ranges-nodejs.sh
+```
+- **Regenerate Domains:**
+```bash
+./scripts/build-domains-cs.sh
+./scripts/build-domains-nodejs.sh
+```
 
 **Important**: The GitHub Actions workflow will fail if generated files don't match the source JSON.
+
+## Editing Documentation
+
+The project documentation is built with Jekyll and uses the Just the Docs theme.
+
+From the `./docs` directory:
+
+**Prerequisites:**
+- Ruby 2.7+ and Bundler
+
+**Commands:**
+- **Install dependencies:** `bundle install`
+- **Test locally:** `bundle exec jekyll serve`
+
+The documentation will be available at `http://localhost:4000` when running the local server.

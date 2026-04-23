@@ -1,0 +1,50 @@
+---
+layout: default
+title: addDeniedAddresses
+parent: Methods
+grand_parent: AntiSSRFPolicy
+great_grand_parent: Node.js API Reference
+nav_order: 1
+description: "addDeniedAddresses method documentation"
+---
+
+# AntiSSRFPolicy.addDeniedAddresses Method
+
+## Definition
+
+Adds to a list of IPv4/IPv6 addresses or subnets to be explicitly blocked by the policy.
+
+```js
+addDeniedAddresses(networks: string[]): void
+```
+
+{: .note }
+> `allowedAddresses` takes precedence over `deniedAddresses`, if if an IP address matches both, it will be considered allowed by the policy.
+
+{: .note }
+> `denyAllUnspecifiedIPs` takes precedence over `deniedAddresses`, if `denyAllUnspecifiedIPs` is `true`, `deniedAddresses` will not be considered when determining if an IP address is allowed or blocked by the policy.
+
+### Parameters
+
+`networks`: `string[]`
+
+The list of IPv4/IPv6 addresses or subnets to be explicitly blocked by the policy.
+
+Networks can be:
+* IPv4 addresses in dotted-quad notation
+    * ex. `127.0.0.1`
+* IPv6 addresses in expanded notation `x:x:x:x:x:x:x:x`, where the `x`s are one to four hexadecimal digits
+    * ex. `ABCD:EF01:2345:6789:ABCD:EF01:2345:6789`
+* IPv6 addresses in compressed notation, where one group of consecutive 0s is be represented with `::`
+    * ex. `ABCD::`, `::1`, `ABCD:EF01::2345:6789`
+* IPv6 in mixed notation `x:x:x:x:x:x:d.d.d.d`, where the `x`s are hexadecimal values and the `d`s are decimal
+    * ex. `::FFFF:127.0.0.1`
+* Any of the above addresses with a decimal prefix length `<ip-address>/<prefix-length>` 
+    * ex. `192.0.2.0/24`, `2001:db8::/32`
+
+### Errors
+
+`AntiSSRFError`
+* The `networks` argument is `null` or `undefined`.
+* Some `network` in `networks` is not a valid format.
+* `denyAllUnspecifiedIPs` is already set to `true`.
