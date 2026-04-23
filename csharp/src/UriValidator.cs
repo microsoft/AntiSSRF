@@ -154,7 +154,7 @@ namespace Microsoft.Security.AntiSSRF
 
         private static bool InOneDomain(object? untrustedInput, string? trustedDomain)
         {
-            if (untrustedInput == null || string.IsNullOrEmpty(trustedDomain))
+            if (untrustedInput == null || trustedDomain == null || trustedDomain.Length == 0)
                 return false;
 
             try

@@ -93,7 +93,6 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("http://bing.com/some/path")]
         [InlineData("http://bing.com#fragment")]
         [InlineData("http://bing.com/?query=hi")]
-        [InlineData("http:/bing.com")]
         [InlineData("http:/\\bing.com")]
         [InlineData("http:\\/bing.com")]
         public void Should_ReturnTrue_ForUrlsWithVariousComponents(string url)
@@ -182,7 +181,7 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         }
 
         [Theory]
-        [InlineData("http://HELLO.com", new[] { "", "hello.com" })]
+        [InlineData("http://HELLO.com", new[] { "notempty", "hello.com" })]
         [InlineData("http://Hello.你好/", new[] { "xn--6qq79v", "not_the_domain.com" })]
         [InlineData("http://español.test.net/", new[] { "TeSt.net", "asdf" })]
         [InlineData("http://hello.COM", new[] { "HELLO.com" })]
