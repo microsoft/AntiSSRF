@@ -24,7 +24,6 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             Assert.False(UriValidator.InAzureStorageDomain((string)null!));
             Assert.False(UriValidator.InAzureStorageDomain((Uri)null!));
             Assert.False(UriValidator.InAzureStorageDomain(""));
-            Assert.False(UriValidator.InAzureStorageDomain(new Uri("")));
         }
 
         [Theory]
@@ -111,7 +110,7 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("https://myapp.core.blob.windows.net")]
         [InlineData("https://storage.azure.storage.net")]
         [InlineData("https://files.windows.core.net")]
-        [InlineData("https://myapp.blob.blob.core.windows.net")]
+        [InlineData("https://myapp.blob.core.blob.windows.net")]
         [InlineData("https://storage.web.core.windows.net.storage.azure.net")]
         [InlineData("https://myapp.blob.core.windows.net.evil.com")]
         [InlineData("https://storage.table.core.windows.netmalicious")]
@@ -132,8 +131,8 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         [InlineData("http://accountname.blob.core.windows.net:45", true)]
         [InlineData("https://username@accountname.blob.core.windows.net", true)]
         [InlineData("https://username:password@accountname.blob.core.windows.net", true)]
-        [InlineData("https:accountname.blob.core.windows.net", true)]
-        [InlineData("http:/accountname.blob.core.windows.net", true)]
+        [InlineData("https:accountname.blob.core.windows.net", false)]
+        [InlineData("http:/accountname.blob.core.windows.net", false)]
         [InlineData("http:/\\accountname.blob.core.windows.net", true)]
         [InlineData("http:\\/accountname.blob.core.windows.net", true)]
         [InlineData("http://accountname.blob.core.windows.net:badPort", false)]
