@@ -1,13 +1,13 @@
 ---
 layout: default
 title: inAzureKeyVaultDomain
-parent: UriValidator
+parent: URIValidator
 grand_parent: Node.js API Reference
 nav_order: 3
 description: "Check if a URI belongs to Azure Key Vault domains"
 ---
 
-# URIValidate.inAzureKeyVaultDomain Method
+# URIValidator.inAzureKeyVaultDomain Method
 
 ## Use Case
 

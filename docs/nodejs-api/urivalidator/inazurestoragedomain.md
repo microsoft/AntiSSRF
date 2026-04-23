@@ -1,13 +1,13 @@
 ---
 layout: default
 title: inAzureStorageDomain
-parent: UriValidator
+parent: URIValidator
 grand_parent: Node.js API Reference
 nav_order: 2
 description: "Check if a URI belongs to Azure Storage domains"
 ---
 
-# URIValidate.inAzureStorageDomain Method
+# URIValidator.inAzureStorageDomain Method
 
 ## Use Case
 

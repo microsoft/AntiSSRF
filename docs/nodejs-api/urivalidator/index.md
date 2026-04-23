@@ -1,12 +1,12 @@
 ---
 layout: default
-title: UriValidator
+title: URIValidator
 parent: Node.js API Reference
 description: "URL validation class for SSRF protection"
 has_children: true
 ---
 
-# UriValidator Class
+# URIValidator Class
 
 ## Use Case
 

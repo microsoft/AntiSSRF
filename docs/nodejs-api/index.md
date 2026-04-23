@@ -19,9 +19,9 @@ There are four different ways to use this library, depending on your specific ca
 
 | Use Case | Steps |
 | --- | --- |
-| The URL you are accessing must always belong to a **specific, trsuted domain**. | See URIValidate.inDomain. |
-| The URL you are accessing must be an **Azure Storage endpoint**. | See URIValidate.inAzureStorageDomain. |
-| The URL you are accessing must be an **Azure Key Vault endpoint**. | See URIValidate.inAzureKeyVaultDomain. |
+| The URL you are accessing must always belong to a **specific, trsuted domain**. | See URIValidator.inDomain. |
+| The URL you are accessing must be an **Azure Storage endpoint**. | See URIValidator.inAzureStorageDomain. |
+| The URL you are accessing must be an **Azure Key Vault endpoint**. | See URIValidator.inAzureKeyVaultDomain. |
 | The URL you are accessing can belong to **any domain** or an **untrusted domain**, so to prevent SSRF vulnerabilities, you must ensure that it does not resolve to internal and special-purpose IP addresses. | See AntiSSRFPolicy. |
 
 ## Classes
@@ -30,4 +30,4 @@ There are four different ways to use this library, depending on your specific ca
 | --- | --- |
 | AntiSSRFPolicy | Represents a customizable security policy and provides HTTP(S) agents to ensure all outgoing requests match the security policy. |
 | IPAddressRanges | Provides predefined IP address ranges for use with AntiSSRF policies. |
-| URIValidate | Provides methods for validating the hostname of URLs. |
+| URIValidator | Provides methods for validating the hostname of URLs. |

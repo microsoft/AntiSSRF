@@ -1,7 +1,7 @@
 ---
 layout: default
 title: inDomain
-parent: UriValidator
+parent: URIValidator
 grand_parent: Node.js API Reference
 nav_order: 1
 description: "Check if a URI belongs to specified domain(s)"
@@ -11,7 +11,7 @@ description: "Check if a URI belongs to specified domain(s)"
 uid: indomain
 ---
 
-# URIValidate.inDomain Method
+# URIValidator.inDomain Method
 
 ## Use Case
 
