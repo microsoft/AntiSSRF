@@ -15,7 +15,7 @@
     "test": "mocha --recursive --timeout 10000 --require ts-node/register --no-strip-types \"tests/{UnitTests,FunctionalTests}/**/*.test.ts\"",
     "test:coverage": "nyc mocha --recursive --timeout 10000 --require ts-node/register tests/**/*.test.ts",
     "test:unit": "mocha --recursive --timeout 10000 --require ts-node/register tests/UnitTests/**/*.test.ts",
-    "test:functional": "mocha --recursive --timeout 10000 --require ts-node/register tests/FunctionalTests/**/*.test.ts",
+    "test:functional": "mocha --recursive --timeout 10000 --require ts-node/register --no-strip-types tests/FunctionalTests/**/*.test.ts",
     "test:prepublish": "mocha --recursive --timeout 10000 tests/PrePublishTests/**/*.test.js"
   },
   "author": "Microsoft",
