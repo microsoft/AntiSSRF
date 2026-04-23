@@ -7,20 +7,27 @@ has_children: true
 has_toc: false
 ---
 
-# Node.js API Reference
+# API Documentation
 
-Complete API documentation for the AntiSSRF Node.js library.
-{: .fs-6 .fw-300 }
+## AntiSSRF JavaScript Library
 
-This section contains detailed documentation for all classes, methods, and configuration options available in the Node.js AntiSSRF library.
+The  **AntiSSRF NodeJS Library** is a library for JavaScript/TypeScript applications using Node.js that provides robust URL validation to prevent SSRF vulnerabilities in code. It is designed as an easy, drop-in library with a minimal impact on the engineering team, implemented both as a NodeJS HTTP(S) Agent and URL validator, depending on use case.
 
-## Quick Navigation
+## Usage Instructions
 
-Use the navigation menu to jump to specific sections:
+There are four different ways to use this library, depending on your specific case. Identify the use case below based on the URLs your code is accessing.
 
-- **Installation** - Setup and import instructions
-- **AntiSSRFPolicy** - Main policy configuration class  
-- **UriValidator** - Static utility methods for domain validation
-- **Configuration** - Policy properties and settings
-- **Usage Examples** - Common implementation patterns
-- **Error Handling** - Exception handling and troubleshooting
+| Use Case | Steps |
+| --- | --- |
+| The URL you are accessing must always belong to a **specific, trsuted domain**. | See URIValidate.inDomain. |
+| The URL you are accessing must be an **Azure Storage endpoint**. | See URIValidate.inAzureStorageDomain. |
+| The URL you are accessing must be an **Azure Key Vault endpoint**. | See URIValidate.inAzureKeyVaultDomain. |
+| The URL you are accessing can belong to **any domain** or an **untrusted domain**, so to prevent SSRF vulnerabilities, you must ensure that it does not resolve to internal and special-purpose IP addresses. | See AntiSSRFPolicy. |
+
+## Classes
+
+| Class | Description |
+| --- | --- |
+| AntiSSRFPolicy | Represents a customizable security policy and provides HTTP(S) agents to ensure all outgoing requests match the security policy. |
+| IPAddressRanges | Provides predefined IP address ranges for use with AntiSSRF policies. |
+| URIValidate | Provides methods for validating the hostname of URLs. |

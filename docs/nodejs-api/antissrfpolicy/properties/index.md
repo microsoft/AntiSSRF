@@ -6,8 +6,5 @@ grand_parent: Node.js API Reference
 nav_order: 2
 description: "AntiSSRFPolicy properties documentation"
 has_children: true
+nav_fold: true
 ---
-
-# Properties
-
-TODO: Properties overview documentation

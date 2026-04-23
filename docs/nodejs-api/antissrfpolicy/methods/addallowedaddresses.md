@@ -8,6 +8,39 @@ nav_order: 1
 description: "addAllowedAddresses method documentation"
 ---
 
-# addAllowedAddresses
+# AntiSSRFPolicy.addAllowedAddresses Method
 
-TODO: addAllowedAddresses method documentation
+## Definition
+
+Adds to a list of IPv4/IPv6 addresses or subnets to be explicitly allowed by the policy.
+
+```js
+addAllowedAddresses(networks: string[]): void
+```
+
+{: .note }
+> `allowedAddresses` takes precedence over `deniedAddresses`, if if an IP address matches both, it will be considered allowed by the policy.
+
+### Parameters
+
+`networks`: `string[]`
+
+The llist of IPv4/IPv6 addresses or subnets to be explicitly allowed by the policy.
+
+Networks can be:
+* IPv4 addresses in dotted-quad notation
+    * ex. `127.0.0.1`
+* IPv6 addresses in expanded notation `x:x:x:x:x:x:x:x`, where the `x`s are one to four hexadecimal digits
+    * ex. `ABCD:EF01:2345:6789:ABCD:EF01:2345:6789`
+* IPv6 addresses in compressed notation, where one group of consecutive 0s is be represented with `::`
+    * ex. `ABCD::`, `::1`, `ABCD:EF01::2345:6789`
+* IPv6 in mixed notation `x:x:x:x:x:x:d.d.d.d`, where the `x`s are hexadecimal values and the `d`s are decimal
+    * ex. `::FFFF:127.0.0.1`
+* Any of the above addresses with a decimal prefix length `<ip-address>/<prefix-length>` 
+    * ex. `192.0.2.0/24`, `2001:db8::/32`
+
+### Errors
+
+`AntiSSRFError`
+* The `networks` argument is `null` or `undefined`.
+* Some `network` in `networks` is not a valid format.

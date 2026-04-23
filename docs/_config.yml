@@ -33,7 +33,7 @@ gh_edit_view_mode: "tree"
 
 # Build settings
 theme: just-the-docs
-remote_theme: just-the-docs/just-the-docs@v0.8.2
+remote_theme: just-the-docs/just-the-docs@v0.10.0
 
 plugins:
   - jekyll-feed
@@ -57,6 +57,23 @@ nav_external_links:
   - title: GitHub Repository
     url: https://github.com/Microsoft/AntiSSRF
     hide_icon: false
+
+# Callout configuration
+callouts:
+  highlight:
+    color: yellow
+  important:
+    title: Important
+    color: blue
+  new:
+    title: New
+    color: green
+  note:
+    title: Note
+    color: purple
+  warning:
+    title: Warning
+    color: red
 
 # Footer content
 footer_content: "Copyright &copy; 2026 Microsoft Corporation. Distributed under the <a href=\"https://github.com/Microsoft/AntiSSRF/tree/main/LICENSE\">MIT license.</a>"
