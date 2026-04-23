@@ -5,6 +5,7 @@ Thank you for your interest in contributing to the AntiSSRF project! This guide 
 ## Development Setup
 
 ### C# AntiSSRF Library
+
 From the `./csharp` directory:
 
 **Prerequisites:**
@@ -15,6 +16,7 @@ From the `./csharp` directory:
 - **Unit tests:** `dotnet test`
 
 ### Node.js (TypeScript)
+
 From the `./nodejs` directory:
 
 **Prerequisites:**
@@ -49,3 +51,18 @@ The Azure SDK domains are maintained in [`config/Domains.json`](config/Domains.j
 ```
 
 **Important**: The GitHub Actions workflow will fail if generated files don't match the source JSON.
+
+## Editing Documentation
+
+The project documentation is built with Jekyll and uses the Just the Docs theme.
+
+From the `./docs` directory:
+
+**Prerequisites:**
+- Ruby 2.7+ and Bundler
+
+**Commands:**
+- **Install dependencies:** `bundle install`
+- **Test locally:** `bundle exec jekyll serve`
+
+The documentation will be available at `http://localhost:4000` when running the local server.
