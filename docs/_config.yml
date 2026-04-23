@@ -104,9 +104,4 @@ exclude:
   - gemfiles/
   - Gemfile
   - Gemfile.lock
-  - _posts/  # Exclude posts since we're not using blog functionality
-#   - node_modules/
-#   - vendor/bundle/
-#   - vendor/cache/
-#   - vendor/gems/
-#   - vendor/ruby/
+  - _posts/

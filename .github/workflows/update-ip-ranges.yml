@@ -5,12 +5,8 @@ name: Verify IP Address Ranges
 
 on:
   pull_request:
-    paths:
-      - 'config/IPAddressRanges.json'
-      - 'nodejs/src/IPAddressRanges.ts'
-      - 'csharp/src/IPAddressRanges.cs'
-  push:
-    branches: [main]
+    branches:
+      - main
     paths:
       - 'config/IPAddressRanges.json'
       - 'nodejs/src/IPAddressRanges.ts'
