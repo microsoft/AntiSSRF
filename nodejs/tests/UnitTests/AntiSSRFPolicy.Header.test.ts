@@ -28,22 +28,22 @@ describe("AntiSSRFPolicy Header Tests", () => {
         // Invalid array elements
         assert.throws(
             () => policy.addDeniedHeaders([""]),
-            (err: AntiSSRFError) => err.message === "Header cannot be an empty string",
+            (err: AntiSSRFError) => err.message === "Headers cannot be an empty string",
             "Expected addDeniedHeaders(['']) to throw empty-header validation error"
         );
         assert.throws(
             () => policy.addRequiredHeaders([""]),
-            (err: AntiSSRFError) => err.message === "Header cannot be an empty string",
+            (err: AntiSSRFError) => err.message === "Headers cannot be an empty string",
             "Expected addRequiredHeaders(['']) to throw empty-header validation error"
         );
         assert.throws(
             () => policy.addDeniedHeaders(["X-Valid-Header", null as any, "Another-Header"]),
-            (err: AntiSSRFError) => err.message === "Header cannot be null or undefined",
+            (err: AntiSSRFError) => err.message === "Headers cannot be null or undefined",
             "Expected addDeniedHeaders(['X-Valid-Header', null, 'Another-Header']) to throw null-header validation error"
         );
         assert.throws(
             () => policy.addRequiredHeaders([null as any, "X-Test-Header"]),
-            (err: AntiSSRFError) => err.message === "Header cannot be null or undefined",
+            (err: AntiSSRFError) => err.message === "Headers cannot be null or undefined",
             "Expected addRequiredHeaders([null, 'X-Test-Header']) to throw null-header validation error"
         );
     });
