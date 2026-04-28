@@ -264,7 +264,7 @@ describe("AntiSSRFDnsLookup", () => {
 
     const hostnames = ["google.com", "bing.com", "learn.microsoft.com"];
 
-    describe("Lookup options - order", async () => {
+    it("Lookup options - order", async () => {
         // order: verbatim, ipv4first, ipv6first, undefined
         // checking ipv4first and ipv6first work as expected. checking verbatim and undefined have the right elements.
         const promisified = promisify(antiSSRFDnsLookup(new AntiSSRFPolicy(PolicyConfigOptions.None)));
