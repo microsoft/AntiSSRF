@@ -3,7 +3,7 @@
 
 import assert from "assert";
 import { ADDRCONFIG, ALL, lookup, LookupAddress, LookupOptions, V4MAPPED } from "dns";
-import { isIPv4, LookupFunction } from "net";
+import { isIPv4, isIPv6, LookupFunction } from "net";
 
 import { antiSSRFDnsLookup } from "../../src/Helpers/AntiSSRFDnsLookup";
 import { AntiSSRFPolicy, AntiSSRFError, PolicyConfigOptions } from "../../src";
@@ -266,7 +266,8 @@ describe("AntiSSRFDnsLookup", () => {
 
     it("Lookup options - order", async () => {
         // order: verbatim, ipv4first, ipv6first, undefined
-        // checking ipv4first and ipv6first work as expected. checking verbatim and undefined have the right elements.
+        // checking ipv4first and ipv6first work as expected.
+        // only checking verbatim and undefined have the right elements.
         const promisified = promisify(antiSSRFDnsLookup(new AntiSSRFPolicy(PolicyConfigOptions.None)));
 
         for (const hostname of hostnames) {
@@ -296,6 +297,75 @@ describe("AntiSSRFDnsLookup", () => {
         }
     });
 
+    it("Lookup options - verbatim", async () => {
+        // verbatim: true, false, undefined
+        // only checking they all have the right elements.
+        const promisified = promisify(antiSSRFDnsLookup(new AntiSSRFPolicy(PolicyConfigOptions.None)));
+
+        for (const hostname of hostnames) {
+            const addresses_true = await promisified(hostname, { all: true, verbatim: true }) as LookupAddress[];
+            const addresses_false = await promisified(hostname, { all: true, verbatim: false }) as LookupAddress[];
+            const addresses_undefined = await promisified(hostname, { all: true, verbatim: undefined as unknown as boolean }) as LookupAddress[];
+
+            const sorted_true = addresses_true.map((addr) => `${addr.address}|${addr.family}`).sort();
+            const sorted_false = addresses_false.map((addr) => `${addr.address}|${addr.family}`).sort();
+            const sorted_undefined = addresses_undefined.map((addr) => `${addr.address}|${addr.family}`).sort();
+
+            assert.deepStrictEqual(sorted_true, sorted_false, `${hostname}: verbatim=true and verbatim=false returned different address sets`);
+            assert.deepStrictEqual(sorted_true, sorted_undefined, `${hostname}: verbatim=true and verbatim=undefined returned different address sets`);
+        }
+    });
+
+    it("Lookup options - family", async () => {
+        // family: 0, 4, 6, IPv4, IPv6, undefined
+        // checking:
+        // 1) family=0 has the same elements as family=4 and family=6 combined
+        // 2) family=undefined matches family=0
+        // 3) family=4 and family=IPv4 match, all IPv4 addresses
+        // 4) family=6 and family=IPv6 match, all IPv6 addresses
+        const promisified = promisify(antiSSRFDnsLookup(new AntiSSRFPolicy(PolicyConfigOptions.None)));
+
+        for (const hostname of hostnames) {
+            const addresses_0 = await promisified(hostname, { all: true, family: 0 }) as LookupAddress[];
+            const addresses_4 = await promisified(hostname, { all: true, family: 4 }) as LookupAddress[];
+            const addresses_6 = await promisified(hostname, { all: true, family: 6 }) as LookupAddress[];
+            const addresses_ipv4 = await promisified(hostname, {
+                all: true,
+                family: "IPv4"
+            }) as LookupAddress[];
+            const addresses_ipv6 = await promisified(hostname, {
+                all: true,
+                family: "IPv6"
+            }) as LookupAddress[];
+            const addresses_undefined = await promisified(hostname, {
+                all: true,
+                family: undefined as unknown as 0
+            }) as LookupAddress[];
+
+            assert.ok(
+                addresses_4.every((addr) => addr.family === 4 && isIPv4(addr.address)),
+                `${hostname}: family=4 returned non-IPv4 address(es): ${JSON.stringify(addresses_4, null, 2)}`
+            );
+            assert.ok(
+                addresses_6.every((addr) => addr.family === 6 && isIPv6(addr.address)),
+                `${hostname}: family=6 returned non-IPv6 address(es): ${JSON.stringify(addresses_6, null, 2)}`
+            );
+
+            const sorted_0 = addresses_0.map((addr) => `${addr.address}|${addr.family}`).sort();
+            const sorted_4 = addresses_4.map((addr) => `${addr.address}|${addr.family}`).sort();
+            const sorted_6 = addresses_6.map((addr) => `${addr.address}|${addr.family}`).sort();
+            const sorted_ipv4 = addresses_ipv4.map((addr) => `${addr.address}|${addr.family}`).sort();
+            const sorted_ipv6 = addresses_ipv6.map((addr) => `${addr.address}|${addr.family}`).sort();
+            const sorted_undefined = addresses_undefined.map((addr) => `${addr.address}|${addr.family}`).sort();
+            const sorted_4and6 = [...addresses_4, ...addresses_6].map((addr) => `${addr.address}|${addr.family}`).sort();
+
+            assert.deepStrictEqual(sorted_0, sorted_4and6, `${hostname}: family=0 should match family=4 + family=6`);
+            assert.deepStrictEqual(sorted_0, sorted_undefined, `${hostname}: family=0 and family=undefined returned different address sets`);
+            assert.deepStrictEqual(sorted_4, sorted_ipv4, `${hostname}: family=4 and family=IPv4 returned different address sets`);
+            assert.deepStrictEqual(sorted_6, sorted_ipv6, `${hostname}: family=6 and family=IPv6 returned different address sets`);
+        }
+    });
+
     /**
      * All addresses are allowed, so dns.lookup and AntiSSRFDnsLookup should
      * always return the same result or throw the same error.
@@ -304,7 +374,6 @@ describe("AntiSSRFDnsLookup", () => {
         // If all addresses are allowed, dns.lookup and AntiSSRFDnsLookup should be the same
         const policy = new AntiSSRFPolicy(PolicyConfigOptions.None);
 
-        const OPT_FAMILY: (0 | 4 | 6 | "IPv4" | "IPv6")[] = [4, 6, 0, "IPv4", "IPv6", undefined as unknown as 0];
         const OPT_ALL: boolean[] = [true, false, undefined as unknown as boolean];
         const OPT_HINTS: number[] = [
             V4MAPPED, // 2048
@@ -316,32 +385,16 @@ describe("AntiSSRFDnsLookup", () => {
             V4MAPPED | ALL | ADDRCONFIG,
             undefined as unknown as number
         ];
-        const OPT_VERBATIM: boolean[] = [true, false, undefined as unknown as boolean];
 
         const hostnames = ["google.com", "bing.com", "learn.microsoft.com"];
         for (const hostname of hostnames) {
             it(`Common domain tests - ${hostname}`, async () => {
                 for (const all of OPT_ALL) {
-                    for (const family of OPT_FAMILY) {
-                        for (const hints of OPT_HINTS) {
-                            for (const verbatim of OPT_VERBATIM) {
-                                if (family == 6 || family == "IPv6") {
-                                    await AssertMatchResultOrError(policy, hostname, {
-                                        all,
-                                        family,
-                                        hints,
-                                        verbatim
-                                    });
-                                } else {
-                                    await AssertMatchResult(policy, hostname, {
-                                        all,
-                                        family,
-                                        hints,
-                                        verbatim
-                                    });
-                                }
-                            }
-                        }
+                    for (const hints of OPT_HINTS) {
+                        await AssertMatchResult(policy, hostname, {
+                            all,
+                            hints
+                        });
                     }
                 }
             });
@@ -351,26 +404,11 @@ describe("AntiSSRFDnsLookup", () => {
         for (const hostname of hostnames2) {
             it(`Common domain tests, no IPv6 - ${hostname}`, async () => {
                 for (const all of OPT_ALL) {
-                    for (const family of OPT_FAMILY) {
-                        for (const hints of OPT_HINTS) {
-                            for (const verbatim of OPT_VERBATIM) {
-                                if (family == 6 || family == "IPv6") {
-                                    await AssertMatchResultOrError(policy, hostname, {
-                                        all,
-                                        family,
-                                        hints,
-                                        verbatim
-                                    });
-                                } else {
-                                    await AssertMatchResult(policy, hostname, {
-                                        all,
-                                        family,
-                                        hints,
-                                        verbatim
-                                    });
-                                }
-                            }
-                        }
+                    for (const hints of OPT_HINTS) {
+                        await AssertMatchResult(policy, hostname, {
+                            all,
+                            hints
+                        });
                     }
                 }
             });
