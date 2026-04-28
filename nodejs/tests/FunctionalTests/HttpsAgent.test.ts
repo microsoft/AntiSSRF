@@ -544,6 +544,10 @@ describe("HttpsAgent Tests - other methods", () => {
                         return done();
                     }
 
+                    if (method == "PATCH") {
+                        done(res.statusCode);
+                    }
+
                     try {
                         assert.equal(res.statusCode, 200);
                         const parsedData = JSON.parse(responseData);
