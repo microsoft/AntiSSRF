@@ -205,22 +205,24 @@ const AssertMatchResultOrError = async (policy: AntiSSRFPolicy, hostname: string
 describe("AntiSSRFDnsLookup", () => {
     describe("Bad inputs", () => {
         it("Null hostname", async () => {
+            // Different behavior across versions of NodeJS
             const policy = new AntiSSRFPolicy(PolicyConfigOptions.None);
-            await AssertMatchResult(policy, null as unknown as string, {});
-            await AssertMatchResult(policy, null as unknown as string, { all: false });
-            await AssertMatchResult(policy, null as unknown as string, { all: true });
-            await AssertMatchResult(policy, null as unknown as string, { family: 0 });
-            await AssertMatchResult(policy, null as unknown as string, { family: 6 });
+            await AssertMatchResultOrError(policy, null as unknown as string, {});
+            await AssertMatchResultOrError(policy, null as unknown as string, { all: false });
+            await AssertMatchResultOrError(policy, null as unknown as string, { all: true });
+            await AssertMatchResultOrError(policy, null as unknown as string, { family: 0 });
+            await AssertMatchResultOrError(policy, null as unknown as string, { family: 6 });
         });
 
         it("Undefined hostname", async () => {
+            // Different behavior across versions of NodeJS
             const policy = new AntiSSRFPolicy(PolicyConfigOptions.None);
-            await AssertMatchResult(policy, undefined as unknown as string, {});
-            await AssertMatchResult(policy, undefined as unknown as string, { all: false });
-            await AssertMatchResult(policy, undefined as unknown as string, { all: true });
-            await AssertMatchResult(policy, undefined as unknown as string, { family: 4 });
-            await AssertMatchResult(policy, undefined as unknown as string, { family: 6 });
-            await AssertMatchResult(policy, undefined as unknown as string, { family: 0, all: true });
+            await AssertMatchResultOrError(policy, undefined as unknown as string, {});
+            await AssertMatchResultOrError(policy, undefined as unknown as string, { all: false });
+            await AssertMatchResultOrError(policy, undefined as unknown as string, { all: true });
+            await AssertMatchResultOrError(policy, undefined as unknown as string, { family: 4 });
+            await AssertMatchResultOrError(policy, undefined as unknown as string, { family: 6 });
+            await AssertMatchResultOrError(policy, undefined as unknown as string, { family: 0, all: true });
         });
 
         it("Generally bad hostname", async () => {
