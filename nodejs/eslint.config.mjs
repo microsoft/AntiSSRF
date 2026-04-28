@@ -15,24 +15,6 @@ export default tseslint.config({
         eslint: eslint
     },
     rules: {
-        "func-style": ["error", "declaration"],
-        "@typescript-eslint/naming-convention": [
-            "error",
-            {
-                selector: ["class"],
-                format: ["PascalCase"]
-            },
-            {
-                selector: ["variable"],
-                modifiers: ["const", "exported"],
-                format: ["UPPER_CASE"]
-            },
-            {
-                selector: "memberLike",
-                modifiers: ["private"],
-                format: ["camelCase"],
-                leadingUnderscore: "require"
-            }
-        ]
+        "func-style": ["error", "declaration"]
     }
 });

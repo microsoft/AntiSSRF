@@ -60,7 +60,7 @@ export class URIValidator {
         }
 
         // Standardize untrustedAddress
-        let validHostname;
+        let validHostname: string;
         try {
             validHostname = this._getValidHostname(untrustedAddress, this._domainProtocols);
         } catch {
@@ -98,7 +98,7 @@ export class URIValidator {
             return false;
         }
 
-        let validHostname;
+        let validHostname: string;
         try {
             validHostname = this._getValidHostname(untrustedAddress, this._azureSdkProtocols);
         } catch {
@@ -129,7 +129,7 @@ export class URIValidator {
             return false;
         }
 
-        let validHostname;
+        let validHostname: string;
         try {
             validHostname = this._getValidHostname(untrustedAddress, this._azureSdkProtocols);
         } catch {
