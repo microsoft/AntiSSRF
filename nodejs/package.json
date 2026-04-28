@@ -13,7 +13,6 @@
     "format": "prettier --write .",
     "lint": "eslint src",
     "test": "mocha --recursive --timeout 15000 --require ts-node/register --no-strip-types \"tests/{UnitTests,FunctionalTests}/**/*.test.ts\"",
-    "test:coverage": "nyc mocha --recursive --timeout 15000 --require ts-node/register tests/**/*.test.ts",
     "test:unit": "mocha --recursive --timeout 15000 --require ts-node/register tests/UnitTests/**/*.test.ts",
     "test:functional": "mocha --recursive --timeout 15000 --require ts-node/register --no-strip-types tests/FunctionalTests/**/*.test.ts",
     "test:prepublish": "mocha --recursive --timeout 15000 tests/PrePublishTests/**/*.test.js"
@@ -30,11 +29,10 @@
     "follow-redirects": "^1.15.9",
     "mocha": "^11.7.5",
     "node-fetch": "^3.3.2",
-    "nyc": "^17.1.0",
     "prettier": "^3.5.3",
     "tar": "^7.4.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3",
-    "typescript-eslint": "^8.23.0"
+    "typescript-eslint": "^8.59.1"
   }
 }
