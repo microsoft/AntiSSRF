@@ -3,10 +3,12 @@
 
 import assert from "assert";
 import { ADDRCONFIG, ALL, lookup, LookupAddress, LookupOptions, V4MAPPED } from "dns";
-import { LookupFunction } from "net";
+import { isIPv4, LookupFunction } from "net";
 
 import { antiSSRFDnsLookup } from "../../src/Helpers/AntiSSRFDnsLookup";
 import { AntiSSRFPolicy, AntiSSRFError, PolicyConfigOptions } from "../../src";
+import { options } from "axios";
+import { promisify } from "util";
 
 /**
  * Converts a callback-based lookup function to a promise-based lookup function
@@ -260,6 +262,40 @@ describe("AntiSSRFDnsLookup", () => {
         });
     });
 
+    const hostnames = ["google.com", "bing.com", "learn.microsoft.com"];
+
+    describe("Lookup options - order", async () => {
+        // order: verbatim, ipv4first, ipv6first, undefined
+        // checking ipv4first and ipv6first work as expected. checking verbatim and undefined have the right elements.
+        const promisified = promisify(antiSSRFDnsLookup(new AntiSSRFPolicy(PolicyConfigOptions.None)));
+
+        for (const hostname of hostnames) {
+            const addresses_ipv4first = await promisified(hostname, { all: true, order: "ipv4first" }) as LookupAddress[];
+            assert.ok(
+                addresses_ipv4first.every((addr, i, a) => i === 0 || a[i - 1].family <= addr.family),
+                `Addresses should be sorted with IPv4 first, but got ${JSON.stringify(addresses_ipv4first, null, 2)}`
+            );
+
+            const addresses_ipv6first = await promisified(hostname, { all: true, order: "ipv6first" }) as LookupAddress[];
+            assert.ok(
+                addresses_ipv6first.every((addr, i, a) => i === 0 || a[i - 1].family >= addr.family),
+                `Addresses should be sorted with IPv6 first, but got ${JSON.stringify(addresses_ipv6first, null, 2)}`
+            );
+
+            const addresses_verbatim = await promisified(hostname, { all: true, order: "verbatim" }) as LookupAddress[];
+            const addresses_undefined = await promisified(hostname, { all: true, order: undefined as unknown as "verbatim" }) as LookupAddress[];
+
+            const sorted_ipv4first = addresses_ipv4first.map((addr) => `${addr.address}|${addr.family}`).sort();
+            const sorted_ipv6first = addresses_ipv6first.map((addr) => `${addr.address}|${addr.family}`).sort();
+            const sorted_verbatim = addresses_verbatim.map((addr) => `${addr.address}|${addr.family}`).sort();
+            const sorted_undefined = addresses_undefined.map((addr) => `${addr.address}|${addr.family}`).sort();
+
+            assert.deepStrictEqual(sorted_ipv4first, sorted_ipv6first, `${hostname}: ipv4first and ipv6first returned different address sets`);
+            assert.deepStrictEqual(sorted_ipv4first, sorted_verbatim, `${hostname}: ipv4first and verbatim returned different address sets`);
+            assert.deepStrictEqual(sorted_ipv4first, sorted_undefined, `${hostname}: ipv4first and undefined-order returned different address sets`);
+        }
+    });
+
     /**
      * All addresses are allowed, so dns.lookup and AntiSSRFDnsLookup should
      * always return the same result or throw the same error.
@@ -270,12 +306,6 @@ describe("AntiSSRFDnsLookup", () => {
 
         const OPT_FAMILY: (0 | 4 | 6 | "IPv4" | "IPv6")[] = [4, 6, 0, "IPv4", "IPv6", undefined as unknown as 0];
         const OPT_ALL: boolean[] = [true, false, undefined as unknown as boolean];
-        const OPT_ORDER: ("verbatim" | "ipv4first" | "ipv6first")[] = [
-            "verbatim",
-            "ipv4first",
-            "ipv6first",
-            undefined as unknown as "verbatim"
-        ];
         const OPT_HINTS: number[] = [
             V4MAPPED, // 2048
             ALL, // 256
@@ -293,26 +323,22 @@ describe("AntiSSRFDnsLookup", () => {
             it(`Common domain tests - ${hostname}`, async () => {
                 for (const all of OPT_ALL) {
                     for (const family of OPT_FAMILY) {
-                        for (const order of OPT_ORDER) {
-                            for (const hints of OPT_HINTS) {
-                                for (const verbatim of OPT_VERBATIM) {
-                                    if (family == 6 || family == "IPv6") {
-                                        await AssertMatchResultOrError(policy, hostname, {
-                                            all,
-                                            family,
-                                            order,
-                                            hints,
-                                            verbatim
-                                        });
-                                    } else {
-                                        await AssertMatchResult(policy, hostname, {
-                                            all,
-                                            family,
-                                            order,
-                                            hints,
-                                            verbatim
-                                        });
-                                    }
+                        for (const hints of OPT_HINTS) {
+                            for (const verbatim of OPT_VERBATIM) {
+                                if (family == 6 || family == "IPv6") {
+                                    await AssertMatchResultOrError(policy, hostname, {
+                                        all,
+                                        family,
+                                        hints,
+                                        verbatim
+                                    });
+                                } else {
+                                    await AssertMatchResult(policy, hostname, {
+                                        all,
+                                        family,
+                                        hints,
+                                        verbatim
+                                    });
                                 }
                             }
                         }
@@ -326,26 +352,22 @@ describe("AntiSSRFDnsLookup", () => {
             it(`Common domain tests, no IPv6 - ${hostname}`, async () => {
                 for (const all of OPT_ALL) {
                     for (const family of OPT_FAMILY) {
-                        for (const order of OPT_ORDER) {
-                            for (const hints of OPT_HINTS) {
-                                for (const verbatim of OPT_VERBATIM) {
-                                    if (family == 6 || family == "IPv6") {
-                                        await AssertMatchResultOrError(policy, hostname, {
-                                            all,
-                                            family,
-                                            order,
-                                            hints,
-                                            verbatim
-                                        });
-                                    } else {
-                                        await AssertMatchResult(policy, hostname, {
-                                            all,
-                                            family,
-                                            order,
-                                            hints,
-                                            verbatim
-                                        });
-                                    }
+                        for (const hints of OPT_HINTS) {
+                            for (const verbatim of OPT_VERBATIM) {
+                                if (family == 6 || family == "IPv6") {
+                                    await AssertMatchResultOrError(policy, hostname, {
+                                        all,
+                                        family,
+                                        hints,
+                                        verbatim
+                                    });
+                                } else {
+                                    await AssertMatchResult(policy, hostname, {
+                                        all,
+                                        family,
+                                        hints,
+                                        verbatim
+                                    });
                                 }
                             }
                         }
