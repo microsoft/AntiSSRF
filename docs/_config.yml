@@ -98,6 +98,14 @@ aux_links_new_tab: false
 # Excluded items can be processed by explicitly listing the directories or
 # their entries' file path in the `include:` list.
 #
+# Silence Dart Sass deprecation warnings from the just-the-docs theme
+sass:
+  quiet_deps: true
+  silence_deprecations:
+    - import
+    - global-builtin
+    - color-functions
+
 exclude:
   - .sass-cache/
   - .jekyll-cache/

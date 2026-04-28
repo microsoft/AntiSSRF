@@ -3,7 +3,7 @@ layout: default
 title: addRequiredHeaders
 parent: Methods
 grand_parent: AntiSSRFPolicy
-great_grand_parent: Node.js API Reference
+ancestor: Node.js API Reference
 nav_order: 1
 description: "addRequiredHeaders method documentation"
 ---

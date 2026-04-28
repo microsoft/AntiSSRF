@@ -3,7 +3,7 @@ layout: default
 title: requiredHeaders
 parent: Properties
 grand_parent: AntiSSRFPolicy
-great_grand_parent: Node.js API Reference
+ancestor: Node.js API Reference
 description: "requiredHeaders property documentation"
 ---
 
