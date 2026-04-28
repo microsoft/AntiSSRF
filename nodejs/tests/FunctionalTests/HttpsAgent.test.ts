@@ -567,9 +567,9 @@ describe("HttpsAgent Tests - other methods", () => {
                 res.on("data", () => {});
                 res.on("end", () => {
                     if (method == "PATCH") {
-                        done(res.statusCode);
+                        console.debug(res);
                     }
-                    
+
                     done("Expected error, but got response");
                 });
             });

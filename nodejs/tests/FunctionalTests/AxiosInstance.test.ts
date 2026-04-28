@@ -233,7 +233,7 @@ describe("Axios Instance tests", () => {
             });
             assert.fail("Expected error, but got response");
         } catch (err) {
-            assert.equal((err as Error).message, "Request failed with status code 404");
+            assert.equal((err as Error).message, "Request failed with status code 404", err as Error);
         }
     });
 
