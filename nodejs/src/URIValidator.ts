@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { domainToASCII } from "url";
 
 import { _azureKeyVaultDomains, _azureStorageDomains } from "./Helpers/Domains";
