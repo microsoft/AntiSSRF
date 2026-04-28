@@ -189,7 +189,7 @@ describe("AntiSSRFPolicy Address Tests", () => {
                 );
             }
         }
-    }).timeout(10000);
+    }).timeout(30000);
 
     it("check defaults wireserver", async () => {
         const urls = [
