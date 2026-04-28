@@ -544,10 +544,6 @@ describe("HttpsAgent Tests - other methods", () => {
                         return done();
                     }
 
-                    if (method == "PATCH") {
-                        done(res.statusCode);
-                    }
-
                     try {
                         assert.equal(res.statusCode, 200);
                         const parsedData = JSON.parse(responseData);
@@ -570,6 +566,10 @@ describe("HttpsAgent Tests - other methods", () => {
             const req = https.request(testUrl, { method, agent: disallowAgent }, (res) => {
                 res.on("data", () => {});
                 res.on("end", () => {
+                    if (method == "PATCH") {
+                        done(res.statusCode);
+                    }
+                    
                     done("Expected error, but got response");
                 });
             });
