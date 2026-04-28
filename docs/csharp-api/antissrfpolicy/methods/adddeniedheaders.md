@@ -2,8 +2,8 @@
 layout: default
 title: AddDeniedHeaders
 parent: Methods
-grand_parent: AntiSSRFPolicy (C#)
-great_grand_parent: C# API Reference
+grand_parent: AntiSSRFPolicy
+ancestor: C# API Reference
 nav_order: 4
 description: "AddDeniedHeaders method documentation"
 ---

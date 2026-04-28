@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Methods
-parent: AntiSSRFPolicy (C#)
+parent: AntiSSRFPolicy
 grand_parent: C# API Reference
 nav_order: 3
 description: "AntiSSRFPolicy methods documentation"

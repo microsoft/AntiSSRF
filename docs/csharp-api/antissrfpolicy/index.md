@@ -1,6 +1,6 @@
 ---
 layout: default
-title: AntiSSRFPolicy (C#)
+title: AntiSSRFPolicy
 parent: C# API Reference
 description: "Main policy configuration class for SSRF protection"
 has_children: true

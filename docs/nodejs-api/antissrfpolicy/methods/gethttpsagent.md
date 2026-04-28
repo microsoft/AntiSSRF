@@ -3,7 +3,7 @@ layout: default
 title: getHttpsAgent
 parent: Methods
 grand_parent: AntiSSRFPolicy
-great_grand_parent: Node.js API Reference
+ancestor: Node.js API Reference
 nav_order: 1
 description: "getHttpsAgent method documentation"
 ---
