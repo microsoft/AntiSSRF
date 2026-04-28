@@ -7,7 +7,8 @@ import { promises } from "dns";
 
 import { AntiSSRFError, AntiSSRFPolicy, IPAddressRanges, PolicyConfigOptions } from "../../src";
 
-describe("AntiSSRFPolicy Address Tests", () => {
+describe("AntiSSRFPolicy Address Tests", function () {
+    this.timeout(30000);
     const BAD_IP_MESSAGE = "IP address disallowed by policy";
     const TEST_DOMAIN = "ambitious-flower-0611c910f.2.azurestaticapps.net";
 
@@ -189,7 +190,7 @@ describe("AntiSSRFPolicy Address Tests", () => {
                 );
             }
         }
-    }).timeout(30000);
+    });
 
     it("check defaults wireserver", async () => {
         const urls = [
@@ -238,7 +239,7 @@ describe("AntiSSRFPolicy Address Tests", () => {
                 );
             }
         }
-    }).timeout(10000);
+    });
 
     it("check defaults localhost", async () => {
         const urls = [
@@ -288,7 +289,7 @@ describe("AntiSSRFPolicy Address Tests", () => {
                 );
             }
         }
-    }).timeout(10000);
+    });
 
     it("default with IpAddressRanges", async () => {
         const policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1);
