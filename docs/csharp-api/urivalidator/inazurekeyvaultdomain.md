@@ -36,12 +36,12 @@ Validates if the given input is an Azure Key Vault endpoint. Only supports HTTP 
 ## InAzureKeyVaultDomain(Uri)
 
 ```csharp
-public static bool InAzureKeyVaultDomain(Uri? untrustedUri)
+public static bool InAzureKeyVaultDomain(Uri untrustedUri)
 ```
 
 ### Parameters
 
-`untrustedUri`: `Uri?`
+`untrustedUri`: `Uri`
 
 The URI to be evaluated.
 
@@ -55,12 +55,12 @@ The URI to be evaluated.
 ## InAzureKeyVaultDomain(string)
 
 ```csharp
-public static bool InAzureKeyVaultDomain(string? untrustedAddress)
+public static bool InAzureKeyVaultDomain(string untrustedAddress)
 ```
 
 ### Parameters
 
-`untrustedAddress`: `string?`
+`untrustedAddress`: `string`
 
 The URI string to be evaluated.
 

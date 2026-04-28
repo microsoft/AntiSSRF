@@ -28,6 +28,6 @@ There are four different ways to use this library, depending on your specific ca
 
 | Class | Description |
 | --- | --- |
-| AntiSSRFPolicy | Represents a customizable security policy and provides HTTP(S) agents to ensure all outgoing requests match the security policy. |
-| IPAddressRanges | Provides predefined IP address ranges for use with AntiSSRF policies. |
-| URIValidator | Provides methods for validating the hostname of URLs. |
+| [AntiSSRFPolicy](antissrfpolicy/) | Represents a customizable security policy and provides HTTP(S) agents to ensure all outgoing requests match the security policy. |
+| [IPAddressRanges](../ipaddressranges.html) | Provides predefined IP address ranges for use with AntiSSRF policies. |
+| [URIValidator](urivalidator/) | Provides methods for validating the hostname of URLs. |

@@ -41,16 +41,16 @@ Validates if the given input belongs to any of the specified domains. Only suppo
 ## InDomain(Uri, string)
 
 ```csharp
-public static bool InDomain(Uri? untrustedUri, string? trustedDomain)
+public static bool InDomain(Uri untrustedUri, string trustedDomain)
 ```
 
 ### Parameters
 
-`untrustedUri`: `Uri?`
+`untrustedUri`: `Uri`
 
 The URI to be evaluated.
 
-`trustedDomain`: `string?`
+`trustedDomain`: `string`
 
 The domain name that `untrustedUri` will be compared against.
 
@@ -64,16 +64,16 @@ The domain name that `untrustedUri` will be compared against.
 ## InDomain(string, string)
 
 ```csharp
-public static bool InDomain(string? untrustedAddress, string? trustedDomain)
+public static bool InDomain(string untrustedAddress, string trustedDomain)
 ```
 
 ### Parameters
 
-`untrustedAddress`: `string?`
+`untrustedAddress`: `string`
 
 The URI string to be evaluated.
 
-`trustedDomain`: `string?`
+`trustedDomain`: `string`
 
 The domain name that `untrustedAddress` will be compared against.
 
@@ -87,16 +87,16 @@ The domain name that `untrustedAddress` will be compared against.
 ## InDomain(Uri, string[])
 
 ```csharp
-public static bool InDomain(Uri? untrustedUri, string[]? trustedDomains)
+public static bool InDomain(Uri untrustedUri, string[] trustedDomains)
 ```
 
 ### Parameters
 
-`untrustedUri`: `Uri?`
+`untrustedUri`: `Uri`
 
 The URI to be evaluated.
 
-`trustedDomains`: `string[]?`
+`trustedDomains`: `string[]`
 
 The list of domain names that `untrustedUri` will be compared against.
 
@@ -110,16 +110,16 @@ The list of domain names that `untrustedUri` will be compared against.
 ## InDomain(string, string[])
 
 ```csharp
-public static bool InDomain(string? untrustedAddress, string[]? trustedDomains)
+public static bool InDomain(string untrustedAddress, string[] trustedDomains)
 ```
 
 ### Parameters
 
-`untrustedAddress`: `string?`
+`untrustedAddress`: `string`
 
 The URI string to be evaluated.
 
-`trustedDomains`: `string[]?`
+`trustedDomains`: `string[]`
 
 The list of domain names that `untrustedAddress` will be compared against.
 

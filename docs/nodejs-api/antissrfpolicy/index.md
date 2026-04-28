@@ -15,9 +15,9 @@ You would use this class whenever you are accessesing a URL that can belong to a
 When you are accessing a URL that was constructed with external input (user input or input from other services), you need to make sure the final construted URL cannot be abused to access unexpected internal endpoints. This class allows you to use built-in configurations or customize your own policy, then provides an `http.Agent` and `https.Agent` that will enforce that policy across all requests and redirects.
 
 {: .note }
-> * If you instead expect the domain to be a **specific, trusted domain**, see inDomain.
-> * If you instead expect the URL to be an **Azure Storage endpoint**, see inAzureStorageDomain.
-> * If you instead expect the URL to be an **Azure Key Vault endpoint**, see inAzureKeyVaultDomain.
+> * If you instead expect the domain to be a **specific, trusted domain**, see [inDomain](../urivalidator/indomain.html).
+> * If you instead expect the URL to be an **Azure Storage endpoint**, see [inAzureStorageDomain](../urivalidator/inazurestoragedomain.html).
+> * If you instead expect the URL to be an **Azure Key Vault endpoint**, see [inAzureKeyVaultDomain](../urivalidator/inazurekeyvaultdomain.html).
 
 ## Definition
 

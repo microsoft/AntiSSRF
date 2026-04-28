@@ -36,12 +36,12 @@ Validates if the given input is an Azure Storage endpoint. Only supports HTTP an
 ## InAzureStorageDomain(Uri)
 
 ```csharp
-public static bool InAzureStorageDomain(Uri? untrustedUri)
+public static bool InAzureStorageDomain(Uri untrustedUri)
 ```
 
 ### Parameters
 
-`untrustedUri`: `Uri?`
+`untrustedUri`: `Uri`
 
 The URI to be evaluated.
 
@@ -55,12 +55,12 @@ The URI to be evaluated.
 ## InAzureStorageDomain(string)
 
 ```csharp
-public static bool InAzureStorageDomain(string? untrustedAddress)
+public static bool InAzureStorageDomain(string untrustedAddress)
 ```
 
 ### Parameters
 
-`untrustedAddress`: `string?`
+`untrustedAddress`: `string`
 
 The URI string to be evaluated.
 

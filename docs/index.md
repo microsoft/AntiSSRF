@@ -2,7 +2,7 @@
 layout: default
 title: Home
 nav_order: 1
-description: "AntiSSRF Documentation - Protect your applications from SSRF attacks"
+description: "Microsoft AntiSSRF Documentation - Protect your applications from SSRF attacks"
 permalink: /
 ---
 
@@ -27,13 +27,13 @@ SSRF can lead (but not limited) to:
 
 Even data that doesn't initially appear to be a URL can become one. For example, a workspace name or resource identifier that gets concatenated into a URL. All untrusted input used in URL construction MUST be validated.
 
-## What is the AntiSSRF Library?
+## What is the Microsoft AntiSSRF Library?
 
-AntiSSRF is a security library available for multiple languages that provides robust URI validation to prevent Server-Side Request Forgery (SSRF) vulnerabilities in code. It is aimed at being an easy-to-drop-in library with a minimal impact on the developers.
+Microsoft AntiSSRF is a security library available for multiple languages that provides robust URL validation to prevent Server-Side Request Forgery (SSRF) vulnerabilities in code. It is aimed at being an easy-to-drop-in library with a minimal impact on the developers.
 
-A common scenario in many online services is handling requests from customers containing customer-supplied strings that are, or are used to construct a URI. These strings are often not validated properly, leading to vulnerabilities such as Server-Side Request Forgery which can result in token theft.
+A common scenario in many online services is handling requests from customers containing customer-supplied strings that are, or are used to construct a URL. These strings are often not validated properly, leading to vulnerabilities such as Server-Side Request Forgery which can result in token theft.
 
-### How the AntiSSRF Library Helps
+### How the Microsoft AntiSSRF Library Helps
 
 - Automatically validates URLs and network connections
 - Reduces developer effort and risk of insufficient validation
@@ -45,8 +45,8 @@ A common scenario in many online services is handling requests from customers co
 | --- | --- | --- |
 | .NET Framework and Core | [AntiSSRF C# Library](csharp-api/) | For web clients using `HttpClient` objects |
 | JavaScript/TypeScript | [AntiSSRF JavaScript Library](nodejs-api/) | For requests using NodeJS HTTP(S) Agents |
-| Golang | N/A | coming soon |
-| Python | N/A | coming soon |
 
 {: .note }
+> More languages coming soon!
+>
 > For any questions regarding the usage of this library or for more information, please contact [antissrf-oss@microsoft.com](mailto:antissrf-oss@microsoft.com).

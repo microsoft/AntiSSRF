@@ -29,7 +29,7 @@ using var client = new HttpClient(handler);
 
 The handler enforces the policy at two levels:
 1. **HTTP request validation** — Checks the request scheme, denied/required headers, and optionally adds the `X-Forwarded-For` header.
-2. **Network connection validation** — On .NET 5+, uses a custom `ConnectCallback` to resolve DNS and verify IP addresses against the policy before establishing a TCP connection. On .NET Standard, validates IP addresses in the `SendAsync` override.
+2. **Network connection validation** — On .NET Core, uses a custom `ConnectCallback` to resolve DNS and verify IP addresses against the policy before establishing a TCP connection. On .NET Standard, validates IP addresses in the `SendAsync` override.
 
 The handler also manages redirects internally, re-validating the policy on each redirect hop.
 
@@ -43,7 +43,7 @@ The handler also manages redirects internally, re-validating the policy on each 
 | `MaxConnectionsPerServer` | `int` | Gets or sets the maximum number of concurrent connections per server. |
 | `MaxResponseHeadersLength` | `int` | Gets or sets the maximum length of response headers in kilobytes. |
 
-### .NET 5+ Only Properties
+### .NET Core Only Properties
 
 | Property | Type | Description |
 | --- | --- | --- |

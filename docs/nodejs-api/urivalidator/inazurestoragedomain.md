@@ -18,9 +18,9 @@ AND
 The URL is expected to belong to an **Azure Storage Domain**.
 
 {: .note }
-> * If you instead expect the domain to be another **specific, trusted domain**, see inDomain.
-> * If you instead expect the URL to be an **Azure Key Vault endpoint**, see inAzureKeyVaultDomain.
-> * If you instead expect the domain to be in **any domain** or **an untrusted domain**, see AntiSSRFPolicy.
+> * If you instead expect the domain to be another **specific, trusted domain**, see [inDomain](indomain.html).
+> * If you instead expect the URL to be an **Azure Key Vault endpoint**, see [inAzureKeyVaultDomain](inazurekeyvaultdomain.html).
+> * If you instead expect the domain to be in **any domain** or **an untrusted domain**, see [AntiSSRFPolicy](../antissrfpolicy/).
 
 ## Definition
 

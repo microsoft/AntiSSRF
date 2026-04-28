@@ -30,5 +30,5 @@ There are four different ways to use this library, depending on your specific ca
 | --- | --- |
 | [AntiSSRFPolicy](antissrfpolicy/) | Represents a customizable security policy and provides an `AntiSSRFHandler` to ensure all outgoing `HttpClient` requests match the security policy. |
 | [AntiSSRFHandler](antissrfhandler.html) | An `HttpMessageHandler` that enforces the `AntiSSRFPolicy` on all outgoing requests made via `HttpClient`. |
-| [IPAddressRanges](ipaddressranges.html) | Provides predefined IP address ranges for use with AntiSSRF policies. |
+| [IPAddressRanges](../ipaddressranges.html) | Provides predefined IP address ranges for use with AntiSSRF policies. |
 | [URIValidator](urivalidator/) | Provides static methods for validating the hostname and protocol of URLs. |

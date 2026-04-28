@@ -1,7 +1,7 @@
 ---
 layout: default
-title: IPAddressRanges
-parent: Node.js API Reference
+title: IP Address Ranges
+nav_order: 2
 description: "Predefined IP address ranges class"
 ---
 
@@ -10,6 +10,8 @@ description: "Predefined IP address ranges class"
 ## Definition
 
 Provides predefined IP address ranges for internal and special-purpose addresses for use with AntiSSRF policies.
+
+This list is consistent and shared across all the languages and frameworks.
 
 ## Special-Purpose Ranges
 

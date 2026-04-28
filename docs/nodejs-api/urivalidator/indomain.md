@@ -22,9 +22,9 @@ AND
 The URL is expected to belong to a **specific set of trusted domains**.
 
 {: .note }
-> * If you instead expect the URL to be an **Azure Storage endpoint**, see inAzureStorageDomain.
-> * If you instead expect the URL to be an **Azure Key Vault endpoint**, see inAzureKeyVaultDomain.
-> * If you instead expect the domain to be in **any domain** or **an untrusted domain**, see AntiSSRFPolicy.
+> * If you instead expect the URL to be an **Azure Storage endpoint**, see [inAzureStorageDomain](inazurestoragedomain.html).
+> * If you instead expect the URL to be an **Azure Key Vault endpoint**, see [inAzureKeyVaultDomain](inazurekeyvaultdomain.html).
+> * If you instead expect the domain to be in **any domain** or **an untrusted domain**, see [AntiSSRFPolicy](../antissrfpolicy/).
 
 {: .important }
 > If your untrusted URL needs to belong to a specific domain, but you do not fully control all subdomains of the domain, you can use BOTH `inDomain` AND `AntiSSRFPolicy` to be protected.
