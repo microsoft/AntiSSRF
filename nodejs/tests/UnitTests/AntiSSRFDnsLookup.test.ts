@@ -320,7 +320,7 @@ describe("AntiSSRFDnsLookup", () => {
         // family: 0, 4, 6, IPv4, IPv6, undefined
         // checking:
         // 1) family=0 includes both families when family=4/family=6 resolve (DNS may rotate exact IPs)
-        // 2) family=undefined returns only IPv4 addresses
+        // 2) family=undefined matches family=0
         // 3) family=4 and family=IPv4 match, all IPv4 addresses
         // 4) family=6 and family=IPv6 match, all IPv6 addresses
         const promisified = promisify(antiSSRFDnsLookup(new AntiSSRFPolicy(PolicyConfigOptions.None)));
@@ -341,7 +341,8 @@ describe("AntiSSRFDnsLookup", () => {
             }) as LookupAddress[];
             const addresses_undefined = await promisified(hostname, {
                 all: true,
-                family: undefined as unknown as 0
+                family: undefined as unknown as 0,
+                hints: ALL
             }) as LookupAddress[];
 
             assert.ok(
@@ -352,16 +353,13 @@ describe("AntiSSRFDnsLookup", () => {
                 addresses_6.every((addr) => addr.family === 6 && isIPv6(addr.address)),
                 `${hostname}: family=6 returned non-IPv6 address(es): ${JSON.stringify(addresses_6, null, 2)}`
             );
-            assert.ok(
-                addresses_undefined.every((addr) => addr.family === 4 && isIPv4(addr.address)),
-                `${hostname}: family=undefined returned non-IPv4 address(es): ${JSON.stringify(addresses_undefined, null, 2)}`
-            );
 
             const sorted_0 = addresses_0.map((addr) => `${addr.address}|${addr.family}`).sort();
             const sorted_4 = addresses_4.map((addr) => `${addr.address}|${addr.family}`).sort();
             const sorted_6 = addresses_6.map((addr) => `${addr.address}|${addr.family}`).sort();
             const sorted_ipv4 = addresses_ipv4.map((addr) => `${addr.address}|${addr.family}`).sort();
             const sorted_ipv6 = addresses_ipv6.map((addr) => `${addr.address}|${addr.family}`).sort();
+            const sorted_undefined = addresses_undefined.map((addr) => `${addr.address}|${addr.family}`).sort();
 
             const has_ipv4_in_0 = addresses_0.some((addr) => addr.family === 4);
             const has_ipv6_in_0 = addresses_0.some((addr) => addr.family === 6);
@@ -373,6 +371,7 @@ describe("AntiSSRFDnsLookup", () => {
                 assert.ok(has_ipv6_in_0, `${hostname}: family=0 should include IPv6 results when family=6 resolves`);
             }
 
+            assert.deepStrictEqual(sorted_0, sorted_undefined, `${hostname}: family=0 and family=undefined returned different address sets`);
             assert.deepStrictEqual(sorted_4, sorted_ipv4, `${hostname}: family=4 and family=IPv4 returned different address sets`);
             assert.deepStrictEqual(sorted_6, sorted_ipv6, `${hostname}: family=6 and family=IPv6 returned different address sets`);
         }

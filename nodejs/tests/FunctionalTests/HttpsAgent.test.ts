@@ -566,10 +566,6 @@ describe("HttpsAgent Tests - other methods", () => {
             const req = https.request(testUrl, { method, agent: disallowAgent }, (res) => {
                 res.on("data", () => {});
                 res.on("end", () => {
-                    if (method == "PATCH") {
-                        console.debug(res);
-                    }
-
                     done("Expected error, but got response");
                 });
             });
