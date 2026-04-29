@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 name: Bug - Node.js
 description: File a bug report for the NodeJS version of the AntiSSRF library.
 title: "[Bug][Nodejs]: <title>"
