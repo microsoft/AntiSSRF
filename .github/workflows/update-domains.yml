@@ -8,13 +8,13 @@ on:
     paths:
       - 'config/Domains.json'
       - 'nodejs/src/Helpers/Domains.ts'
-      - 'csharp/src/Helpers/Domains.cs'
+      - 'dotnet/src/Helpers/Domains.cs'
   push:
     branches: [main]
     paths:
       - 'config/Domains.json'
       - 'nodejs/src/Helpers/Domains.ts'  
-      - 'csharp/src/Helpers/Domains.cs'
+      - 'dotnet/src/Helpers/Domains.cs'
   workflow_dispatch: # Allow manual triggering
 
 jobs:
@@ -37,18 +37,18 @@ jobs:
       run: ./scripts/build-domains-nodejs.sh
     
     - name: Build C# version
-      run: ./scripts/build-domains-cs.sh
+      run: ./scripts/build-domains-dotnet.sh
     
     - name: Verify generated files are up-to-date
       run: |
-        if ! git diff --exit-code nodejs/src/Helpers/Domains.ts csharp/src/Helpers/Domains.cs; then
+        if ! git diff --exit-code nodejs/src/Helpers/Domains.ts dotnet/src/Helpers/Domains.cs; then
           echo "❌ Generated domain files are out of sync!"
           echo "The following files need to be regenerated:"
-          git diff --name-only nodejs/src/Helpers/Domains.ts csharp/src/Helpers/Domains.cs
+          git diff --name-only nodejs/src/Helpers/Domains.ts dotnet/src/Helpers/Domains.cs
           echo ""
           echo "Please run the following commands locally and commit the results:"
           echo "  ./scripts/build-domains-nodejs.sh"
-          echo "  ./scripts/build-domains-cs.sh"
+          echo "  ./scripts/build-domains-dotnet.sh"
           exit 1
         else
           echo "✅ All generated files are up-to-date"

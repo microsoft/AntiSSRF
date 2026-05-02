@@ -8,8 +8,8 @@ on:
     branches:
       - main
     paths:
-      - "csharp/**"
-      - ".github/workflows/test-csharp.yml"
+      - "dotnet/**"
+      - ".github/workflows/test-dotnet.yml"
   workflow_dispatch:
 
 jobs:
@@ -32,10 +32,10 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Restore solution
-        run: dotnet restore csharp/Microsoft.Security.AntiSSRF.sln
+        run: dotnet restore dotnet/Microsoft.Security.AntiSSRF.sln
 
       - name: Run UnitTests (${{ matrix.framework }})
-        run: dotnet test csharp/UnitTests/Microsoft.Security.AntiSSRF.UnitTests.csproj --configuration Release --framework ${{ matrix.framework }} --no-restore
+        run: dotnet test dotnet/UnitTests/Microsoft.Security.AntiSSRF.UnitTests.csproj --configuration Release --framework ${{ matrix.framework }} --no-restore
 
       - name: Run FunctionalTests (${{ matrix.framework }})
-        run: dotnet test csharp/FunctionalTests/Microsoft.Security.AntiSSRF.FunctionalTests.csproj --configuration Release --framework ${{ matrix.framework }} --no-restore
+        run: dotnet test dotnet/FunctionalTests/Microsoft.Security.AntiSSRF.FunctionalTests.csproj --configuration Release --framework ${{ matrix.framework }} --no-restore
