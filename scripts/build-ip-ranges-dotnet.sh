@@ -11,7 +11,7 @@ set -e
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 JSON_FILE="$SCRIPT_DIR/../config/IPAddressRanges.json"
-CS_FILE="$SCRIPT_DIR/../csharp/src/IPAddressRanges.cs"
+CS_FILE="$SCRIPT_DIR/../dotnet/src/IPAddressRanges.cs"
 
 # Check if jq is available
 if ! command -v jq &> /dev/null; then
