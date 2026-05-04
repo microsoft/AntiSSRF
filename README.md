@@ -12,6 +12,17 @@ SSRF can lead (but is not limited) to:
 - Service disruption
 - Remote code execution
 
+### What is "Untrusted" Input?
+
+**All incoming HTTP requests are untrusted.** Any data originating from outside your service's immediate trust boundary must be treated as potentially malicious. This includes:
+
+- User-provided URLs, filenames, or identifiers
+- Data from external APIs, webhooks, or partner services
+- Configuration values, metadata, or file contents that users can influence
+- Requests from your own service's backend applications or other components within the same environment (query parameters, headers, form fields, etc.)
+
+Even data that doesn't initially appear to be a URL should be treated as one. For example, a workspace name or resource identifier that gets concatenated into a URL. All untrusted input used in URL construction MUST be validated.
+
 ## How the Microsoft AntiSSRF Library Helps
 
 A common scenario in many online services is handling requests from customers containing customer-supplied strings that are, or are used to construct a URL. These strings are often not validated properly, leading to vulnerabilities such as Server-Side Request Forgery which can result in token theft.
@@ -22,17 +33,17 @@ AntiSSRF helps mitigate these risks by:
 
 ## Getting Started
 
-### .NET Framework and .NET Core
+### C# (.NET Framework and .NET Core)
 
 - 📦 **NuGet Package**: [Microsoft.Security.AntiSSRF](https://www.nuget.org/packages/Microsoft.Security.AntiSSRF/)
-- 📖 **Documentation**: [AntiSSRF C# API Documentation](https://microsoft.github.io/AntiSSRF/nodejs-api/)
+- 📖 **Documentation**: [AntiSSRF .NET API Documentation](https://microsoft.github.io/AntiSSRF/dotnet-api/)
 - 🚀 **Quick Start**: [Getting Started Guide](https://microsoft.github.io/AntiSSRF/getting-started)
 - 📋 **Library README**: [.NET README](dotnet/README.md)
 
 ### JavaScript/TypeScript (Node.js)
 
 - 📦 **npm Package**: [@microsoft/antissrf](https://www.npmjs.com/package/@microsoft/antissrf)
-- 📖 **Documentation**: [AntiSSRF JavaScript API Documentation](https://microsoft.github.io/AntiSSRF/nodejs-api/)
+- 📖 **Documentation**: [AntiSSRF Node.js API Documentation](https://microsoft.github.io/AntiSSRF/nodejs-api/)
 - 🚀 **Quick Start**: [Getting Started Guide](https://microsoft.github.io/AntiSSRF/getting-started)
 - 📋 **Library README**: [Node.js README](nodejs/README.md)
 

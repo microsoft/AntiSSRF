@@ -43,17 +43,15 @@ body:
     validations:
       required: false
 
-  - type: dropdown
+  - type: checkboxes
     attributes:
       label: Applicable Libraries
-      description: Select which AntiSSRF library or libraries this feature request applies to.
+      description: Select all that apply for which AntiSSRF library or libraries this feature request applies to.
       options:
-        - .NET Library
-        - Node.js Library
-        - Both Libraries
-        - None or N/A
+        - label: .NET Library
+        - label: Node.js Library
     validations:
-      required: true
+      required: false
 
   - type: markdown
     attributes:

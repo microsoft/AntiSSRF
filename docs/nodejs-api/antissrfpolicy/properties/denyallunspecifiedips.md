@@ -14,7 +14,7 @@ description: "denyAllUnspecifiedIPs property documentation"
 Determines whether all IP addresses should be blocked by default or only `deniedAddresses` should be blocked.
 
 {: .note }
-> To allow specific addresses, use `addAllowedAddresses`. 
+> To allow specific addresses, see [addAllowedAddresses](../methods/addallowedaddresses). 
 
 ```js
 denyAllUnspecifiedIPs: boolean { get; set; }

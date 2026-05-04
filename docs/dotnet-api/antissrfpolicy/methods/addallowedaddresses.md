@@ -41,6 +41,9 @@ The list of IP networks to be explicitly allowed by the policy.
 
 ```csharp
 using Microsoft.Security.AntiSSRF;
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 // Customize the policy
 var policy = new AntiSSRFPolicy(PolicyConfigOptions.None);

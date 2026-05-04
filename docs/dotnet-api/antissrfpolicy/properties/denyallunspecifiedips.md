@@ -14,7 +14,7 @@ description: "DenyAllUnspecifiedIPs property documentation"
 Determines whether all IP addresses should be blocked by default or only `DeniedAddresses` should be blocked.
 
 {: .note }
-> To allow specific addresses, use `AddAllowedAddresses`. 
+> To allow specific addresses, see [addAllowedAddresses](../methods/addallowedaddresses). 
 
 ```csharp
 public bool DenyAllUnspecifiedIPs { get; set; }
