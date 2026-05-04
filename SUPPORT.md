@@ -1,25 +1,14 @@
-# TODO: The maintainer of this repo has not yet edited this file
-
-**REPO OWNER**: Do you want Customer Service & Support (CSS) support for this product/project?
-
-- **No CSS support:** Fill out this template with information about how to file issues and get help.
-- **Yes CSS support:** Fill out an intake form at [aka.ms/onboardsupport](https://aka.ms/onboardsupport). CSS will work with/help you to determine next steps.
-- **Not sure?** Fill out an intake as though the answer were "Yes". CSS will help you decide.
-
-*Then remove this first heading from this SUPPORT.MD file before publishing your repo.*
-
 # Support
 
-## How to file issues and get help  
+This project uses GitHub Issues to track bugs and feature requests. Please search the existing issues before filing new issues to avoid duplicates. For new issues, file your bug or feature request as a new issue.
 
-This project uses GitHub Issues to track bugs and feature requests. Please search the existing 
-issues before filing new issues to avoid duplicates.  For new issues, file your bug or 
-feature request as a new Issue.
+For help and questions about using this project, please:
 
-For help and questions about using this project, please **REPO MAINTAINER: INSERT INSTRUCTIONS HERE 
-FOR HOW TO ENGAGE REPO OWNERS OR COMMUNITY FOR HELP. COULD BE A STACK OVERFLOW TAG OR OTHER
-CHANNEL. WHERE WILL YOU HELP PEOPLE?**.
+- **Check the documentation**: Visit our [documentation site](https://microsoft.github.io/AntiSSRF/) for comprehensive guides and API references
+- **Search existing issues**: Browse [GitHub Issues](https://github.com/Microsoft/AntiSSRF/issues) to see if your question has already been answered
+- **File a new issue**: Create a [new issue](https://github.com/Microsoft/AntiSSRF/issues/new/choose) using our issue templates for bug reports or feature requests
+- **Contact us directly**: Email us at **antissrf-oss@microsoft.com** for questions about usage, integration, or other inquiries
 
-## Microsoft Support Policy  
+## Microsoft Support Policy
 
-Support for this **PROJECT or PRODUCT** is limited to the resources listed above.
+Support for Microsoft AntiSSRF is limited to the resources listed above. This is an open source project maintained by Microsoft, and support is provided on a best-effort basis through the community channels listed above.

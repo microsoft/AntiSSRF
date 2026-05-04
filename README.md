@@ -1,33 +1,61 @@
-# Project
+# Microsoft AntiSSRF
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+The Microsoft AntiSSRF library is a security-developed, exhaustively-tested secure code library that provides robust URL validation to mitigate the risk of Server-Side Request Forgery (SSRF) vulnerabilities. It is an easy-to-use drop-in library with minimal adoption effort for developers, available for both .NET and Node.js applications.
 
-As the maintainer of this project, please make a few updates:
+## What is Server-Side Request Forgery (SSRF)?
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+Server-Side Request Forgery (also known as SSRF) is a critical web security vulnerability in which an attacker can manipulate the server-side application to make network requests to an arbitrary endpoint. Through this vulnerability, the attacker manipulates the target web server to connect to internal, sensitive networks or exfiltrate sensitive data to an untrusted endpoint on the Internet.
+
+SSRF can lead (but is not limited) to:
+- Exposure of internal services
+- Leakage of sensitive data
+- Service disruption
+- Remote code execution
+
+## How the Microsoft AntiSSRF Library Helps
+
+A common scenario in many online services is handling requests from customers containing customer-supplied strings that are, or are used to construct a URL. These strings are often not validated properly, leading to vulnerabilities such as Server-Side Request Forgery which can result in token theft.
+
+AntiSSRF helps mitigate these risks by:
+- Automatically validating URLs and network connections and rejecting/refusing unsafe input
+- Providing an agent that ensures HTTP requests cannot reach internal or sensitive IP addresses
+
+## Getting Started
+
+### .NET Framework and .NET Core
+
+- 📦 **NuGet Package**: [Microsoft.Security.AntiSSRF](https://www.nuget.org/packages/Microsoft.Security.AntiSSRF/)
+- 📖 **Documentation**: [AntiSSRF C# API Documentation](https://microsoft.github.io/AntiSSRF/nodejs-api/)
+- 🚀 **Quick Start**: [Getting Started Guide](https://microsoft.github.io/AntiSSRF/getting-started)
+- 📋 **Library README**: [.NET README](dotnet/README.md)
+
+### JavaScript/TypeScript (Node.js)
+
+- 📦 **npm Package**: [@microsoft/antissrf](https://www.npmjs.com/package/@microsoft/antissrf)
+- 📖 **Documentation**: [AntiSSRF JavaScript API Documentation](https://microsoft.github.io/AntiSSRF/nodejs-api/)
+- 🚀 **Quick Start**: [Getting Started Guide](https://microsoft.github.io/AntiSSRF/getting-started)
+- 📋 **Library README**: [Node.js README](nodejs/README.md)
 
 ## Contributing
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit [Contributor License Agreements](https://cla.opensource.microsoft.com).
+We welcome contributions! Please see our contribution resources:
 
-When you submit a pull request, a CLA bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
+- 🤝 **Contributing Guide**: [CONTRIBUTING.md](CONTRIBUTING.md)
+- 🐛 **Report Issues**: [GitHub Issues](https://github.com/Microsoft/AntiSSRF/issues)
+- � **License**: [LICENSE](LICENSE)
+- 🔒 **Security Policy**: [SECURITY.md](SECURITY.md)
+- 📋 **Code of Conduct**: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+- 🆘 **Support**: [SUPPORT.md](SUPPORT.md)
 
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+## More Resources
 
-## Trademarks
+### Learning About SSRF
 
-This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft
-trademarks or logos is subject to and must follow
-[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/legal/intellectualproperty/trademarks/usage/general).
-Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
-Any use of third-party trademarks or logos are subject to those third-party's policies.
+- 📖 **AntiSSRF Documentation**: [Microsoft AntiSSRF Documentation](https://microsoft.github.io/AntiSSRF/)
+- **OWASP SSRF Guide**: [Server-Side Request Forgery Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html)
+- **PortSwigger Web Security Academy**: [Server-side request forgery (SSRF)](https://portswigger.net/web-security/ssrf)
+- **CWE-918**: [Server-Side Request Forgery (SSRF)](https://cwe.mitre.org/data/definitions/918.html)
+
+### Testing Tools
+
+- 🧪 **Dusseldorf**: [Dynamic SSRF Testing Tool](https://github.com/Microsoft/Dusseldorf) - Microsoft's open-source tool for dynamic SSRF testing and validation

@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Node.js API Reference
-nav_order: 3
+nav_order: 4
 description: "Complete API documentation for the AntiSSRF Node.js library"
 has_children: true
 has_toc: false
@@ -11,7 +11,7 @@ has_toc: false
 
 ## AntiSSRF JavaScript Library
 
-The  **AntiSSRF NodeJS Library** is a library for JavaScript/TypeScript applications using Node.js that provides robust URL validation to prevent SSRF vulnerabilities in code. It is designed as an easy, drop-in library with a minimal impact on the engineering team, implemented both as a NodeJS HTTP(S) Agent and URL validator, depending on use case.
+The  **AntiSSRF Node.js Library** is a library for JavaScript/TypeScript applications using Node.js that provides robust URL validation to prevent SSRF vulnerabilities in code. It is designed as an easy, drop-in library with a minimal impact on the engineering team, implemented both as a Node.js HTTP(S) Agent and URL validator, depending on use-case.
 
 ## Usage Instructions
 

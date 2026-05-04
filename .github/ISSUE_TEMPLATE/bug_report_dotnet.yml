@@ -1,10 +1,10 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
-name: Bug Report - Node.js
-description: File a bug report for the Node.js version of the AntiSSRF library
-title: "[Bug][Node.js]: <title>"
-labels: ["bug", "nodejs"]
+name: Bug Report - .NET
+description: File a bug report for the .NET version of the AntiSSRF library
+title: "[Bug][.NET]: <title>"
+labels: ["bug", "dotnet"]
 type: bug
 body:
 
@@ -27,10 +27,10 @@ body:
       label: Steps To Reproduce
       description: Provide clear steps to reproduce this issue, including code samples if applicable.
       placeholder: |
-        1. Import the library: `import { AntiSSRFPolicy, PolicyConfigOptions } from "@microsoft/antissrf";`
-        2. Create policy: `const policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyLatest);`
-        3. Get agent: `const agent = policy.getHttpsAgent();`
-        4. Make request: `https.get("https://example.com", { agent }, (res) => { ... });`
+        1. Create policy: `var policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyLatest);`
+        2. Get handler: `using var handler = policy.GetHandler();`
+        3. Create HttpClient: `using var client = new HttpClient(handler);`
+        4. Make request: `var response = await client.GetAsync("https://example.com");`
         5. Observe unexpected behavior: [describe what happens]
     validations:
       required: false
@@ -38,7 +38,7 @@ body:
   - type: input
     attributes:
       label: Version
-      description: Specify the version of the AntiSSRF Node.js library where you encountered this issue.
+      description: Specify the version of the AntiSSRF .NET library where you encountered this issue.
       placeholder: "e.g., 1.0.0"
     validations:
       required: true
@@ -53,9 +53,9 @@ body:
 
   - type: input
     attributes:
-      label: Node.js Version
-      description: Specify the Node.js version you are using.
-      placeholder: "e.g., 22.1.0"
+      label: .NET Version
+      description: Specify the .NET version you are using.
+      placeholder: "e.g., 8.0.100"
     validations:
       required: true
 

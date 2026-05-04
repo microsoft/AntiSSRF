@@ -13,6 +13,15 @@ Provides predefined IP address ranges for internal and special-purpose addresses
 
 This list is consistent and shared across all the languages and frameworks.
 
+## Example
+
+To block all address ranges except for the IPv4 Private-Use ranges:
+
+```cs
+const policy = new AntiSSRFPolicy(PolicyConfigOptions.InternalOnly);
+policy.addAllowedAddresses(IPAddressRanges.privateUse);
+```
+
 ## Special-Purpose Ranges
 
 | Special Purpose | Variable Name | IP Address Ranges |

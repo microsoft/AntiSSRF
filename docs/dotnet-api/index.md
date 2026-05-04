@@ -1,7 +1,7 @@
 ---
 layout: default
 title: C# API Reference
-nav_order: 4
+nav_order: 3
 description: "Complete API documentation for the AntiSSRF C# library"
 has_children: true
 has_toc: false
