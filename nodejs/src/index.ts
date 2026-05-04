@@ -4,3 +4,4 @@
 export * from "./AntiSSRFError";
 export * from "./AntiSSRFPolicy";
 export * from "./IPAddressRanges";
+export * from "./URIValidator";

@@ -105,7 +105,7 @@ describe("Axios Instance tests", () => {
                     });
                     assert.ok(res.status == 200);
                 } catch (err) {
-                    assert.fail(err as Error);
+                    assert.fail(`Unexpected error for ${url}: ${(err as Error).message}\n${(err as Error).stack}`);
                 }
             });
 
@@ -114,7 +114,7 @@ describe("Axios Instance tests", () => {
                     const res = await instance.get(url);
                     assert.ok(res.status == 200);
                 } catch (err) {
-                    assert.fail(err as Error);
+                    assert.fail(`Unexpected error for ${url}: ${(err as Error).message}\n${(err as Error).stack}`);
                 }
             });
         });
@@ -138,7 +138,7 @@ describe("Axios Instance tests", () => {
                     const res = await instance.get(url);
                     assert.ok(res.status == 200);
                 } catch (err) {
-                    assert.fail(err as Error);
+                    assert.fail(`Unexpected error for ${url}: ${(err as Error).message}\n${(err as Error).stack}`);
                 }
             });
         });
@@ -222,7 +222,7 @@ describe("Axios Instance tests", () => {
             });
             assert.ok(res.status == 200);
         } catch (err) {
-            assert.fail(err as Error);
+            assert.fail(`Unexpected error for baseURL test: ${(err as Error).message}\n${(err as Error).stack}`);
         }
     });
 
@@ -233,7 +233,7 @@ describe("Axios Instance tests", () => {
             });
             assert.fail("Expected error, but got response");
         } catch (err) {
-            assert.equal((err as Error).message, "Request failed with status code 404");
+            assert.equal((err as Error).message, "Request failed with status code 404", `Unexpected error message: ${(err as Error).message}\n${(err as Error).stack}`);
         }
     });
 
