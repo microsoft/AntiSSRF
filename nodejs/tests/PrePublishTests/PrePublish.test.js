@@ -11,8 +11,9 @@ const https = require("https");
 describe("Tests for most recent .tgz package", function () {
     const baseDir = path.join(__dirname, "../..");
     const extractPath = path.join(baseDir, "temp-lib");
-    let URIValidate;
+    let URIValidator;
     let AntiSSRFPolicy;
+    let PolicyConfigOptions;
 
     before(async function () {
         // Find the .tgz file dynamically
@@ -37,13 +38,14 @@ describe("Tests for most recent .tgz package", function () {
         }); // Dynamically require the AddOne function
 
         const lib = require(path.join(extractPath, "out/src/index.js")); // Adjust if needed
-        URIValidate = lib.URIValidate;
+        URIValidator = lib.URIValidator;
         AntiSSRFPolicy = lib.AntiSSRFPolicy;
+        PolicyConfigOptions = lib.PolicyConfigOptions;
     });
 
-    it("URIValidate.inDomain test", () => {
-        assert.equal(URIValidate.inDomain("https://example.com", ".example.com"), true);
-        assert.equal(URIValidate.inDomain("https://example.com.evil.com", "example.com"), false);
+    it("URIValidator.inDomain test", () => {
+        assert.equal(URIValidator.inDomain("https://example.com", ".example.com"), true);
+        assert.equal(URIValidator.inDomain("https://example.com.evil.com", "example.com"), false);
     });
 
     describe("AntiSSRFPolicy tests", () => {
@@ -54,11 +56,11 @@ describe("Tests for most recent .tgz package", function () {
             policy.addRequiredHeaders(["test-required-header"]);
             policy.addDeniedHeaders(["test-denied-header"]);
 
-            googleIPs = await dns.promises.lookup("www.google.com", {
+            const googleIPs = await dns.promises.lookup("www.google.com", {
                 family: 0,
                 all: true
             });
-            appleIPs = await dns.promises.lookup("apple.com", { family: 0, all: true });
+            const appleIPs = await dns.promises.lookup("apple.com", { family: 0, all: true });
             policy.addDeniedAddresses([...googleIPs, ...appleIPs].map((address) => address.address));
 
             antiSSRFHttpsAgent = policy.getHttpsAgent();

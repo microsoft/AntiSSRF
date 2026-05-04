@@ -47,3 +47,7 @@ jobs:
       - name: Run functional tests
         working-directory: nodejs
         run: npm run test:functional
+
+      - name: Run pre-publish tests
+        working-directory: nodejs
+        run: npm run build && npm pack && npm run test:prepublish
