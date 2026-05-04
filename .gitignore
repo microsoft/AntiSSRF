@@ -48,6 +48,9 @@ bld/
 # Visual Studio 2017 auto generated files
 Generated\ Files/
 
+# C# Dev Kit cache files
+*.lscache
+
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
@@ -416,3 +419,7 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+.DS_Store
+*.tgz
+temp-lib/
