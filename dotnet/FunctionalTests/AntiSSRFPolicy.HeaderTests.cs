@@ -205,7 +205,7 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         public void NoEditsAfterHandler()
         {
             var policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1);
-            var handler = policy.GetHandler();
+            policy.GetHandler();
 
             Assert.Throws<AntiSSRFException>(() => policy.AddRequiredHeaders(["X-Test-Header"]));
             Assert.Throws<AntiSSRFException>(() => policy.AddDeniedHeaders(["X-Test-Header"]));

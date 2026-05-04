@@ -123,7 +123,7 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             try
             {
                 using var cts4 = new CancellationTokenSource(TimeSpan.FromMilliseconds(500));
-                var response4 = await client4.GetAsync(ipUrl, cts4.Token);
+                await client4.GetAsync(ipUrl, cts4.Token);
                 // If we get here, the call succeeded (no AntiSSRFException thrown as expected)
                 Assert.True(true, "Call completed successfully without throwing AntiSSRFException as expected");
             }
@@ -759,7 +759,7 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         public void NoEditsAfterHandler()
         {
             var policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1);
-            var handler = policy.GetHandler();
+            policy.GetHandler();
 
             Assert.Throws<AntiSSRFException>(() => policy.AddAllowedAddresses(["1.2.3.4"]));
             Assert.Throws<AntiSSRFException>(() => policy.AddDeniedAddresses(["1.2.3.4"]));
