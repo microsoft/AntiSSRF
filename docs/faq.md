@@ -38,9 +38,9 @@ For more information, see the [X-Forwarded-For header documentation](../dotnet-a
 
 ## What languages and frameworks are supported?
 
-| Language / Framework | Documentation | Notes |
+| Language | Documentation | Notes |
 | --- | --- | --- |
-| C# / .NET Framework and Core | [AntiSSRF .NET Library](../dotnet-api/) | For web clients using `HttpClient` objects |
-| Node.js / JavaScript/TypeScript | [AntiSSRF Node.js Library](../nodejs-api/) | For requests using NodeJS HTTP(S) Agents |
+| C# | [AntiSSRF .NET Library](dotnet-api/) | For web clients using `HttpClient` objects |
+| JavaScript/TypeScript | [AntiSSRF Node.js Library](nodejs-api/) | For requests using NodeJS HTTP(S) Agents |
 
 Broader platform support is under development.

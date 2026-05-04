@@ -10,18 +10,18 @@ description: "allowPlainTextHttp property documentation"
 # AntiSSRFPolicy.allowPlainTextHttp Property
 
 {: .warning }
-> Changing an `AntiSSRFPolicy` instance to allow plaintext HTTP means you will be able to send HTTP requests without the required TLS encryption.
+> Changing an `AntiSSRFPolicy` instance to allow plaintext HTTP means you will be able to send HTTP requests without the recommended TLS encryption.
 
 ## Definition
 
 Determines whether HTTPS is required or HTTP is allowed.
 
 ```js
-boolean allowPlainTextHttp { get; set; }
+allowPlainTextHttp: boolean { get; set; }
 ```
 
 {: .note }
-> With ALL configuration options, HTTP is disallowed unless `allowPaintextHttp` is explicitly set to `true`.
+> With ALL configuration options, HTTP is disallowed unless `allowPlainTextHttp` is explicitly set to `true`.
 
 ### Property Value
 

@@ -42,10 +42,10 @@ A common scenario in many online services is handling requests from customers co
 
 ## Supported Languages and Frameworks
 
-| Language / Framework | Documentation | Notes |
+| Language | Documentation | Notes |
 | --- | --- | --- |
-| .NET Framework and Core | [AntiSSRF C# Library](csharp-api/) | For web clients using `HttpClient` objects |
-| JavaScript/TypeScript | [AntiSSRF JavaScript Library](nodejs-api/) | For requests using NodeJS HTTP(S) Agents |
+| C# | [AntiSSRF .NET Library](dotnet-api/) | For web clients using `HttpClient` objects |
+| JavaScript/TypeScript | [AntiSSRF Node.js Library](nodejs-api/) | For requests using NodeJS HTTP(S) Agents |
 
 {: .note }
 > Broader platform support is under development.

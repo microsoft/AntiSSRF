@@ -11,20 +11,20 @@ description: "deniedAddresses property documentation"
 
 ## Definition
 
-The `BlockList` of IP address ranges explicitly blocked by the policy.
+The [`BlockList`](https://nodejs.org/api/net.html#class-netblocklist) of IP networks explicitly blocked by the policy.
 
 ```js
-ReadOnly<BlockList> deniedAddresses { get; }
+deniedAddresses: ReadOnly<BlockList> { get; }
 ```
 
 {: .note }
-> `allowedAddresses` takes precedence over `deniedAddresses`, if if an IP address matches both, it will be considered allowed by the policy.
+> `allowedAddresses` takes precedence over `deniedAddresses`. If an IP address matches both, it will be considered allowed by the policy.
 
 {: .note }
-> `denyAllUnspecifiedIPs` takes precedence over `deniedAddresses`, if `denyAllUnspecifiedIPs` is `true`, `deniedAddresses` will not be considered when determining if an IP address is allowed or blocked by the policy.
+> `denyAllUnspecifiedIPs` takes precedence over `deniedAddresses`. If `denyAllUnspecifiedIPs` is `true`, `deniedAddresses` will not be considered when determining if an IP address is allowed or blocked by the policy.
 
 ### Property Value
 
 `ReadOnly<BlockList>`
 
-The `ReadOnly` version of the `net.Blocklist` storing the denied IP addresses.
+The `ReadOnly` version of the `net.BlockList` storing the denied IP networks.

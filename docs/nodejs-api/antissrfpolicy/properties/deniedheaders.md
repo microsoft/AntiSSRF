@@ -11,10 +11,10 @@ description: "deniedHeaders property documentation"
 
 ## Definition
 
-The readonly copy of the list of headers explicitly blocked by the policy. Outgoing requests that include a denied header will be blocked.
+A read-only array of headers that are forbidden from being included in outgoing requests.
 
 ```js
-readonly string[] deniedHeaders { get; }
+deniedHeaders: readonly string[] { get; }
 ```
 
 {: .note }
@@ -24,4 +24,4 @@ readonly string[] deniedHeaders { get; }
 
 `readonly string[]`
 
-The readonly copy of the list of headers explicitly blocked by the policy.
+A read-only array of header names that are blocked by the policy.

@@ -11,10 +11,10 @@ description: "requiredHeaders property documentation"
 
 ## Definition
 
-The readonly copy of the list of headers explicitly required by the policy. Outgoing requests that are missing a required header will be blocked.
+A read-only array of headers that are required to be present in outgoing requests.
 
 ```js
-readonly string[] requiredHeaders { get; }
+requiredHeaders: readonly string[] { get; }
 ```
 
 {: .note }
@@ -24,4 +24,4 @@ readonly string[] requiredHeaders { get; }
 
 `readonly string[]`
 
-The readonly copy of the list of headers explicitly required by the policy.
+A read-only array of header names that are required by the policy.
