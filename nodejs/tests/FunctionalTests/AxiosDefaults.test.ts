@@ -116,7 +116,7 @@ describe("Axios Defaults tests", () => {
         allowedAddressesWithRedirect.forEach((url) => {
             it(`GET ${url} - maxRedirects = 0`, async () => {
                 try {
-                    const res = await axios.get(url, {
+                    await axios.get(url, {
                         maxRedirects: 0,
                         headers: { "test-required-header": "true" }
                     });
@@ -141,7 +141,7 @@ describe("Axios Defaults tests", () => {
         deniedAddressesNoRedirect.forEach((url) => {
             it(`GET ${url} - maxRedirects = 0`, async () => {
                 try {
-                    const res = await axios.get(url, {
+                    await axios.get(url, {
                         maxRedirects: 0,
                         headers: { "test-required-header": "true" }
                     });
@@ -153,7 +153,7 @@ describe("Axios Defaults tests", () => {
 
             it(`GET ${url} - no maxRedirects`, async () => {
                 try {
-                    const res = await axios.get(url, { headers: { "test-required-header": "true" } });
+                    await axios.get(url, { headers: { "test-required-header": "true" } });
                     assert.fail("Expected error, but got response");
                 } catch (err) {
                     assert.equal((err as Error).message, "IP address disallowed by policy");
@@ -166,7 +166,7 @@ describe("Axios Defaults tests", () => {
         deniedAddressesWithRedirect.forEach((url) => {
             it(`GET ${url} - maxRedirects = 0`, async () => {
                 try {
-                    const res = await axios.get(url, {
+                    await axios.get(url, {
                         maxRedirects: 0,
                         headers: { "test-required-header": "true" }
                     });
@@ -178,7 +178,7 @@ describe("Axios Defaults tests", () => {
 
             it(`GET ${url} - no maxRedirects`, async () => {
                 try {
-                    const res = await axios.get(url, { headers: { "test-required-header": "true" } });
+                    await axios.get(url, { headers: { "test-required-header": "true" } });
                     assert.fail("Expected error, but got response");
                 } catch (err) {
                     assert.equal((err as Error).message, "IP address disallowed by policy");
@@ -189,7 +189,7 @@ describe("Axios Defaults tests", () => {
 
     it("Contains denied header", async () => {
         try {
-            const res = await axios.get("https://github.com", {
+            await axios.get("https://github.com", {
                 headers: { "test-required-header": "true", "test-denied-header": "true" }
             });
             assert.fail("Expected error, but got response");
@@ -200,7 +200,7 @@ describe("Axios Defaults tests", () => {
 
     it("Missing required header", async () => {
         try {
-            const res = await axios.get("https://github.com", {
+            await axios.get("https://github.com", {
                 headers: {}
             });
             assert.fail("Expected error, but got response");
@@ -211,7 +211,7 @@ describe("Axios Defaults tests", () => {
 
     it("Tries to overwrite lookup", async () => {
         try {
-            const res = await axios.get("https://github.com", {
+            await axios.get("https://github.com", {
                 headers: { "test-required-header": "true" },
                 // @ts-ignore Testing that custom lookup is rejected
                 lookup: lookup

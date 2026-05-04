@@ -15,7 +15,7 @@ import assert from "assert";
 import { createServer, Server, Agent as NodeHttpAgent } from "http";
 import { Agent as NodeHttpsAgent } from "https";
 import { promises } from "dns";
-import { http, https } from "follow-redirects";
+import { http } from "follow-redirects";
 
 import { AntiSSRFPolicy, PolicyConfigOptions } from "../../src";
 
@@ -78,9 +78,7 @@ describe("Follow-Redirects Library Tests", () => {
                     }
                 );
 
-                req.on("error", (err) => {
-                    done(err);
-                });
+                req.on("error", done);
 
                 req.end();
             });

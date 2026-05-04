@@ -155,7 +155,7 @@ describe("Node-Fetch Tests", () => {
         allowedAddressesWithRedirect.forEach((url) => {
             it(`GET ${url} - follow = 0`, async () => {
                 try {
-                    const res = await fetch(url, {
+                    await fetch(url, {
                         follow: 0,
                         headers: { "test-required-header": "true" },
                         agent: agentFn
@@ -194,7 +194,7 @@ describe("Node-Fetch Tests", () => {
 
             it(`GET ${url} - redirect = "error"`, async () => {
                 try {
-                    const res = await fetch(url, {
+                    await fetch(url, {
                         redirect: "error",
                         headers: { "test-required-header": "true" },
                         agent: agentFn
@@ -214,7 +214,7 @@ describe("Node-Fetch Tests", () => {
         deniedAddressesNoRedirect.forEach((url) => {
             it(`GET ${url} - follow = 0`, async () => {
                 try {
-                    const res = await fetch(url, {
+                    await fetch(url, {
                         follow: 0,
                         headers: { "test-required-header": "true" },
                         agent: agentFn
@@ -227,7 +227,7 @@ describe("Node-Fetch Tests", () => {
 
             it(`GET ${url} - redirect = "manual"`, async () => {
                 try {
-                    const res = await fetch(url, {
+                    await fetch(url, {
                         redirect: "manual",
                         headers: { "test-required-header": "true" },
                         agent: agentFn
@@ -240,7 +240,7 @@ describe("Node-Fetch Tests", () => {
 
             it(`GET ${url} - redirect = "follow"`, async () => {
                 try {
-                    const res = await fetch(url, {
+                    await fetch(url, {
                         redirect: "follow",
                         headers: { "test-required-header": "true" },
                         agent: agentFn
@@ -253,7 +253,7 @@ describe("Node-Fetch Tests", () => {
 
             it(`GET ${url} - redirect = "error"`, async () => {
                 try {
-                    const res = await fetch(url, {
+                    await fetch(url, {
                         redirect: "error",
                         headers: { "test-required-header": "true" },
                         agent: agentFn
@@ -270,7 +270,7 @@ describe("Node-Fetch Tests", () => {
         deniedAddressesWithRedirect.forEach((url) => {
             it(`GET ${url} - follow = 0`, async () => {
                 try {
-                    const res = await fetch(url, {
+                    await fetch(url, {
                         follow: 0,
                         headers: { "test-required-header": "true" },
                         agent: agentFn
@@ -296,7 +296,7 @@ describe("Node-Fetch Tests", () => {
 
             it(`GET ${url} - redirect = "follow"`, async () => {
                 try {
-                    const res = await fetch(url, {
+                    await fetch(url, {
                         redirect: "follow",
                         headers: { "test-required-header": "true" },
                         agent: agentFn
@@ -309,7 +309,7 @@ describe("Node-Fetch Tests", () => {
 
             it(`GET ${url} - redirect = "error"`, async () => {
                 try {
-                    const res = await fetch(url, {
+                    await fetch(url, {
                         redirect: "error",
                         headers: { "test-required-header": "true" },
                         agent: agentFn
@@ -328,7 +328,7 @@ describe("Node-Fetch Tests", () => {
     describe("Header policy enforcement", () => {
         it("Contains denied header", async () => {
             try {
-                const res = await fetch("https://github.com", {
+                await fetch("https://github.com", {
                     headers: { "test-required-header": "true", "test-denied-header": "true" },
                     agent: agentFn
                 });
@@ -340,7 +340,7 @@ describe("Node-Fetch Tests", () => {
 
         it("Missing required header", async () => {
             try {
-                const res = await fetch("https://github.com", {
+                await fetch("https://github.com", {
                     headers: {},
                     agent: agentFn
                 });

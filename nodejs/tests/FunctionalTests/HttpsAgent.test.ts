@@ -27,9 +27,7 @@ describe("HttpsAgent Tests - default policy", () => {
             });
         });
 
-        req.on("error", (err) => {
-            done(err);
-        });
+        req.on("error", done);
 
         req.end();
     });
@@ -51,9 +49,7 @@ describe("HttpsAgent Tests - default policy", () => {
             }
         );
 
-        req.on("error", (err) => {
-            done(err);
-        });
+        req.on("error", done);
 
         req.end();
     });
@@ -71,9 +67,7 @@ describe("HttpsAgent Tests - default policy", () => {
             }
         );
 
-        req.on("error", (err) => {
-            done(err);
-        });
+        req.on("error", done);
 
         req.end();
     });
@@ -94,9 +88,7 @@ describe("HttpsAgent Tests - default policy", () => {
             }
         );
 
-        req.on("error", (err) => {
-            done(err);
-        });
+        req.on("error", done);
 
         req.end();
     });
@@ -187,9 +179,7 @@ describe("HttpsAgent Tests - default policy", () => {
             });
         });
 
-        req.on("error", (err) => {
-            done(err);
-        });
+        req.on("error", done);
 
         req.end(() => {
             assert.equal(req.getHeader("X-Forwarded-For"), "true");
@@ -209,9 +199,7 @@ describe("HttpsAgent Tests - default policy", () => {
             }
         );
 
-        req.on("error", (err) => {
-            done(err);
-        });
+        req.on("error", done);
 
         req.end(() => {
             assert.equal(req.getHeader("x-forwarded-for"), "127.0.0.1");
@@ -261,7 +249,7 @@ describe("HttpsAgent Tests - custom policy", () => {
             "https://www.bing.com/",
             { agent: antiSSRFHttpsAgent, port: 443, headers: { "test-required-header": 25 } },
             (res) => {
-                res.on("data", (data) => {});
+                res.on("data", () => {});
                 res.on("end", () => {
                     assert.equal(res.statusCode, 200);
                     done();
@@ -269,9 +257,7 @@ describe("HttpsAgent Tests - custom policy", () => {
             }
         );
 
-        req.on("error", (err) => {
-            done(err);
-        });
+        req.on("error", done);
 
         req.end();
     });
@@ -280,7 +266,7 @@ describe("HttpsAgent Tests - custom policy", () => {
         const req = https.get(
             { agent: antiSSRFHttpsAgent, hostname: "github.com", headers: { "test-required-header": 25 } },
             (res) => {
-                res.on("data", (data) => {});
+                res.on("data", () => {});
                 res.on("end", () => {
                     if (res.statusCode == 200) {
                         done();
@@ -291,9 +277,7 @@ describe("HttpsAgent Tests - custom policy", () => {
             }
         );
 
-        req.on("error", (err) => {
-            done(err);
-        });
+        req.on("error", done);
 
         req.end();
     });
@@ -303,7 +287,7 @@ describe("HttpsAgent Tests - custom policy", () => {
             "https://www.cmu.edu/",
             { agent: antiSSRFHttpsAgent, headers: { "test-required-header": 25 } },
             (res) => {
-                res.on("data", (data) => {});
+                res.on("data", () => {});
                 res.on("end", () => {
                     assert.equal(res.statusCode, 200);
                     done();
@@ -311,9 +295,7 @@ describe("HttpsAgent Tests - custom policy", () => {
             }
         );
 
-        req.on("error", (err) => {
-            done(err);
-        });
+        req.on("error", done);
 
         req.end();
     });
@@ -327,7 +309,7 @@ describe("HttpsAgent Tests - custom policy", () => {
                 headers: { "test-required-header": 25 }
             },
             (res) => {
-                res.on("data", (data) => {});
+                res.on("data", () => {});
                 res.on("end", () => {
                     assert.equal(res.statusCode, 200);
                     done();
@@ -335,9 +317,7 @@ describe("HttpsAgent Tests - custom policy", () => {
             }
         );
 
-        req.on("error", (err) => {
-            done(err);
-        });
+        req.on("error", done);
 
         req.end();
     });
@@ -351,7 +331,7 @@ describe("HttpsAgent Tests - custom policy", () => {
                 headers: { "test-required-header": 25 }
             },
             (res) => {
-                res.on("data", (data) => {});
+                res.on("data", () => {});
                 res.on("end", () => {
                     done("Expected error, but got response");
                 });
@@ -375,7 +355,7 @@ describe("HttpsAgent Tests - custom policy", () => {
                 servername: "apple.com"
             },
             (res) => {
-                res.on("data", (data) => {});
+                res.on("data", () => {});
                 res.on("end", () => {
                     done("Expected error, but got response");
                 });
@@ -390,32 +370,6 @@ describe("HttpsAgent Tests - custom policy", () => {
         req.end();
     });
 
-    // Azure Pipeline not supporting IPv6
-    // it("Reject lookup - request, URL", (done) => {
-    //     const req = https.request(
-    //         `https://[${googleIPs.find((address) => address.family === 6).address}]:443`,
-    //         {
-    //             agent: antiSSRFHttpsAgent,
-    //             host: "google.com",
-    //             family: 4,
-    //             headers: { "test-required-header": 25 }
-    //         },
-    //         (res) => {
-    //             res.on("data", (data) => {});
-    //             res.on("end", () => {
-    //                 done("Expected error, but got response");
-    //             });
-    //         }
-    //     );
-
-    //     req.on("error", (err) => {
-    //         assert.equal(err.message, "IP address disallowed by policy");
-    //         done();
-    //     });
-
-    //     req.end();
-    // });
-
     it("Reject lookup - request, options", (done) => {
         const req = https.request(
             {
@@ -425,7 +379,7 @@ describe("HttpsAgent Tests - custom policy", () => {
                 headers: { "test-required-header": 25 }
             },
             (res) => {
-                res.on("data", (data) => {});
+                res.on("data", () => {});
                 res.on("end", () => {
                     done("Expected error, but got response");
                 });
@@ -442,7 +396,7 @@ describe("HttpsAgent Tests - custom policy", () => {
 
     it("Reject lookup - any, missing required header", (done) => {
         const req = https.get("https://www.google.com/", { agent: antiSSRFHttpsAgent }, (res) => {
-            res.on("data", (data) => {});
+            res.on("data", () => {});
             res.on("end", () => {
                 done("Expected error, but got response");
             });
@@ -461,7 +415,7 @@ describe("HttpsAgent Tests - custom policy", () => {
             "https://www.bing.com/",
             { agent: antiSSRFHttpsAgent, headers: { "test-required-header": "true", "test-denied-header": "false" } },
             (res) => {
-                res.on("data", (data) => {});
+                res.on("data", () => {});
                 res.on("end", () => {
                     done("Expected error, but got response");
                 });
@@ -488,7 +442,7 @@ describe("HttpsAgent Tests - custom policy", () => {
                 headers: { "test-required-header": 25 }
             },
             (res) => {
-                res.on("data", (data) => {});
+                res.on("data", () => {});
                 res.on("end", () => {
                     done("Expected error, but got response");
                 });
@@ -506,7 +460,7 @@ describe("HttpsAgent Tests - custom policy", () => {
     it("Bad agent construction", () => {
         assert.throws(() => {
             const newPolicy = new AntiSSRFPolicy(PolicyConfigOptions.None);
-            const newAgent = newPolicy.getHttpsAgent({ lookup: lookup });
+            newPolicy.getHttpsAgent({ lookup: lookup });
         });
     });
 
@@ -555,9 +509,7 @@ describe("HttpsAgent Tests - other methods", () => {
                 });
             });
 
-            req.on("error", (err) => {
-                done(err);
-            });
+            req.on("error", done);
 
             req.end();
         });
@@ -602,9 +554,7 @@ describe("HttpsAgent Tests - certificates", () => {
                 });
             });
 
-            req.on("error", (err) => {
-                done(err);
-            });
+            req.on("error", done);
 
             req.end();
         });
@@ -640,9 +590,7 @@ describe("HttpsAgent Tests - certificates", () => {
                 }
             );
 
-            req.on("error", (err) => {
-                done(err);
-            });
+            req.on("error", done);
 
             req.end();
         });
@@ -682,9 +630,7 @@ describe("HttpsAgent Tests - certificates", () => {
                 }
             );
 
-            req.on("error", (err) => {
-                done(err);
-            });
+            req.on("error", done);
 
             req.end();
         });
@@ -724,9 +670,7 @@ describe("HttpsAgent Tests - certificates", () => {
                 }
             );
 
-            req.on("error", (err) => {
-                done(err);
-            });
+            req.on("error", done);
 
             req.end();
         });
@@ -766,9 +710,7 @@ describe("HttpsAgent Tests - certificates", () => {
                 }
             );
 
-            req.on("error", (err) => {
-                done(err);
-            });
+            req.on("error", done);
 
             req.end();
         });

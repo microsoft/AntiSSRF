@@ -4,11 +4,10 @@
 import assert from "assert";
 import { ADDRCONFIG, ALL, lookup, LookupAddress, LookupOptions, V4MAPPED } from "dns";
 import { isIP, isIPv4, isIPv6, LookupFunction } from "net";
+import { promisify } from "util";
 
 import { antiSSRFDnsLookup } from "../../src/Helpers/AntiSSRFDnsLookup";
 import { AntiSSRFPolicy, AntiSSRFError, PolicyConfigOptions } from "../../src";
-import { options } from "axios";
-import { promisify } from "util";
 
 /**
  * Converts a callback-based lookup function to a promise-based lookup function
