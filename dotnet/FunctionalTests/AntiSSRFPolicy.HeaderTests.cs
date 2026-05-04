@@ -74,11 +74,11 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             HttpClient client = new(policy.GetHandler());
             string Url = $"https://{TestDomain}/api/header-check?header=X-Test-Header";
 
-            HttpRequestMessage request = new(HttpMethod.Get, Url);
+            using HttpRequestMessage request = new(HttpMethod.Get, Url);
             request.Headers.Add("Not-X-Test-Header", "test-value");
             await Assert.ThrowsAsync<AntiSSRFException>(() => client.SendAsync(request, CancellationToken.None));
 
-            HttpRequestMessage request2 = new(HttpMethod.Get, Url);
+            using HttpRequestMessage request2 = new(HttpMethod.Get, Url);
             request2.Headers.Add("X-Test-Header", "test-value");
             var response = await client.SendAsync(request2, CancellationToken.None);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -92,11 +92,11 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             HttpClient client = new(policy.GetHandler());
             string url = $"https://{TestDomain}/";
 
-            HttpRequestMessage request = new(HttpMethod.Get, url);
+            using HttpRequestMessage request = new(HttpMethod.Get, url);
             request.Headers.Add("X-Test-Header", "test-value");
             await Assert.ThrowsAsync<AntiSSRFException>(() => client.SendAsync(request, CancellationToken.None));
 
-            HttpRequestMessage request2 = new(HttpMethod.Get, url);
+            using HttpRequestMessage request2 = new(HttpMethod.Get, url);
             request2.Headers.Add("Not-X-Test-Header", "test-value");
             var response = await client.SendAsync(request2, CancellationToken.None);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -111,7 +111,7 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             requiredPolicy.AddRequiredHeaders(["X-Test-Header"]);
             HttpClient requiredClient = new(requiredPolicy.GetHandler());
 
-            HttpRequestMessage requiredRequest = new(HttpMethod.Get, url);
+            using HttpRequestMessage requiredRequest = new(HttpMethod.Get, url);
             requiredRequest.Headers.Add("x-test-header", "test-value");
             var requiredResponse = await requiredClient.SendAsync(requiredRequest, CancellationToken.None);
             Assert.Equal(HttpStatusCode.OK, requiredResponse.StatusCode);
@@ -120,7 +120,7 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             deniedPolicy.AddDeniedHeaders(["X-Test-Header"]);
             HttpClient deniedClient = new(deniedPolicy.GetHandler());
 
-            HttpRequestMessage deniedRequest = new(HttpMethod.Get, $"https://{TestDomain}/");
+            using HttpRequestMessage deniedRequest = new(HttpMethod.Get, $"https://{TestDomain}/");
             deniedRequest.Headers.Add("x-test-header", "test-value");
             await Assert.ThrowsAsync<AntiSSRFException>(() => deniedClient.SendAsync(deniedRequest, CancellationToken.None));
         }
@@ -134,11 +134,11 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             HttpClient client = new(policy.GetHandler());
             string Url = $"https://{TestDomain}/api/header-check?header=X-Test-Header";
 
-            HttpRequestMessage request = new(HttpMethod.Get, Url);
+            using HttpRequestMessage request = new(HttpMethod.Get, Url);
             request.Headers.Add("X-Test-Header", "test-value");
             await Assert.ThrowsAsync<AntiSSRFException>(() => client.SendAsync(request, CancellationToken.None));
 
-            HttpRequestMessage request2 = new(HttpMethod.Get, Url);
+            using HttpRequestMessage request2 = new(HttpMethod.Get, Url);
             request2.Headers.Add("Not-X-Test-Header", "test-value");
             await Assert.ThrowsAsync<AntiSSRFException>(() => client.SendAsync(request2, CancellationToken.None));
         }
@@ -155,7 +155,7 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             policy.AddRequiredHeaders(["X-Forwarded-For", "X-Test-Header"]);
             HttpClient client = new(policy.GetHandler());
 
-            HttpRequestMessage request = new(HttpMethod.Get, Url);
+            using HttpRequestMessage request = new(HttpMethod.Get, Url);
             request.Headers.Add("X-Test-Header", "test-value");
             var response = await client.SendAsync(request, CancellationToken.None);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -167,7 +167,7 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             policy2.AddDeniedHeaders(["X-Forwarded-For", "Not-X-Test-Header"]);
             HttpClient client2 = new(policy2.GetHandler());
 
-            HttpRequestMessage request2 = new(HttpMethod.Get, Url);
+            using HttpRequestMessage request2 = new(HttpMethod.Get, Url);
             request2.Headers.Add("X-Test-Header", "test-value");
             await Assert.ThrowsAsync<AntiSSRFException>(() => client2.SendAsync(request2, CancellationToken.None));
         }
@@ -179,7 +179,7 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             policy.AddRequiredHeaders(["X-Required-Header"]);
             HttpClient client = new(policy.GetHandler());
 
-            HttpRequestMessage req = new(HttpMethod.Get, $"https://{TestDomain}/api/redirect?num=3");
+            using HttpRequestMessage req = new(HttpMethod.Get, $"https://{TestDomain}/api/redirect?num=3");
             req.Headers.Add("X-Required-Header", "test-value");
 
             // Should succeed since the required header is present and maintained through redirects
@@ -194,7 +194,7 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             policy.AddRequiredHeaders(["Authorization"]);
             HttpClient client = new(policy.GetHandler());
 
-            HttpRequestMessage req = new(HttpMethod.Get, $"https://{TestDomain}/api/redirect?num=3");
+            using HttpRequestMessage req = new(HttpMethod.Get, $"https://{TestDomain}/api/redirect?num=3");
             req.Headers.Add("Authorization", "Bearer test-token");
 
             // Should fail because Authorization header gets dropped by HttpClient during redirects
@@ -205,7 +205,7 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         public void NoEditsAfterHandler()
         {
             var policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1);
-            var handler = policy.GetHandler();
+            policy.GetHandler();
 
             Assert.Throws<AntiSSRFException>(() => policy.AddRequiredHeaders(["X-Test-Header"]));
             Assert.Throws<AntiSSRFException>(() => policy.AddDeniedHeaders(["X-Test-Header"]));

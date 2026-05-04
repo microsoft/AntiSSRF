@@ -13,6 +13,9 @@ on:
       - 'dotnet/src/IPAddressRanges.cs'
   workflow_dispatch: # Allow manual triggering
 
+permissions:
+  contents: read
+
 jobs:
   verify-ranges:
     runs-on: ubuntu-latest

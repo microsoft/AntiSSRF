@@ -124,7 +124,7 @@ describe("Axios Instance tests", () => {
         allowedAddressesWithRedirect.forEach((url) => {
             it(`GET ${url} - maxRedirects = 0`, async () => {
                 try {
-                    const res = await instance.get(url, {
+                    await instance.get(url, {
                         maxRedirects: 0
                     });
                     assert.fail("Expected error, but got response");
@@ -148,7 +148,7 @@ describe("Axios Instance tests", () => {
         deniedAddressesNoRedirect.forEach((url) => {
             it(`GET ${url} - maxRedirects = 0`, async () => {
                 try {
-                    const res = await instance.get(url, {
+                    await instance.get(url, {
                         maxRedirects: 0
                     });
                     assert.fail("Expected error, but got response");
@@ -159,7 +159,7 @@ describe("Axios Instance tests", () => {
 
             it(`GET ${url} - no maxRedirects`, async () => {
                 try {
-                    const res = await instance.get(url);
+                    await instance.get(url);
                     assert.fail("Expected error, but got response");
                 } catch (err) {
                     assert.equal((err as Error).message, "IP address disallowed by policy");
@@ -172,7 +172,7 @@ describe("Axios Instance tests", () => {
         deniedAddressesWithRedirect.forEach((url) => {
             it(`GET ${url} - maxRedirects = 0`, async () => {
                 try {
-                    const res = await instance.get(url, {
+                    await instance.get(url, {
                         maxRedirects: 0
                     });
                     assert.fail("Expected error, but got response");
@@ -183,7 +183,7 @@ describe("Axios Instance tests", () => {
 
             it(`GET ${url} - no maxRedirects`, async () => {
                 try {
-                    const res = await instance.get(url);
+                    await instance.get(url);
                     assert.fail("Expected error, but got response");
                 } catch (err) {
                     assert.equal((err as Error).message, "IP address disallowed by policy");
@@ -194,7 +194,7 @@ describe("Axios Instance tests", () => {
 
     it("Contains denied header", async () => {
         try {
-            const res = await instance.get("https://github.com", {
+            await instance.get("https://github.com", {
                 headers: { "test-required-header": "true", "test-denied-header": "true" }
             });
             assert.fail("Expected error, but got response");
@@ -205,7 +205,7 @@ describe("Axios Instance tests", () => {
 
     it("Tries to overwrite lookup", async () => {
         try {
-            const res = await instance.get("https://github.com", {
+            await instance.get("https://github.com", {
                 headers: { "test-required-header": "true" },
                 lookup: lookup
             });
@@ -228,7 +228,7 @@ describe("Axios Instance tests", () => {
 
     it("Incorrectly uses baseURL", async () => {
         try {
-            const res = await instance.get("www.bing.com", {
+            await instance.get("www.bing.com", {
                 headers: { "test-required-header": "true" }
             });
             assert.fail("Expected error, but got response");

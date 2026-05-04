@@ -123,7 +123,7 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             try
             {
                 using var cts4 = new CancellationTokenSource(TimeSpan.FromMilliseconds(500));
-                var response4 = await client4.GetAsync(ipUrl, cts4.Token);
+                await client4.GetAsync(ipUrl, cts4.Token);
                 // If we get here, the call succeeded (no AntiSSRFException thrown as expected)
                 Assert.True(true, "Call completed successfully without throwing AntiSSRFException as expected");
             }
@@ -516,13 +516,13 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             };
 
             // Allowed IPv4
-            using var response = await client.GetAsync("http://" + testIpArr[0].ToString(), CancellationToken.None);
+            using var response = await client.GetAsync("http://" + testIpArr[0], CancellationToken.None);
             Assert.True(response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.NotFound || (uint)response.StatusCode == BlockedByAzureFirewall, $"Request to IPv4 address {testIpArr[0]} should be allowed since it is in the allowed list, but got status code {response.StatusCode}");
 
             // Allowed IPv4-mapped IPv6
             try
             {
-                using var response2 = await client.GetAsync("http://[" + testIpArr[0].MapToIPv6().ToString() + "]:80", CancellationToken.None);
+                using var response2 = await client.GetAsync("http://[" + testIpArr[0].MapToIPv6() + "]:80", CancellationToken.None);
                 Assert.True(response2.StatusCode == HttpStatusCode.OK || response2.StatusCode == HttpStatusCode.NotFound || (uint)response2.StatusCode == BlockedByAzureFirewall, $"Request to IPv4-mapped IPv6 address {testIpArr[0].MapToIPv6()} should be allowed since it is in the allowed list, but got status code {response2.StatusCode}");
             }
             catch (Exception ex) when (ex is not AntiSSRFException)
@@ -560,13 +560,13 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             };
 
             // Allowed IPv4
-            using var response = await client.GetAsync("http://" + testIpArr[0].ToString(), CancellationToken.None);
+            using var response = await client.GetAsync("http://" + testIpArr[0], CancellationToken.None);
             Assert.True(response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.NotFound || (uint)response.StatusCode == BlockedByAzureFirewall, $"Request to IPv4 address {testIpArr[0]} should be allowed since its IPv4-mapped IPv6 address is in the allowed list, but got status code {response.StatusCode}");
 
             // Allowed IPv4-mapped IPv6
             try
             {
-                using var response2 = await client.GetAsync("http://[" + testIpArr[0].MapToIPv6().ToString() + "]:80", CancellationToken.None);
+                using var response2 = await client.GetAsync("http://[" + testIpArr[0].MapToIPv6() + "]:80", CancellationToken.None);
                 Assert.True(response2.StatusCode == HttpStatusCode.OK || response2.StatusCode == HttpStatusCode.NotFound || (uint)response2.StatusCode == BlockedByAzureFirewall, $"Request to IPv4-mapped IPv6 address {testIpArr[0].MapToIPv6()} should be allowed since it is in the allowed list, but got status code {response2.StatusCode}");
             }
             catch (Exception ex) when (ex is not AntiSSRFException)
@@ -636,10 +636,10 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             };
 
             // Denied IPv4
-            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync("https://" + testIp.ToString(), CancellationToken.None));
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync("https://" + testIp, CancellationToken.None));
 
             // Denied IPv4-mapped IPv6 (should also be denied since it's the same address)
-            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync("https://[" + testIp.MapToIPv6().ToString() + "]", CancellationToken.None));
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync("https://[" + testIp.MapToIPv6() + "]", CancellationToken.None));
 
             // Allowed different IPv4
             using var response = await client.GetAsync("https://github.com", CancellationToken.None);
@@ -676,10 +676,10 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             };
 
             // Denied IPv4 (should be denied since IPv4-mapped IPv6 denies the underlying IPv4)
-            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync("http://" + testIp.ToString(), CancellationToken.None));
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync("http://" + testIp, CancellationToken.None));
 
             // Denied IPv4-mapped IPv6
-            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync("http://[" + testIp.MapToIPv6().ToString() + "]", CancellationToken.None));
+            await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync("http://[" + testIp.MapToIPv6() + "]", CancellationToken.None));
 
             // Allowed different IPv4
             using var response = await client.GetAsync($"https://github.com", CancellationToken.None);
@@ -759,7 +759,7 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         public void NoEditsAfterHandler()
         {
             var policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1);
-            var handler = policy.GetHandler();
+            policy.GetHandler();
 
             Assert.Throws<AntiSSRFException>(() => policy.AddAllowedAddresses(["1.2.3.4"]));
             Assert.Throws<AntiSSRFException>(() => policy.AddDeniedAddresses(["1.2.3.4"]));

@@ -27,9 +27,7 @@ describe("HttpAgent Tests - default policy", () => {
             });
         });
 
-        req.on("error", (err) => {
-            done(err);
-        });
+        req.on("error", done);
 
         req.end();
     });
@@ -50,9 +48,7 @@ describe("HttpAgent Tests - default policy", () => {
             }
         );
 
-        req.on("error", (err) => {
-            done(err);
-        });
+        req.on("error", done);
 
         req.end();
     });
@@ -70,9 +66,7 @@ describe("HttpAgent Tests - default policy", () => {
             }
         );
 
-        req.on("error", (err) => {
-            done(err);
-        });
+        req.on("error", done);
 
         req.end();
     });
@@ -93,9 +87,7 @@ describe("HttpAgent Tests - default policy", () => {
             }
         );
 
-        req.on("error", (err) => {
-            done(err);
-        });
+        req.on("error", done);
 
         req.end();
     });
@@ -186,9 +178,7 @@ describe("HttpAgent Tests - default policy", () => {
             });
         });
 
-        req.on("error", (err) => {
-            done(err);
-        });
+        req.on("error", done);
 
         req.end(() => {
             assert.equal(req.getHeader("X-Forwarded-For"), "true");
@@ -208,9 +198,7 @@ describe("HttpAgent Tests - default policy", () => {
             }
         );
 
-        req.on("error", (err) => {
-            done(err);
-        });
+        req.on("error", done);
 
         req.end(() => {
             assert.equal(req.getHeader("x-forwarded-for"), "127.0.0.1");
@@ -269,9 +257,7 @@ describe("HttpAgent Tests - custom policy", () => {
             }
         );
 
-        req.on("error", (err) => {
-            done(err);
-        });
+        req.on("error", done);
 
         req.end();
     });
@@ -288,9 +274,7 @@ describe("HttpAgent Tests - custom policy", () => {
             }
         );
 
-        req.on("error", (err) => {
-            done(err);
-        });
+        req.on("error", done);
 
         req.end();
     });
@@ -308,9 +292,7 @@ describe("HttpAgent Tests - custom policy", () => {
             }
         );
 
-        req.on("error", (err) => {
-            done(err);
-        });
+        req.on("error", done);
 
         req.end();
     });
@@ -332,9 +314,7 @@ describe("HttpAgent Tests - custom policy", () => {
             }
         );
 
-        req.on("error", (err) => {
-            done(err);
-        });
+        req.on("error", done);
 
         req.end();
     });
@@ -476,7 +456,7 @@ describe("HttpAgent Tests - custom policy", () => {
     it("Bad agent construction", () => {
         assert.throws(() => {
             const newPolicy = new AntiSSRFPolicy(PolicyConfigOptions.None);
-            const newAgent = newPolicy.getHttpAgent({ lookup: lookup });
+            newPolicy.getHttpAgent({ lookup: lookup });
         });
     });
 

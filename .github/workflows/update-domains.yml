@@ -5,17 +5,16 @@ name: Verify Azure Service Domains
 
 on:
   pull_request:
+    branches:
+      - main
     paths:
       - 'config/Domains.json'
       - 'nodejs/src/Helpers/Domains.ts'
       - 'dotnet/src/Helpers/Domains.cs'
-  push:
-    branches: [main]
-    paths:
-      - 'config/Domains.json'
-      - 'nodejs/src/Helpers/Domains.ts'  
-      - 'dotnet/src/Helpers/Domains.cs'
   workflow_dispatch: # Allow manual triggering
+
+permissions:
+  contents: read
 
 jobs:
   verify-domains:

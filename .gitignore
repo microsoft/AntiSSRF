@@ -421,3 +421,5 @@ FodyWeavers.xsd
 *.msp
 
 .DS_Store
+*.tgz
+temp-lib/

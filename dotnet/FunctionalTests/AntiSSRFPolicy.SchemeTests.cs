@@ -111,7 +111,7 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         public void NoEditsAfterHandler()
         {
             var policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyV1);
-            var handler = policy.GetHandler();
+            policy.GetHandler();
 
             Assert.Throws<AntiSSRFException>(() => policy.AllowPlainTextHttp = true);
         }

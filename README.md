@@ -35,38 +35,38 @@ AntiSSRF helps mitigate these risks by:
 
 ### C# (.NET Framework and .NET Core)
 
-- 📦 **NuGet Package**: [Microsoft.Security.AntiSSRF](https://www.nuget.org/packages/Microsoft.Security.AntiSSRF/)
-- 📖 **Documentation**: [AntiSSRF .NET API Documentation](https://microsoft.github.io/AntiSSRF/dotnet-api/)
-- 🚀 **Quick Start**: [Getting Started Guide](https://microsoft.github.io/AntiSSRF/getting-started)
-- 📋 **Library README**: [.NET README](dotnet/README.md)
+- **NuGet Package**: [Microsoft.Security.AntiSSRF](https://www.nuget.org/packages/Microsoft.Security.AntiSSRF/)
+- **Documentation**: [AntiSSRF .NET API Documentation](https://microsoft.github.io/AntiSSRF/dotnet-api/)
+- **Quick Start**: [Getting Started Guide](https://microsoft.github.io/AntiSSRF/getting-started)
+- **Library README**: [.NET README](dotnet/README.md)
 
 ### JavaScript/TypeScript (Node.js)
 
-- 📦 **npm Package**: [@microsoft/antissrf](https://www.npmjs.com/package/@microsoft/antissrf)
-- 📖 **Documentation**: [AntiSSRF Node.js API Documentation](https://microsoft.github.io/AntiSSRF/nodejs-api/)
-- 🚀 **Quick Start**: [Getting Started Guide](https://microsoft.github.io/AntiSSRF/getting-started)
-- 📋 **Library README**: [Node.js README](nodejs/README.md)
+- **npm Package**: [@microsoft/antissrf](https://www.npmjs.com/package/@microsoft/antissrf)
+- **Documentation**: [AntiSSRF Node.js API Documentation](https://microsoft.github.io/AntiSSRF/nodejs-api/)
+- **Quick Start**: [Getting Started Guide](https://microsoft.github.io/AntiSSRF/getting-started)
+- **Library README**: [Node.js README](nodejs/README.md)
 
 ## Contributing
 
 We welcome contributions! Please see our contribution resources:
 
-- 🤝 **Contributing Guide**: [CONTRIBUTING.md](CONTRIBUTING.md)
-- 🐛 **Report Issues**: [GitHub Issues](https://github.com/Microsoft/AntiSSRF/issues)
-- � **License**: [LICENSE](LICENSE)
-- 🔒 **Security Policy**: [SECURITY.md](SECURITY.md)
-- 📋 **Code of Conduct**: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
-- 🆘 **Support**: [SUPPORT.md](SUPPORT.md)
+- **Contributing Guide**: [CONTRIBUTING.md](CONTRIBUTING.md)
+- **Report Issues**: [GitHub Issues](https://github.com/Microsoft/AntiSSRF/issues)
+- **License**: [LICENSE](LICENSE)
+- **Security Policy**: [SECURITY.md](SECURITY.md)
+- **Code of Conduct**: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+- **Support**: [SUPPORT.md](SUPPORT.md)
 
 ## More Resources
 
 ### Learning About SSRF
 
-- 📖 **AntiSSRF Documentation**: [Microsoft AntiSSRF Documentation](https://microsoft.github.io/AntiSSRF/)
+- **AntiSSRF Documentation**: [Microsoft AntiSSRF Documentation](https://microsoft.github.io/AntiSSRF/)
 - **OWASP SSRF Guide**: [Server-Side Request Forgery Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html)
 - **PortSwigger Web Security Academy**: [Server-side request forgery (SSRF)](https://portswigger.net/web-security/ssrf)
 - **CWE-918**: [Server-Side Request Forgery (SSRF)](https://cwe.mitre.org/data/definitions/918.html)
 
 ### Testing Tools
 
-- 🧪 **Dusseldorf**: [Dynamic SSRF Testing Tool](https://github.com/Microsoft/Dusseldorf) - Microsoft's open-source tool for dynamic SSRF testing and validation
+- **Dusseldorf**: [Dynamic SSRF Testing Tool](https://github.com/Microsoft/Dusseldorf) - Microsoft's open-source tool for dynamic SSRF testing and validation

@@ -1,4 +1,4 @@
-## Microsoft AntiSSRF for Node.js
+## Microsoft AntiSSRF Library for Node.js
 
 The Microsoft AntiSSRF Library for Node.js is a security-developed, exhaustively-tested library that provides robust URL validation to protect Node.js applications from Server-Side Request Forgery (SSRF) vulnerabilities. It integrates seamlessly with Node.js HTTP/HTTPS agents, allowing developers to secure outbound HTTP requests with minimal code changes.
 
