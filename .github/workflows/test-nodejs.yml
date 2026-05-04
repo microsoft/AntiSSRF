@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
-name: Run NodeJS Tests
+name: Run Node.js Tests
 
 on:
   pull_request:
@@ -11,6 +11,9 @@ on:
       - "nodejs/**"
       - ".github/workflows/test-nodejs.yml"
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   test:

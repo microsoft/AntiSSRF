@@ -12,6 +12,9 @@ on:
       - ".github/workflows/test-dotnet.yml"
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: windows-latest
