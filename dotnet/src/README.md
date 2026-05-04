@@ -1,4 +1,4 @@
-## Microsoft AntiSSRF for .NET
+## Microsoft AntiSSRF Library for .NET
 
 The Microsoft AntiSSRF Library for .NET is a security-developed, exhaustively-tested library that provides robust URL validation to protect .NET applications from Server-Side Request Forgery (SSRF) vulnerabilities. Designed specifically for .NET Framework and .NET Core applications, it integrates seamlessly with `HttpClient` through the `AntiSSRFHandler` class, allowing developers to secure outbound HTTP requests with minimal code changes.
 
