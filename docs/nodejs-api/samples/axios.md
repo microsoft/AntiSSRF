@@ -27,7 +27,7 @@ Axios allows you to create an Axios instance with a custom `config` including th
 Set up the `AntiSSRFPolicy`, then create an Axios instance with the AntiSSRF agents from the policy.
 
 ```js
-import { AntiSSRFPolicy, PolicyConfigOptions } from '@azuresecurity/antissrf';
+import { AntiSSRFPolicy, PolicyConfigOptions } from '@microsoft/antissrf';
 import axios from "axios";
 
 // Customize the policy
@@ -77,7 +77,7 @@ Just like Node.js requests, Axios allows you to add agents to individual request
 Set up the `AntiSSRFPolicy`, then get the AntiSSRF agents from the policy.
 
 ```js
-import { AntiSSRFPolicy, PolicyConfigOptions } from '@azuresecurity/antissrf';
+import { AntiSSRFPolicy, PolicyConfigOptions } from '@microsoft/antissrf';
 import axios from "axios";
 
 // Customize the policy

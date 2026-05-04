@@ -8,4 +8,7 @@ has_children: true
 has_toc: false
 ---
 
-TODO
+Sample code showing AntiSSRF integrating with common open-source request libraries:
+* [Axios](axios) - Popular promise-based HTTP client for Node.js
+* [follow-redirects](follow-redirects) - HTTP and HTTPS modules that follow redirects
+* [node-fetch](node-fetch) - A light-weight module bringing Fetch API to Node.js
