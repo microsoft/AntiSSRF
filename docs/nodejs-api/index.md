@@ -15,7 +15,7 @@ The **AntiSSRF Node.js Library** is a library for JavaScript/TypeScript applicat
 
 ## Usage Instructions
 
-The AntiSSRF library provides validation for different scenarios based on your trust requirements:
+The AntiSSRF Library provides validation for different scenarios based on your trust requirements:
 
 | Use Case | Description | Documentation Link |
 | --- | --- | --- |

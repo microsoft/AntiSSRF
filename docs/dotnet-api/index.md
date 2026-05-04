@@ -15,7 +15,7 @@ The **AntiSSRF .NET Library** is a library for C# applications using .NET that p
 
 ## Usage Instructions
 
-The AntiSSRF library provides validation for different scenarios based on your trust requirements:
+The AntiSSRF Library provides validation for different scenarios based on your trust requirements:
 
 | Use Case | Description | Documentation Link |
 | --- | --- | --- |

@@ -6,6 +6,8 @@ description: "Microsoft AntiSSRF Documentation - Protect your applications from 
 permalink: /
 ---
 
+# Microsoft AntiSSRF Libraries
+
 ## What is Server-Side Request Forgery (SSRF)?
 
 Server-Side Request Forgery (also known as SSRF) is a critical web security vulnerability in which an attacker can manipulate the server-side application to make network requests to an arbitrary endpoint. Through this vulnerability, the attacker manipulates the target web server to connect to internal, sensitive networks or exfiltrate sensitive data to an untrusted endpoint on the Internet.
@@ -27,15 +29,15 @@ SSRF can lead (but is not limited) to:
 
 Even data that doesn't initially appear to be a URL should be treated as one. For example, a workspace name or resource identifier that gets concatenated into a URL. All untrusted input used in URL construction MUST be validated.
 
-## What is the Microsoft `AntiSSRF` Library?
+## What is the Microsoft AntiSSRF Library?
 
-The Microsoft `AntiSSRF` library is a security-developed, exhaustively-tested secure code library available for multiple platforms, that provides robust URL validation to mitigate the risk of SSRF vulnerabilities in code where it is integrated. It is an easy-to-use drop-in library with a minimal toil of adoption on developers.
+The Microsoft AntiSSRF Library is a security-developed, exhaustively-tested secure code library available for multiple platforms, that provides robust URL validation to mitigate the risk of SSRF vulnerabilities in code where it is integrated. It is an easy-to-use drop-in library with a minimal toil of adoption on developers.
 
 ### How the Microsoft AntiSSRF Library Helps
 
 A common scenario in many online services is handling requests from customers containing customer-supplied strings that are, or are used to construct a URL. These strings are often not validated properly, leading to vulnerabilities such as Server-Side Request Forgery which can result in token theft.
 
-`AntiSSRF` helps mitigate these risks by:
+AntiSSRF helps mitigate these risks by:
 
 - Automatically validating URLs and network connections and rejecting/refusing unsafe input
 - Providing an agent that ensures HTTP requests cannot reach internal or sensitive IP addresses
@@ -49,5 +51,17 @@ A common scenario in many online services is handling requests from customers co
 
 {: .note }
 > Broader platform support is under development.
->
-> For questions regarding the usage of this library or for more information, please contact [antissrf-oss@microsoft.com](mailto:antissrf-oss@microsoft.com).
+
+## Next Steps
+
+### Learn More
+
+- � **Getting Started**: [Installation and Quick Start Guide](getting-started)
+- 📖 **API Documentation**: [.NET API](dotnet-api) \| [Node.js API](nodejs-api)
+- ❓ **Common Questions**: [FAQ](faq)
+
+### Get Support
+
+- 🐛 **Report Issues**: [GitHub Issues](https://github.com/Microsoft/AntiSSRF/issues)
+- 📧 **Contact**: [antissrf-oss@microsoft.com](mailto:antissrf-oss@microsoft.com)
+

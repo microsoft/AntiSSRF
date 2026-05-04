@@ -19,12 +19,6 @@ Install the NuGet package:
 dotnet add package Microsoft.Security.AntiSSRF
 ```
 
-Or using Package Manager Console:
-
-```powershell
-Install-Package Microsoft.Security.AntiSSRF
-```
-
 ### Node.js (JavaScript/TypeScript)
 
 Install the npm package:
@@ -84,38 +78,37 @@ The AntiSSRF library provides validation for different scenarios based on your t
 
 | Use Case | Description | Documentation Link |
 |----------|-------------|-------------------|
-| **Any Domain** | Validate untrusted URLs belonging to any domain | [.NET](https://microsoft.github.io/AntiSSRF/dotnet-api/antissrfpolicy/) \| [Node.js](https://microsoft.github.io/AntiSSRF/nodejs-api/antissrfpolicy/) |
-| **Azure Storage Domain** | Validate that URLs are Azure Storage endpoints | [.NET](https://microsoft.github.io/AntiSSRF/dotnet-api/urivalidator/inazurestoragedomain/) \| [Node.js](https://microsoft.github.io/AntiSSRF/nodejs-api/urivalidator/inazurestoragedomain/) |
-| **Azure Key Vault Domain** | Validate URLs are Azure Key Vault endpoints | [.NET](https://microsoft.github.io/AntiSSRF/dotnet-api/urivalidator/inazurekeyvaultdomain/) \| [Node.js](https://microsoft.github.io/AntiSSRF/nodejs-api/urivalidator/inazurekeyvaultdomain/) |
-| **Allowlist of Trusted Domains** | Validate that URLs belong to your custom allowlist of trusted domains | [.NET](https://microsoft.github.io/AntiSSRF/dotnet-api/urivalidator/indomain/) \| [Node.js](https://microsoft.github.io/AntiSSRF/nodejs-api/urivalidator/indomain/) |
+| **General Case** | The untrusted URL can belong to **any domain** or an **untrusted domain**. | [.NET](../dotnet-api/antissrfpolicy) \| [Node.js](../nodejs-api/antissrfpolicy) |
+| **Azure Key Vault Domain** | The untrusted URL must be an **Azure Key Vault endpoint**. | [.NET](../dotnet-api/urivalidator/inazurekeyvaultdomain) \| [Node.js](../nodejs-api/urivalidator/inazurekeyvaultdomain) |
+| **Azure Storage Domain** | The untrusted URL must be an **Azure Storage endpoint**. | [.NET](../dotnet-api/urivalidator/inazurestoragedomain/) \| [Node.js](../nodejs-api/urivalidator/inazurestoragedomain/) |
+| **Allowlist of Trusted Domains** | The untrusted URL must belong to a **specific, trusted domain**. | [.NET](../dotnet-api/urivalidator/indomain/) \| [Node.js](../nodejs-api/urivalidator/indomain/) |
 
 ## Best Practices
 
-1. Use Separate Handlers for External vs. Internal Requests
+1. **Use Separate Handlers for External vs. Internal Requests**
 
-    Always create separate HTTP clients for external and internal requests so that you can use the stricted security policy possible on each.
+    Always create separate HTTP clients for external and internal requests so that you can use the strictest security policy possible on each.
     This approach ensures that external API calls cannot accidentally reach internal services, and internal calls are restricted to only the networks you explicitly trust. When using the `AntiSSRFPolicy`, you can choose different built-in configuration options intended for each use-case.
 
-2. Only Use `InDomain` for Owned and Trusted Domains
+2. **Only Use `InDomain` for Owned and Trusted Domains**
 
     A domain should only be considered trusted if you fully control both the domain itself and all subdomains. You should trust the DNS responses for these domains and should be sure that no subdomain is configurable by a third party.
 
-3. Add X-Forwarded-For Header whenever possible
+3. **Add X-Forwarded-For Header whenever possible**
 
     The `X-Forwarded-For` header can be an important defense-in-depth strategy against SSRF vulnerabilities. Some services, including IMDS, will drop all incoming requests with the `X-Forwarded-For` present. By ensuring that the header is added to all outgoing requests, your service can be sure that it will never have an SSRF vulnerability that leaks data from IMDS.
 
-4. Stay up-to-date
+4. **Stay up-to-date**
 
     Keep the library updated to receive the latest security changes. Instead of using `PolicyConfigOptions.ExternalV1`, consider using `PolicyConfigOptions.ExternalOnlyLatest`.
 
 ## Next Steps
 
 ### Learn More
-
-- 📖 **API Documentation**: [.NET API](../dotnet-api/) | [Node.js API](../nodejs-api/)
-- ❓ **Common Questions**: [FAQ](../faq/)
+- 📖 **API Documentation**: [.NET API](../dotnet-api) \| [Node.js API](../nodejs-api)
+- ❓ **Common Questions**: [FAQ](../faq)
 
 ### Get Support
 
 - 🐛 **Report Issues**: [GitHub Issues](https://github.com/Microsoft/AntiSSRF/issues)
-- 📧 **Contact**: antissrf-oss@microsoft.com
+- 📧 **Contact**: [antissrf-oss@microsoft.com](mailto:antissrf-oss@microsoft.com)
