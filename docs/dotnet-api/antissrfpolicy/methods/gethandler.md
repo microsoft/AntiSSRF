@@ -3,8 +3,7 @@ layout: default
 title: GetHandler
 parent: Methods
 grand_parent: AntiSSRFPolicy
-ancestor: C# API Reference
-nav_order: 5
+ancestor: .NET API Reference
 description: "GetHandler method documentation"
 ---
 
@@ -12,20 +11,20 @@ description: "GetHandler method documentation"
 
 ## Definition
 
-Creates and returns a new `AntiSSRFHandler` instance based on the current policy configuration.
+Builds an `AntiSSRFHandler` that will enforce the policy on all outgoing requests.
 
 ```csharp
 public AntiSSRFHandler GetHandler()
 ```
 
-{: .warning }
+{: .note }
 > After calling `GetHandler()`, the policy becomes immutable. Any attempt to change properties or call customization methods will throw an `AntiSSRFException`.
 
 ### Returns
 
 `AntiSSRFHandler`
 
-A new `AntiSSRFHandler` instance that enforces this policy. Use this handler when constructing an `HttpClient`.
+A new `AntiSSRFHandler` instance that enforces this policy.
 
 ### Example
 
@@ -33,9 +32,8 @@ A new `AntiSSRFHandler` instance that enforces this policy. Use this handler whe
 using Microsoft.Security.AntiSSRF;
 using System.Net.Http;
 
+// Customize the policy
 var policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyLatest);
-
-// Customize before getting handler
 policy.AddAllowedAddresses(new[] { "10.0.1.0/24" });
 
 // Get the handler — policy is now locked

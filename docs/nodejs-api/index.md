@@ -11,7 +11,7 @@ has_toc: false
 
 ## AntiSSRF Node.js Library
 
-The **AntiSSRF Node.js Library** is a library for JavaScript/TypeScript applications using Node.js that provides robust URL validation to prevent SSRF vulnerabilities in code. It is designed as an easy, drop-in library with a minimal impact on the engineering team, implemented both as [Node.js HTTP(S) agents](https://nodejs.org/api/http.html#class-httpagent) and a URL validator, depending on use case.
+The **AntiSSRF Node.js Library** is a library for JavaScript/TypeScript applications using Node.js that provides robust URL validation to prevent SSRF vulnerabilities in code. It is designed as an easy, drop-in library with a minimal impact on the engineering team, implemented both as [Node.js HTTP(S) agents](https://nodejs.org/api/http.html#class-httpagent) and a static URL validator, depending on use case.
 
 ## Usage Instructions
 
@@ -30,4 +30,4 @@ The AntiSSRF library provides validation for different scenarios based on your t
 | --- | --- |
 | [AntiSSRFPolicy](antissrfpolicy) | Represents a customizable security policy and provides HTTP(S) agents to ensure all outgoing requests match the security policy. |
 | [IPAddressRanges](../ipaddressranges) | Provides predefined IP address ranges for use with AntiSSRF policies. |
-| [URIValidator](urivalidator) | Provides methods for validating the hostname of URLs. |
+| [URIValidator](urivalidator) | Provides static methods for validating the hostname and protocol of URLs. |

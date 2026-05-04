@@ -3,7 +3,7 @@ layout: default
 title: AllowedAddresses
 parent: Properties
 grand_parent: AntiSSRFPolicy
-ancestor: C# API Reference
+ancestor: .NET API Reference
 description: "AllowedAddresses property documentation"
 ---
 
@@ -11,7 +11,7 @@ description: "AllowedAddresses property documentation"
 
 ## Definition
 
-Gets a read-only view of the currently allowed IP address ranges as CIDR notation strings.
+Gets a read-only view of the IP networks explicitly allowed by the policy.
 
 ```csharp
 public IReadOnlyList<string> AllowedAddresses { get; }
@@ -24,4 +24,4 @@ public IReadOnlyList<string> AllowedAddresses { get; }
 
 `IReadOnlyList<string>`
 
-A read-only list of the allowed IP address ranges in CIDR notation.
+A read-only list of the allowed IP networks.

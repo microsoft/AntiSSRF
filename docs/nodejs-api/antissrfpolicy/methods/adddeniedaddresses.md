@@ -71,7 +71,7 @@ const req = https.request(options, (res) => {
 
 req.on('error', (err) => {
   // If untrusted hostname directs to 1.2.3.4,
-  // the request will fail here with an AntiSSRF error
+  // the request will fail here with an AntiSSRFError
 });
 
 req.end();

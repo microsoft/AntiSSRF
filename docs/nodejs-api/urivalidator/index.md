@@ -23,7 +23,7 @@ The URL is expected to belong to a specific set of trusted domains, the [Azure S
 
 ## Definition
 
-Provides methods for validating the hostname and protocol of URLs.
+Provides static methods for validating the hostname and protocol of URLs.
 
 ## Methods
 

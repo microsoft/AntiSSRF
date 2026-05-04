@@ -1,8 +1,8 @@
 ---
 layout: default
 title: Constructor
-parent: AntiSSRFPolicy (C#)
-grand_parent: C# API Reference
+parent: AntiSSRFPolicy
+grandparent: .NET API Reference
 nav_order: 1
 description: "AntiSSRFPolicy constructor documentation"
 ---
@@ -11,74 +11,41 @@ description: "AntiSSRFPolicy constructor documentation"
 
 ## Definition
 
-Initializes a new instance of the `AntiSSRFPolicy` class with the specified initial configuration.
+Creates a new [AntiSSRFPolicy](../) instance with a predefined security configuration.
 
-```csharp
-public AntiSSRFPolicy(PolicyConfigOptions config)
+```cs
+AntiSSRFPolicy(config: PolicyConfigOptions)
 ```
 
 ### Parameters
 
 `config`: `PolicyConfigOptions`
 
-* `PolicyConfigOptions.InternalOnly`
-* `PolicyConfigOptions.ExternalOnlyV1`
-* `PolicyConfigOptions.ExternalOnlyLatest`
-* `PolicyConfigOptions.None`
+Choose from the following predefined policy configurations:
 
-### Exceptions
+### PolicyConfigOptions
 
-`ArgumentOutOfRangeException`
-Thrown when an invalid `PolicyConfigOptions` value is provided.
-
-### PolicyConfigOptions.InternalOnly
-
-Recommended when:
-* The policy should enforce requests only reach internal addresses, blocking all requests to external addresses.
-* **OR** the policy should enforce requests only reach addresses specified by `AddAllowedAddresses`.
-
-Configuration:
-* Sets `DenyAllUnspecifiedIPs` to `true`, blocking all requests to all IP addresses by default, only allowing requests to IP addresses that have been explicitly specified by `AddAllowedAddresses`.
-
-### PolicyConfigOptions.ExternalOnlyV1
-
-Recommended when:
-* The policy should enforce that requests should not reach any internal or special-purpose address, unless otherwise specified by `AddAllowedAddresses`.
-
-Configuration:
-* Blocks all requests to internal and special-purpose addresses as specified by `IPAddressRanges.recommendedV1`. This excludes any address ranges that have been explicitly specified by `AddAllowedAddresses`.
-* Sets `AddXFFHeader` to `true` on all outgoing requests that do not already have the header. This can be disabled with `policy.AddXFFHeader = false`.
-
-### PolicyConfigOptions.ExternalOnlyLatest
+| Option | Use Case | Behavior |
+| --- | --- | --- |
+| **InternalOnly** | Making requests to internal addresses only **OR** restricting requests to specific allowed addresses | Blocks all IP addresses by default. Only allows addresses explicitly added via [AddAllowedAddresses](../methods/addallowedaddresses). |
+| **ExternalOnlyV1** | Making requests to external APIs while blocking internal access | Blocks internal and special-purpose IP addresses per [IPAddressRanges.recommendedV1](../../ipaddressranges#recommendedrangesv1). Automatically adds `X-Forwarded-For` header to requests. |
+| **ExternalOnlyLatest** | Currently the same as `ExternalOnlyV1` with automatic security updates | Always stays up to date with the latest `ExternalOnly` version, independent of semantic versioning. |
+| **None** | Custom policy configuration | No restrictions applied. Requires manual configuration via policy methods. |
 
 {: .important }
-> This policy does NOT follow semantic versioning. It will always stay up-to-date with the latest recommended addresses with no code changes required by the user.
+> `PolicyConfigOptions.ExternalOnlyLatest` does NOT follow semantic versioning. It will always stay up-to-date with the latest recommended addresses with no code changes required by the user.
 
-Recommended when:
-* Currently the same as `PolicyConfigOptions.ExternalOnlyV1`, if you want your security requirements updated automatically and are okay with changes that are not reflected in the package's semantic version.
-
-Configuration:
-* Currently the same as `PolicyConfigOptions.ExternalOnlyV1`.
-
-### PolicyConfigOptions.None
-
-Recommended when:
-* You plan to manually configure all policy customizations.
-
-Configuration:
-* Unless customized, this policy will not update any requests and will not block any requests.
-
-### Security Notes
+## Security Notes
 
 To prevent SSRF vulnerabilities, it is a best practice to ensure that your code can make requests to external endpoints or to internal endpoints, but never both.
 
-If your service needs to make outbound requests to external endpoints, you need to make sure that it can't be used to access internal endpoints as well. In this case, we recommend using `PolicyConfigOptions.ExternalOnlyLatest`, which takes care of blocking internal and special-purpose addresses automatically.
+If your service needs to make requests to external endpoints, you need to make sure that it can’t be abused to access internal resources. In this case, we recommend using `PolicyConfigOptions.ExternalOnlyLatest`, which takes care of blocking internal and special-purpose addresses automatically.
 
-If your service needs to make outbound requests to internal endpoints, you need to make sure that it can't be used to access external endpoints as well. In this case, we recommend using `PolicyConfigOptions.InternalOnly` to block all unspecified addresses, then use `AddAllowedAddresses(...)` with the specific internal IP addresses that your service might need to access.
+If your service needs to make requests to backend services, you must prevent data exfiltration by ensuring it cannot be used to send data to external endpoints. In this case, we recommend using `PolicyConfigOptions.InternalOnly` to block all unspecified addresses, then use `AddAllowedAddresses(...)` with the specific internal IP addresses that your service might need to access.
 
-For more about the `X-Forwarded-For` header, see [AddXFFHeader](properties/addxffheader.html).
+For more about the `X-Forwarded-For` header, see [addXFFHeader](../properties/addxffheader).
 
-### Immutability After Handler Creation
+## Immutability After Handler Creation
 
-{: .warning }
+{: .note }
 > Once `GetHandler()` is called, the policy becomes immutable. Any attempt to change properties or call customization methods will throw an `AntiSSRFException`.

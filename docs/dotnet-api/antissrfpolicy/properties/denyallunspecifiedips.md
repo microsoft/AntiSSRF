@@ -3,7 +3,7 @@ layout: default
 title: DenyAllUnspecifiedIPs
 parent: Properties
 grand_parent: AntiSSRFPolicy
-ancestor: C# API Reference
+ancestor: .NET API Reference
 description: "DenyAllUnspecifiedIPs property documentation"
 ---
 
@@ -11,8 +11,10 @@ description: "DenyAllUnspecifiedIPs property documentation"
 
 ## Definition
 
-Gets or sets whether the handler should deny all unspecified IP addresses. If `true`, any request to an IP address not explicitly allowed will be blocked.
-To allow specific addresses, use `AddAllowedAddresses`.
+Determines whether all IP addresses should be blocked by default or only `DeniedAddresses` should be blocked.
+
+{: .note }
+> To allow specific addresses, use `AddAllowedAddresses`. 
 
 ```csharp
 public bool DenyAllUnspecifiedIPs { get; set; }

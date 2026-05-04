@@ -3,7 +3,7 @@ layout: default
 title: RequiredHeaders
 parent: Properties
 grand_parent: AntiSSRFPolicy
-ancestor: C# API Reference
+ancestor: .NET API Reference
 description: "RequiredHeaders property documentation"
 ---
 
@@ -11,7 +11,7 @@ description: "RequiredHeaders property documentation"
 
 ## Definition
 
-Gets a read-only view of the currently required headers. HTTP requests missing any of these headers will be blocked by the handler.
+Gets a read-only view of headers that are required to be present in outgoing requests.
 
 ```csharp
 public IReadOnlyList<string> RequiredHeaders { get; }
@@ -24,4 +24,4 @@ public IReadOnlyList<string> RequiredHeaders { get; }
 
 `IReadOnlyList<string>`
 
-A read-only list of the headers explicitly required by the policy.
+A read-only list of header names that are required by the policy.

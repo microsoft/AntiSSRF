@@ -32,5 +32,5 @@ allowPlainTextHttp: boolean { get; set; }
 
 ### Errors
 
-`AntiSSRFException`
+`AntiSSRFError`
 The value passed cannot be `null` or `undefined`.

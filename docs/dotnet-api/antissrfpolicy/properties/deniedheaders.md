@@ -3,7 +3,7 @@ layout: default
 title: DeniedHeaders
 parent: Properties
 grand_parent: AntiSSRFPolicy
-ancestor: C# API Reference
+ancestor: .NET API Reference
 description: "DeniedHeaders property documentation"
 ---
 
@@ -11,7 +11,7 @@ description: "DeniedHeaders property documentation"
 
 ## Definition
 
-Gets a read-only view of the currently denied headers. HTTP requests containing any of these headers will be blocked by the handler.
+Gets a read-only view of headers that are forbidden from being included in outgoing requests.
 
 ```csharp
 public IReadOnlyList<string> DeniedHeaders { get; }
@@ -24,4 +24,4 @@ public IReadOnlyList<string> DeniedHeaders { get; }
 
 `IReadOnlyList<string>`
 
-A read-only list of the headers explicitly blocked by the policy.
+A read-only list of header names that are blocked by the policy.

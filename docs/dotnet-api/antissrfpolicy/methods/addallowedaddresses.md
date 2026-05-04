@@ -3,8 +3,7 @@ layout: default
 title: AddAllowedAddresses
 parent: Methods
 grand_parent: AntiSSRFPolicy
-ancestor: C# API Reference
-nav_order: 1
+ancestor: .NET API Reference
 description: "AddAllowedAddresses method documentation"
 ---
 
@@ -12,7 +11,7 @@ description: "AddAllowedAddresses method documentation"
 
 ## Definition
 
-Adds IP networks to the allow list. Requests to any IP address that matches any of the specified networks will be allowed by the handler. Allowed addresses take precedence over denied addresses, so if an IP address matches a network on both the allow and deny list, it will be allowed.
+Adds IP networks to be explicitly allowed by the policy.
 
 ```csharp
 public void AddAllowedAddresses(string[] networks)
@@ -25,19 +24,7 @@ public void AddAllowedAddresses(string[] networks)
 
 `networks`: `string[]`
 
-The list of IPv4/IPv6 addresses or subnets to be explicitly allowed by the policy.
-
-Networks can be:
-* IPv4 addresses in dotted-quad notation
-    * e.g. `127.0.0.1`
-* IPv6 addresses in expanded notation `x:x:x:x:x:x:x:x`, where the `x`s are one to four hexadecimal digits
-    * e.g. `ABCD:EF01:2345:6789:ABCD:EF01:2345:6789`
-* IPv6 addresses in compressed notation, where one group of consecutive 0s is represented with `::`
-    * e.g. `ABCD::`, `::1`, `ABCD:EF01::2345:6789`
-* IPv6 in mixed notation `x:x:x:x:x:x:d.d.d.d`, where the `x`s are hexadecimal values and the `d`s are decimal
-    * e.g. `::FFFF:127.0.0.1`
-* Any of the above addresses with a decimal prefix length `<ip-address>/<prefix-length>` 
-    * e.g. `192.0.2.0/24`, `2001:db8::/32`
+The list of IP networks to be explicitly allowed by the policy.
 
 ### Exceptions
 
@@ -49,3 +36,29 @@ Networks can be:
 
 `AntiSSRFException`
 * Attempted to edit the policy after it has been used to create a handler via `GetHandler()`.
+
+## Examples
+
+```csharp
+using Microsoft.Security.AntiSSRF;
+
+// Customize the policy
+var policy = new AntiSSRFPolicy(PolicyConfigOptions.None);
+policy.DenyAllUnspecifiedIPs = true;
+policy.AddAllowedAddresses(new[] { "1.2.3.4" });
+
+// Create HttpClient with the policy handler
+using var httpClient = new HttpClient(policy.GetHandler());
+
+try
+{
+    // If the untrusted hostname directs to 1.2.3.4,
+    // the request will succeed here
+    var response = await httpClient.GetAsync("https://<some_untrusted_hostname>/public/data");
+}
+catch (AntiSSRFException ex)
+{
+    // If untrusted hostname directs to anything besides 1.2.3.4,
+    // the request will fail here with an AntiSSRFException
+}
+```

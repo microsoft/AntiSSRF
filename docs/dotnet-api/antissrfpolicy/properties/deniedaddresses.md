@@ -3,7 +3,7 @@ layout: default
 title: DeniedAddresses
 parent: Properties
 grand_parent: AntiSSRFPolicy
-ancestor: C# API Reference
+ancestor: .NET API Reference
 description: "DeniedAddresses property documentation"
 ---
 
@@ -11,7 +11,7 @@ description: "DeniedAddresses property documentation"
 
 ## Definition
 
-Gets a read-only view of the currently denied IP address ranges as CIDR notation strings.
+Gets a read-only view of IP networks explicitly blocked by the policy.
 
 ```csharp
 public IReadOnlyList<string> DeniedAddresses { get; }
@@ -27,4 +27,4 @@ public IReadOnlyList<string> DeniedAddresses { get; }
 
 `IReadOnlyList<string>`
 
-A read-only list of the denied IP address ranges in CIDR notation.
+A read-only list of the denied IP networks.

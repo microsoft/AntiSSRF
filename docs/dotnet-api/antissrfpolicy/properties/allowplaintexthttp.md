@@ -3,18 +3,18 @@ layout: default
 title: AllowPlainTextHttp
 parent: Properties
 grand_parent: AntiSSRFPolicy
-ancestor: C# API Reference
+ancestor: .NET API Reference
 description: "AllowPlainTextHttp property documentation"
 ---
 
 # AntiSSRFPolicy.AllowPlainTextHttp Property
 
 {: .warning }
-> Setting `AllowPlainTextHttp` to `true` means you will be able to send HTTP requests without the required TLS encryption.
+> Changing an `AntiSSRFPolicy` instance to allow plaintext HTTP means you will be able to send HTTP requests without the recommended TLS encryption.
 
 ## Definition
 
-Gets or sets whether plain text HTTP requests are allowed. If `false`, any request with the `http` scheme will be blocked by the handler.
+Determines whether HTTPS is required or HTTP is allowed.
 
 ```csharp
 public bool AllowPlainTextHttp { get; set; }
@@ -29,8 +29,6 @@ public bool AllowPlainTextHttp { get; set; }
 
 * `true` if HTTP should be allowed.
 * `false` if HTTPS should be required.
-
-Default: `false`
 
 ### Exceptions
 
