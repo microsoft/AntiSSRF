@@ -328,7 +328,7 @@ describe("AntiSSRFDnsLookup", () => {
         for (const hostname of hostnames) {
             const addresses_0 = await promisified(hostname, { all: true, family: 0, hints: ALL }) as LookupAddress[];
             const addresses_4 = await promisified(hostname, { all: true, family: 4, hints: ALL }) as LookupAddress[];
-            const addresses_6 = await promisified(hostname, { all: true, family: 6, hints: ALL }) as LookupAddress[];
+            const addresses_6 = await promisified(hostname, { all: true, family: 6, hints: ALL | V4MAPPED }) as LookupAddress[];
             const addresses_ipv4 = await promisified(hostname, {
                 all: true,
                 family: "IPv4",
@@ -337,7 +337,7 @@ describe("AntiSSRFDnsLookup", () => {
             const addresses_ipv6 = await promisified(hostname, {
                 all: true,
                 family: "IPv6",
-                hints: ALL
+                hints: ALL | V4MAPPED
             }) as LookupAddress[];
             const addresses_undefined = await promisified(hostname, {
                 all: true,
