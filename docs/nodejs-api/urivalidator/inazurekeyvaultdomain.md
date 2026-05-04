@@ -3,7 +3,6 @@ layout: default
 title: inAzureKeyVaultDomain
 parent: URIValidator
 grand_parent: Node.js API Reference
-nav_order: 3
 description: "Check if a URI belongs to Azure Key Vault domains"
 ---
 
@@ -13,18 +12,18 @@ description: "Check if a URI belongs to Azure Key Vault domains"
 
 The code is making requests to a URL constructed using untrusted inputs, where an input is considered untrusted if it comes from *user input* or *other services*.
 
-AND
+**AND**
 
-The URL is expected to belong to an **Azure Key Vault Domain**.
+The URL is expected to belong to an [**Azure Key Vault Domain**](#azure-key-vault-domain-names).
 
 {: .note }
-> * If you instead expect the domain to be another **specific, trusted domain**, see [inDomain](indomain.html).
-> * If you instead expect the URL to be an **Azure Storage endpoint**, see [inAzureStorageDomain](inazurestoragedomain.html).
-> * If you instead expect the domain to be in **any domain** or **an untrusted domain**, see [AntiSSRFPolicy](../antissrfpolicy/).
+> * If you instead expect the domain to be in **any domain** or **an untrusted domain**, see [AntiSSRFPolicy](../antissrfpolicy).
+> * If you instead expect the URL to be an **Azure Storage endpoint**, see [inAzureStorageDomain](inazurestoragedomain).
+> * If you instead expect the domain to be another **specific, trusted domain**, see [inDomain](indomain).
 
 ## Definition
 
-Validates if `url` is an Azure Key Vault endpoint.
+Validates if a URL is an Azure Key Vault endpoint.
 
 ```js
 inAzureKeyVaultDomain(url: URL | string): boolean
@@ -40,6 +39,18 @@ The URL to be evaluated.
 
 * `true` if `url` belongs to any of the listed Azure Key Vault domains.
 * `false` if `url` does not belong to any of the listed Azure Key Vault domains, the `url` is not a valid URL, or the protocol is not HTTP/S.
+
+## Examples
+
+```js
+const { URIValidator } = require('@microsoft/antissrf');
+
+URIValidator.inAzureKeyVaultDomain('https://myvault.vault.azure.net/secrets/api-key');
+// → true
+
+URIValidator.inAzureKeyVaultDomain('https://evil.com/secrets');
+// → false
+```
 
 ## Azure Key Vault Domain Names
 

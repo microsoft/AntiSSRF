@@ -11,11 +11,13 @@ description: "denyAllUnspecifiedIPs property documentation"
 
 ## Definition
 
-Determines whether all IP addresses should be blocked by default or only `deniedAddresses` IP addresses should be blocked.
-To allow specific addresses, use `addAllowedAddresses`. 
+Determines whether all IP addresses should be blocked by default or only `deniedAddresses` should be blocked.
+
+{: .note }
+> To allow specific addresses, see [addAllowedAddresses](../methods/addallowedaddresses). 
 
 ```js
-boolean denyAllUnspecifiedIPs { get; set; }
+denyAllUnspecifiedIPs: boolean { get; set; }
 ```
 
 ### Property Value
@@ -27,5 +29,5 @@ boolean denyAllUnspecifiedIPs { get; set; }
 
 ### Errors
 
-`AntiSSRFException`
+`AntiSSRFError`
 The value passed cannot be `null` or `undefined`.

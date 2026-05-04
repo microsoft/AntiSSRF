@@ -1,33 +1,33 @@
 ---
 layout: default
 title: Node.js API Reference
-nav_order: 3
-description: "Complete API documentation for the AntiSSRF Node.js library"
+nav_order: 4
+description: "Complete API documentation for the AntiSSRF Node.js Library"
 has_children: true
 has_toc: false
 ---
 
 # API Documentation
 
-## AntiSSRF JavaScript Library
+## AntiSSRF Node.js Library
 
-The  **AntiSSRF NodeJS Library** is a library for JavaScript/TypeScript applications using Node.js that provides robust URL validation to prevent SSRF vulnerabilities in code. It is designed as an easy, drop-in library with a minimal impact on the engineering team, implemented both as a NodeJS HTTP(S) Agent and URL validator, depending on use case.
+The **AntiSSRF Node.js Library** is a library for JavaScript/TypeScript applications using Node.js that provides robust URL validation to prevent SSRF vulnerabilities in code. It is designed as an easy, drop-in library with a minimal impact on the engineering team, implemented both as [Node.js HTTP(S) agents](https://nodejs.org/api/http.html#class-httpagent) and a static URL validator, depending on use case.
 
 ## Usage Instructions
 
-There are four different ways to use this library, depending on your specific case. Identify the use case below based on the URLs your code is accessing.
+The AntiSSRF Library provides validation for different scenarios based on your trust requirements:
 
-| Use Case | Steps |
-| --- | --- |
-| The URL you are accessing must always belong to a **specific, trsuted domain**. | See URIValidator.inDomain. |
-| The URL you are accessing must be an **Azure Storage endpoint**. | See URIValidator.inAzureStorageDomain. |
-| The URL you are accessing must be an **Azure Key Vault endpoint**. | See URIValidator.inAzureKeyVaultDomain. |
-| The URL you are accessing can belong to **any domain** or an **untrusted domain**, so to prevent SSRF vulnerabilities, you must ensure that it does not resolve to internal and special-purpose IP addresses. | See AntiSSRFPolicy. |
+| Use Case | Description | Documentation Link |
+| --- | --- | --- |
+| **General Case** | The untrusted URL can belong to **any domain** or an **untrusted domain**. | [AntiSSRFPolicy](antissrfpolicy) |
+| **Azure Key Vault Domain** | The untrusted URL must be an **Azure Key Vault endpoint**. | [URIValidator.inAzureKeyVaultDomain](urivalidator/inazurekeyvaultdomain) |
+| **Azure Storage Domain** | The untrusted URL must be an **Azure Storage endpoint**. | [URIValidator.inAzureStorageDomain](urivalidator/inazurestoragedomain) |
+| **Allowlist of Trusted Domains** | The untrusted URL must belong to a **specific, trusted domain**. | [URIValidator.inDomain](urivalidator/indomain) |
 
 ## Classes
 
 | Class | Description |
 | --- | --- |
-| [AntiSSRFPolicy](antissrfpolicy/) | Represents a customizable security policy and provides HTTP(S) agents to ensure all outgoing requests match the security policy. |
-| [IPAddressRanges](../ipaddressranges.html) | Provides predefined IP address ranges for use with AntiSSRF policies. |
-| [URIValidator](urivalidator/) | Provides methods for validating the hostname of URLs. |
+| [AntiSSRFPolicy](antissrfpolicy) | Represents a customizable security policy and provides HTTP(S) agents to ensure all outgoing requests match the security policy. |
+| [IPAddressRanges](../ipaddressranges) | Provides predefined IP address ranges for use with AntiSSRF policies. |
+| [URIValidator](urivalidator) | Provides static methods for validating the hostname and protocol of URLs. |
