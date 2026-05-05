@@ -22,8 +22,8 @@ title: AntiSSRF Documentation
 description: >- # this means to ignore newlines until "baseurl:"
   Documentation for AntiSSRF - A security library that helps .NET and Node.js developers 
   protect their applications from Server-Side Request Forgery (SSRF) attacks.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "/AntiSSRF" # the subpath of your site, e.g. /blog
+url: "https://microsoft.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 
 # Repository info for GitHub integration
 gh_edit_repository: "https://github.com/Microsoft/AntiSSRF"
