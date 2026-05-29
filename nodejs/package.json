@@ -2,12 +2,30 @@
   "name": "@microsoft/antissrf",
   "version": "1.0.0",
   "description": "A library to prevent SSRF vulnerabilities in Node.js applications",
+  "keywords": [
+    "ssrf",
+    "anti-ssrf",
+    "security",
+    "sanitizer",
+    "url-validation"
+  ],
   "main": "./out/src/index.js",
   "types": "./out/src/index.d.ts",
   "files": [
     "out/src/**/*",
+    "../LICENSE",
     "CHANGELOG.md"
   ],
+  "license": "MIT",
+  "homepage": "https://microsoft.github.io/AntiSSRF/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/AntiSSRF.git"
+  },
+  "bugs": {
+    "url": "https://github.com/microsoft/AntiSSRF/issues",
+    "email": "antissrf-oss@microsoft.com"
+  },
   "scripts": {
     "build": "tsc --project ./tsconfig.json",
     "format": "prettier --write .",
