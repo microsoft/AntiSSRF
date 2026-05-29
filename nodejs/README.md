@@ -40,7 +40,7 @@ Explore our comprehensive documentation to get the most out of Microsoft AntiSSR
 
 ### API Documentation
 - [Complete Node.js API Documentation](https://microsoft.github.io/AntiSSRF/nodejs-api)
-- [AntiSSRF Node.js Agent](https://microsoft.github.io/AntiSSRF/nodejs-api/antissrfhandler)
+- [AntiSSRF Node.js Agent](https://microsoft.github.io/AntiSSRF/nodejs-api/antissrfpolicy/methods/gethttpsagent)
 - [AntiSSRFPolicy](https://microsoft.github.io/AntiSSRF/nodejs-api/antissrfpolicy)
 - [URIValidator](https://microsoft.github.io/AntiSSRF/nodejs-api/urivalidator)
 
