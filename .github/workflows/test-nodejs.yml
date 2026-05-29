@@ -38,7 +38,7 @@ jobs:
       
       - name: Install dependencies
         working-directory: nodejs
-        run: npm ci
+        run: npm ci --ignore-scripts
       
       - name: Run unit tests
         working-directory: nodejs
