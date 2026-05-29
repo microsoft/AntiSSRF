@@ -6,7 +6,7 @@
     "outDir": "out",
     "esModuleInterop": true,
     "declaration": true,
-    "removeComments": true,
+    "removeComments": false,
     "types": ["node", "mocha"]
   },
   "include": ["src", "tests"],
