@@ -11,6 +11,7 @@ on:
       - 'config/Domains.json'
       - 'nodejs/src/Helpers/Domains.ts'
       - 'dotnet/src/Helpers/Domains.cs'
+      - 'rust/src/domains.rs'
   workflow_dispatch: # Allow manual triggering
 
 permissions:
@@ -38,16 +39,20 @@ jobs:
     - name: Build C# version
       run: ./scripts/build-domains-dotnet.sh
     
+    - name: Build Rust version
+      run: ./scripts/build-domains-rust.sh
+    
     - name: Verify generated files are up-to-date
       run: |
-        if ! git diff --exit-code nodejs/src/Helpers/Domains.ts dotnet/src/Helpers/Domains.cs; then
+        if ! git diff --exit-code nodejs/src/Helpers/Domains.ts dotnet/src/Helpers/Domains.cs rust/src/domains.rs; then
           echo "❌ Generated domain files are out of sync!"
           echo "The following files need to be regenerated:"
-          git diff --name-only nodejs/src/Helpers/Domains.ts dotnet/src/Helpers/Domains.cs
+          git diff --name-only nodejs/src/Helpers/Domains.ts dotnet/src/Helpers/Domains.cs rust/src/domains.rs
           echo ""
           echo "Please run the following commands locally and commit the results:"
           echo "  ./scripts/build-domains-nodejs.sh"
           echo "  ./scripts/build-domains-dotnet.sh"
+          echo "  ./scripts/build-domains-rust.sh"
           exit 1
         else
           echo "✅ All generated files are up-to-date"

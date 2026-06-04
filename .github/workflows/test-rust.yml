@@ -1,0 +1,50 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
+name: Run Rust Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "rust/**"
+      - ".github/workflows/test-rust.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        toolchain: [stable, beta]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Rust ${{ matrix.toolchain }}
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: ${{ matrix.toolchain }}
+
+      - name: Cache cargo dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "rust"
+
+      - name: Build
+        working-directory: rust
+        run: cargo build --verbose
+
+      - name: Run lib tests (no network features)
+        working-directory: rust
+        run: cargo test --lib --verbose
+
+      - name: Run all tests (with reqwest integration)
+        working-directory: rust
+        run: cargo test --all-features --verbose
