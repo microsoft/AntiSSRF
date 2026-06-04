@@ -1,0 +1,5 @@
+# Rust build output
+target/
+
+# Local development artifacts
+*.local.*
