@@ -27,6 +27,14 @@ Install the npm package:
 npm install @microsoft/antissrf
 ```
 
+### Rust
+
+Install the crate:
+
+```bash
+cargo add antissrf
+```
+
 ## Quick Start Examples
 
 ### .NET Usage
@@ -72,16 +80,35 @@ https.get(options, (res) => {
 });
 ```
 
+### Rust Usage
+
+```rust
+use antissrf::{AntiSSRFPolicy, PolicyConfigOptions};
+
+// Create a policy for external-only requests
+let policy = AntiSSRFPolicy::new(PolicyConfigOptions::ExternalOnlyLatest);
+
+// Validate a request URL and headers
+let mut headers = vec![];
+let allowed = policy.validate_request("https://api.example.com/data", &mut headers)?;
+
+// With reqwest middleware (DNS-level IP blocking)
+use antissrf::network::reqwest_integration::AntiSSRFClientBuilder;
+
+let client = AntiSSRFClientBuilder::new(policy)
+    .build_with_middleware()?;
+```
+
 ## How to Use
 
 The AntiSSRF library provides validation for different scenarios based on your trust requirements:
 
 | Use Case | Description | Documentation Link |
 |----------|-------------|-------------------|
-| **General Case** | The untrusted URL can belong to **any domain** or an **untrusted domain**. | [.NET](dotnet-api/antissrfpolicy/) \| [Node.js](nodejs-api/antissrfpolicy/) |
-| **Azure Key Vault Domain** | The untrusted URL must be an **Azure Key Vault endpoint**. | [.NET](dotnet-api/urivalidator/inazurekeyvaultdomain) \| [Node.js](nodejs-api/urivalidator/inazurekeyvaultdomain) |
-| **Azure Storage Domain** | The untrusted URL must be an **Azure Storage endpoint**. | [.NET](dotnet-api/urivalidator/inazurestoragedomain) \| [Node.js](nodejs-api/urivalidator/inazurestoragedomain) |
-| **Allowlist of Trusted Domains** | The untrusted URL must belong to a **specific, trusted domain**. | [.NET](dotnet-api/urivalidator/indomain) \| [Node.js](nodejs-api/urivalidator/indomain) |
+| **General Case** | The untrusted URL can belong to **any domain** or an **untrusted domain**. | [.NET](dotnet-api/antissrfpolicy/) \| [Node.js](nodejs-api/antissrfpolicy/) \| [Rust](rust-api/antissrfpolicy/) |
+| **Azure Key Vault Domain** | The untrusted URL must be an **Azure Key Vault endpoint**. | [.NET](dotnet-api/urivalidator/inazurekeyvaultdomain) \| [Node.js](nodejs-api/urivalidator/inazurekeyvaultdomain) \| [Rust](rust-api/urivalidator/inazurekeyvaultdomain) |
+| **Azure Storage Domain** | The untrusted URL must be an **Azure Storage endpoint**. | [.NET](dotnet-api/urivalidator/inazurestoragedomain) \| [Node.js](nodejs-api/urivalidator/inazurestoragedomain) \| [Rust](rust-api/urivalidator/inazurestoragedomain) |
+| **Allowlist of Trusted Domains** | The untrusted URL must belong to a **specific, trusted domain**. | [.NET](dotnet-api/urivalidator/indomain) \| [Node.js](nodejs-api/urivalidator/indomain) \| [Rust](rust-api/urivalidator/indomain) |
 
 ## Best Practices
 
@@ -105,7 +132,7 @@ The AntiSSRF library provides validation for different scenarios based on your t
 ## Next Steps
 
 ### Learn More
-- 📖 **API Documentation**: [.NET API](dotnet-api/) \| [Node.js API](nodejs-api/)
+- 📖 **API Documentation**: [.NET API](dotnet-api/) \| [Node.js API](nodejs-api/) \| [Rust API](rust-api/)
 - ❓ **Common Questions**: [FAQ](faq)
 
 ### Get Support

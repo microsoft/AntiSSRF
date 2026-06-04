@@ -11,6 +11,7 @@ on:
       - 'config/IPAddressRanges.json'
       - 'nodejs/src/IPAddressRanges.ts'
       - 'dotnet/src/IPAddressRanges.cs'
+      - 'rust/src/ip_address_ranges.rs'
   workflow_dispatch: # Allow manual triggering
 
 permissions:
@@ -38,16 +39,20 @@ jobs:
     - name: Build C# version
       run: ./scripts/build-ip-ranges-dotnet.sh
     
+    - name: Build Rust version
+      run: ./scripts/build-ip-ranges-rust.sh
+    
     - name: Verify generated files are up-to-date
       run: |
-        if ! git diff --exit-code nodejs/src/IPAddressRanges.ts dotnet/src/IPAddressRanges.cs; then
+        if ! git diff --exit-code nodejs/src/IPAddressRanges.ts dotnet/src/IPAddressRanges.cs rust/src/ip_address_ranges.rs; then
           echo "❌ Generated IP address range files are out of sync!"
           echo "The following files need to be regenerated:"
-          git diff --name-only nodejs/src/IPAddressRanges.ts dotnet/src/IPAddressRanges.cs
+          git diff --name-only nodejs/src/IPAddressRanges.ts dotnet/src/IPAddressRanges.cs rust/src/ip_address_ranges.rs
           echo ""
           echo "Please run the following commands locally and commit the results:"
           echo "  ./scripts/build-ip-ranges-nodejs.sh"
           echo "  ./scripts/build-ip-ranges-dotnet.sh"
+          echo "  ./scripts/build-ip-ranges-rust.sh"
           exit 1
         else
           echo "✅ All generated files are up-to-date"
