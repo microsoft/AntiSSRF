@@ -1,6 +1,6 @@
 # Microsoft AntiSSRF
 
-The Microsoft AntiSSRF library is a security-developed, exhaustively-tested secure code library that provides robust URL validation to mitigate the risk of Server-Side Request Forgery (SSRF) vulnerabilities. It is an easy-to-use drop-in library with minimal adoption effort for developers, available for both .NET and Node.js applications.
+The Microsoft AntiSSRF library is a security-developed, exhaustively-tested secure code library that provides robust URL validation to mitigate the risk of Server-Side Request Forgery (SSRF) vulnerabilities. It is an easy-to-use drop-in library with minimal adoption effort for developers, available for .NET, Node.js, and Rust applications.
 
 ## What is Server-Side Request Forgery (SSRF)?
 
@@ -46,6 +46,13 @@ AntiSSRF helps mitigate these risks by:
 - **Documentation**: [AntiSSRF Node.js API Documentation](https://microsoft.github.io/AntiSSRF/nodejs-api/)
 - **Quick Start**: [Getting Started Guide](https://microsoft.github.io/AntiSSRF/getting-started)
 - **Library README**: [Node.js README](nodejs/README.md)
+
+### Rust
+
+- **crates.io Package**: [antissrf](https://crates.io/crates/antissrf)
+- **Documentation**: [AntiSSRF Rust API Documentation](https://microsoft.github.io/AntiSSRF/rust-api/)
+- **Quick Start**: [Getting Started Guide](https://microsoft.github.io/AntiSSRF/getting-started)
+- **Library README**: [Rust README](rust/README.md)
 
 ## Contributing
 

@@ -44,20 +44,18 @@ AntiSSRF helps mitigate these risks by:
 
 ## Supported Languages and Frameworks
 
-| Language | Documentation | Notes |
-| --- | --- | --- |
-| C# | [AntiSSRF .NET Library](dotnet-api/) | For web clients using `HttpClient` objects |
-| JavaScript/TypeScript | [AntiSSRF Node.js Library](nodejs-api/) | For requests using NodeJS HTTP(S) Agents |
-
-{: .note }
-> Broader platform support is under development.
+| Language | Documentation | Package | Notes |
+| --- | --- | --- | --- |
+| C# | [AntiSSRF .NET Library](dotnet-api/) | [NuGet](https://www.nuget.org/packages/Microsoft.Security.AntiSSRF/) | For web clients using `HttpClient` objects |
+| JavaScript/TypeScript | [AntiSSRF Node.js Library](nodejs-api/) | [npm](https://www.npmjs.com/package/@microsoft/antissrf) | For requests using NodeJS HTTP(S) Agents |
+| Rust | [AntiSSRF Rust Library](rust-api/) | [crates.io](https://crates.io/crates/antissrf) | For reqwest clients with middleware support |
 
 ## Next Steps
 
 ### Learn More
 
 - 🚀 **Getting Started**: [Installation and Quick Start Guide](getting-started)
-- 📖 **API Documentation**: [.NET API](dotnet-api) \| [Node.js API](nodejs-api)
+- 📖 **API Documentation**: [.NET API](dotnet-api) \| [Node.js API](nodejs-api) \| [Rust API](rust-api)
 - ❓ **Common Questions**: [FAQ](faq)
 
 ### Get Support
