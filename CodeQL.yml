@@ -1,0 +1,6 @@
+name: "CodeQL Config"
+
+paths-ignore:
+  - "dotnet/UnitTests/**"
+  - "dotnet/FunctionalTests/**"
+  - "nodejs/tests/**"
