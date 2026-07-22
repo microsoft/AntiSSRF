@@ -1,0 +1,9 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
+name: "CodeQL Config"
+
+paths-ignore:
+  - "dotnet/UnitTests/**"
+  - "dotnet/FunctionalTests/**"
+  - "nodejs/tests/**"
