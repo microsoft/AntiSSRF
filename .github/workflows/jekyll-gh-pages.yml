@@ -52,6 +52,10 @@ jobs:
           bundle exec jekyll build --destination ./_site
         env:
           JEKYLL_ENV: production
+      - name: Validate generated HTML
+        run: |
+          cd docs
+          bundle exec htmlproofer ./_site --disable-external
       - name: Upload artifact
         if: github.event_name == 'push'
         uses: actions/upload-pages-artifact@v3
