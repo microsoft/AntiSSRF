@@ -7,7 +7,7 @@ source "https://rubygems.org"
 # -- OR --
 #
 # bundle install
-# bundle exec jekyll build --baseurl ""
+# bundle exec jekyll build --destination _site/AntiSSRF
 # bundle exec htmlproofer _site --disable-external
 #
 
