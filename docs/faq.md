@@ -46,7 +46,7 @@ policy.AddXFFHeader = false; // Disables automatic X-Forwarded-For header additi
 * Your destination service drops ALL requests with the `X-Forwarded-For` header. For example, you are intentionally accessing IMDS while blocking all external IP addresses.
 * **OR** another component in your service stack reliably adds the `X-Forwarded-For` header to all outgoing requests. That way, the policy does not need to add the invalid dummy value to include the header.
 
-For more information, see the [X-Forwarded-For security notes](../dotnet-api/antissrfpolicy/properties/addxffheader#security-notes) and `AddXFFHeader` property.
+For more information, see the [X-Forwarded-For security notes](dotnet-api/antissrfpolicy/properties/addxffheader#security-notes) and `AddXFFHeader` property.
 
 ## Should Microsoft services be onboarding to this library?
 

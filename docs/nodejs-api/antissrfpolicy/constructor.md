@@ -29,7 +29,7 @@ Choose from the following predefined policy configurations:
 | Option | Use Case | Behavior |
 | --- | --- | --- |
 | **InternalOnly** | Making requests to internal, non-public addresses only **OR** restricting requests to specific allowed addresses | Blocks all IP addresses by default. Only allows addresses explicitly added via [addAllowedAddresses](./methods/addallowedaddresses). |
-| **ExternalOnlyV1** | Making requests to external APIs while blocking internal access | Blocks internal and special-purpose IP addresses per [IPAddressRanges.recommendedV1](../../ipaddressranges#recommendedrangesv1). Automatically adds `X-Forwarded-For` header to requests. |
+| **ExternalOnlyV1** | Making requests to external APIs while blocking internal access | Blocks internal and special-purpose IP addresses per [IPAddressRanges.recommendedV1](../../ipaddressranges#recommended-ranges-v1). Automatically adds `X-Forwarded-For` header to requests. |
 | **ExternalOnlyLatest** | Currently the same as `ExternalOnlyV1` with automatic security updates | Always stays up to date with the latest `ExternalOnly` version, independent of semantic versioning. |
 | **None** | Custom policy configuration | No restrictions applied. Requires manual configuration via policy methods. |
 
