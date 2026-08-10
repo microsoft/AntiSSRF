@@ -34,8 +34,8 @@ const policy = new AntiSSRFPolicy(PolicyConfigOptions.ExternalOnlyLatest);
 
 // Get the AntiSSRF agents
 const agents = {
-    httpAgent: policy.getHttpAgent(),
-    httpsAgent: policy.getHttpsAgent({ keepAlive: true })
+    http: policy.getHttpAgent(),
+    https: policy.getHttpsAgent({ keepAlive: true })
 }
 ```
 

@@ -1,0 +1,49 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
+name: Documentation Issue or Suggestion
+description: Report an issue or suggest an improvement to the AntiSSRF documentation
+title: "[Docs]: <title>"
+labels: ["documentation"]
+body:
+
+  - type: textarea
+    attributes:
+      label: Documentation Location
+      description: Link to the documentation page or identify the section that needs improvement.
+      placeholder: "e.g., https://microsoft.github.io/AntiSSRF/nodejs-api/urivalidator/indomain"
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: Description of the Issue or Suggestion
+      description: Describe what should be added, changed, clarified, or removed.
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: Why This Would Help
+      description: Explain the problem this improvement would solve or the question it would answer.
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: Additional Context
+      description: Provide any examples, screenshots, related links, or other context that may help us evaluate the suggestion.
+    validations:
+      required: false
+
+  - type: checkboxes
+    attributes:
+      label: Verification
+      description: Please confirm before submitting your suggestion.
+      options:
+        - label: I have searched existing issues and confirmed this suggestion has not already been submitted
+          required: true
+
+  - type: markdown
+    attributes:
+      value: "Thank you for helping us improve the AntiSSRF documentation!"

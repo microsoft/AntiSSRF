@@ -28,8 +28,8 @@ Choose from the following predefined policy configurations:
 
 | Option | Use Case | Behavior |
 | --- | --- | --- |
-| **InternalOnly** | Making requests to internal, non-public addresses only **OR** restricting requests to specific allowed addresses | Blocks all IP addresses by default. Only allows addresses explicitly added via [addAllowedAddresses](../methods/addallowedaddresses). |
-| **ExternalOnlyV1** | Making requests to external APIs while blocking internal access | Blocks internal and special-purpose IP addresses per [IPAddressRanges.recommendedV1](../../ipaddressranges#recommendedrangesv1). Automatically adds `X-Forwarded-For` header to requests. |
+| **InternalOnly** | Making requests to internal, non-public addresses only **OR** restricting requests to specific allowed addresses | Blocks all IP addresses by default. Only allows addresses explicitly added via [addAllowedAddresses](./methods/addallowedaddresses). |
+| **ExternalOnlyV1** | Making requests to external APIs while blocking internal access | Blocks internal and special-purpose IP addresses per [IPAddressRanges.recommendedV1](../../ipaddressranges#recommended-ranges-v1). Automatically adds `X-Forwarded-For` header to requests. |
 | **ExternalOnlyLatest** | Currently the same as `ExternalOnlyV1` with automatic security updates | Always stays up to date with the latest `ExternalOnly` version, independent of semantic versioning. |
 | **None** | Custom policy configuration | No restrictions applied. Requires manual configuration via policy methods. |
 
@@ -44,4 +44,4 @@ If your service needs to make requests to external endpoints, you need to make s
 
 If your service needs to make requests to backend services, you must prevent data exfiltration by ensuring it cannot be used to send data to external endpoints. In this case, we recommend using `PolicyConfigOptions.InternalOnly` to block all unspecified addresses, then use `addAllowedAddresses(...)` with the specific internal IP addresses that your service might need to access.
 
-For more about the `X-Forwarded-For` header, see [addXFFHeader](../properties/addxffheader).
+For more about the `X-Forwarded-For` header, see [addXFFHeader](./properties/addxffheader).

@@ -32,10 +32,12 @@ Validates if a URL belongs to any of a list of trusted domains.
 
 | Method | Description |
 | --------------- | --------------- |
-| [inDomain(URL \| string, string): boolean](#indomainurl-url--string-domain-boolean) | Validates if a URL belongs to a trusted domain. |
-| [inDomain(URL \| string, string[]): boolean](#indomainurl-url--string-domains-string-boolean) | Validates if a URL belongs to any of a list of trusted domains. |
+| [inDomain(URL \| string, string): boolean](#single-trusted-domain) | Validates if a URL belongs to a trusted domain. |
+| [inDomain(URL \| string, string[]): boolean](#trusted-domains) | Validates if a URL belongs to any of a list of trusted domains. |
 
-## inDomain(URL | string, string): boolean
+<h2 id="single-trusted-domain">
+    inDomain(URL | string, string): boolean
+</h2>
 
 ```js
 inDomain(untrustedUrl: URL | string, trustedDomain: string): boolean
@@ -56,8 +58,9 @@ The domain name that `untrustedUrl` will be compared against.
 * `true` if `untrustedUrl` belongs to `trustedDomain`.
 * `false` if `untrustedUrl` does not belong to `trustedDomain`, if `untrustedUrl` cannot be converted to a valid `URL`, if protocol is not HTTP/S or WS/S, or if either argument is invalid.
 
-
-## inDomain(URL | string, string[]): boolean
+<h2 id="trusted-domains">
+    inDomain(URL | string, string[]): boolean
+</h2>
 
 ```js
 inDomain(untrustedUrl: URL | string, trustedDomains: string[]): boolean
