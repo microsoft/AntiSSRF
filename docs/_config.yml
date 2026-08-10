@@ -36,7 +36,6 @@ theme: just-the-docs
 remote_theme: just-the-docs/just-the-docs@v0.10.0
 
 plugins:
-  - jekyll-feed
   - jekyll-sitemap
 
 # Just the Docs configuration
@@ -78,14 +77,10 @@ callouts:
 # Footer content
 footer_content: "Copyright &copy; 2026 Microsoft Corporation. Distributed under the <a href=\"https://github.com/Microsoft/AntiSSRF/tree/main/LICENSE\">MIT license.</a>"
 
-# Google Analytics (optional)
-# ga_tracking: UA-XXXXXXXX-X
-# ga_tracking_anonymize_ip: true
-
 # Aux links for the upper right navigation
 aux_links:
   "AntiSSRF on GitHub":
-    - "//github.com/Microsoft/AntiSSRF"
+    - "https://github.com/Microsoft/AntiSSRF"
 
 # Makes Aux links open in a new tab
 aux_links_new_tab: false
