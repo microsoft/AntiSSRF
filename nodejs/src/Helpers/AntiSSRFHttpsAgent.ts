@@ -78,9 +78,11 @@ export class AntiSSRFHttpsAgent extends HttpsAgent {
      */
     createConnection = (options: any, callback: any) => {
         // Ensure the user does not expect to use a different dns.lookup function
-        if (options?.lookup != null) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
-            return callback(new AntiSSRFError("Cannot use AntiSSRFHttpsAgent with custom lookup function"), null);
+        if (options?.socketPath != null) {
+            return callback(
+                new AntiSSRFError("Cannot use AntiSSRF agent with socketPath"),
+                null
+            );
         }
 
         // https.request host is supposed to default to localhost. We want to
