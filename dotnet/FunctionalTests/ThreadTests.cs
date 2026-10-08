@@ -75,10 +75,15 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         private static int GetFreeTcpPort()
         {
             var tcpListener = new TcpListener(IPAddress.Loopback, 0);
-            tcpListener.Start();
-            int port = ((IPEndPoint)tcpListener.LocalEndpoint).Port;
-            tcpListener.Stop();
-            return port;
+            try
+            {
+                tcpListener.Start();
+                return ((IPEndPoint)tcpListener.LocalEndpoint).Port;
+            }
+            finally
+            {
+                tcpListener.Stop();
+            }
         }
     }
 
@@ -110,14 +115,12 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
                         };
                         policy.AddAllowedAddresses(new[] { "127.0.0.1/32" });
 
-                        using (var handler = policy.GetHandler())
-                        using (var client = new HttpClient(handler))
+                        using var handler = policy.GetHandler();
+                        using var client = new HttpClient(handler);
 #pragma warning disable xUnit1031 // Blocking is intentional to verify the handler does not capture the synchronization context.
-                        using (var response = client.GetAsync(_listener.Url).GetAwaiter().GetResult())
+                        using var response = client.GetAsync(_listener.Url).GetAwaiter().GetResult();
 #pragma warning restore xUnit1031
-                        {
-                            Console.WriteLine(response.StatusCode);
-                        }
+                        Console.WriteLine(response.StatusCode);
                     }
                     catch (Exception ex)
                     {
