@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 * Fixed single-threaded sychronization context bug.
 * Set `UseProxy` to `false` on handlers to help prevent customers from unintentionally bypassing AntiSSRF protections by setting an underlying proxy on the system.
 * Enforced better consistency in `InDomain` to return `false` on IP address hosts.
+* Maintain context when throwing `InnerException`.
 
 ### Security
 

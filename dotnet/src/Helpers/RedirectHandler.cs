@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -37,7 +38,9 @@ namespace Microsoft.Security.AntiSSRF
             }
             catch (HttpRequestException ex) when (ex.InnerException is not null)
             {
-                throw ex.InnerException;
+                // throw ex.InnerException without losing the stack trace
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                return null; // Unreachable, used to satisfy compiler
             }
 
             if (!AllowAutoRedirect)
@@ -60,7 +63,8 @@ namespace Microsoft.Security.AntiSSRF
                 }
                 catch (HttpRequestException ex) when (ex.InnerException is not null)
                 {
-                    throw ex.InnerException;
+                    // throw ex.InnerException without losing the stack trace
+                    ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
                 }
             }
 
@@ -85,7 +89,9 @@ namespace Microsoft.Security.AntiSSRF
             }
             catch (HttpRequestException ex) when (ex.InnerException is not null)
             {
-                throw ex.InnerException;
+                // throw ex.InnerException without losing the stack trace
+                ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                throw; // Unreachable, used to satisfy compiler
             }
 
             if (!AllowAutoRedirect)
@@ -94,10 +100,10 @@ namespace Microsoft.Security.AntiSSRF
             Uri? redirectUri;
             for (int redirectCount = 0; redirectCount < MaxAutomaticRedirections && (redirectUri = GetRedirectUri(request.RequestUri!, response)) is not null; redirectCount++)
             {
-                HttpStatusCode statusCode2 = response.StatusCode;
+                HttpStatusCode statusCode = response.StatusCode;
                 response.Dispose();
                 request.RequestUri = redirectUri;
-                SetUpForRedirect(request, statusCode2);
+                SetUpForRedirect(request, statusCode);
 
                 if (!_policy.IsHttpRequestAllowed(request.RequestUri?.Scheme, request.Headers))
                     throw new AntiSSRFException("This request is not allowed per policy.");
@@ -108,7 +114,8 @@ namespace Microsoft.Security.AntiSSRF
                 }
                 catch (HttpRequestException ex) when (ex.InnerException is not null)
                 {
-                    throw ex.InnerException;
+                    // throw ex.InnerException without losing the stack trace
+                    ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
                 }
             }
 
