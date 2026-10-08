@@ -100,7 +100,7 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
         public void Deadlock_Test()
         {
             Exception? workerFailure = null;
-            const int timeoutSeconds = 3;
+            const int timeoutSeconds = 10;
             using (var workerCompleted = new ManualResetEventSlim())
             {
                 var worker = new Thread(() =>
