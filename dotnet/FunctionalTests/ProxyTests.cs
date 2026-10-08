@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
