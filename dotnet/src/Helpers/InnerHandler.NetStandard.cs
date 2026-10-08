@@ -1,7 +1,7 @@
-#if !NET5_0_OR_GREATER
-
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
+#if !NET5_0_OR_GREATER
 
 using System;
 using System.Net;
@@ -20,6 +20,7 @@ namespace Microsoft.Security.AntiSSRF
         {
             _policy = policy;
             AllowAutoRedirect = false;
+            UseProxy = false;
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)

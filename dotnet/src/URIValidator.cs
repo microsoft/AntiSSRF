@@ -122,6 +122,9 @@ namespace Microsoft.Security.AntiSSRF
             if (!isSdk && !_inDomainProtocols.Contains(uri.Scheme))
                 throw new AntiSSRFException();
 
+            if (uri.HostNameType != UriHostNameType.Dns)
+                throw new AntiSSRFException();
+
             return uri.IdnHost;
         }
 

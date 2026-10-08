@@ -16,19 +16,20 @@ namespace Microsoft.Security.AntiSSRF
             return new SocketsHttpHandler()
             {
                 AllowAutoRedirect = false,
-                ConnectCallback = async (ConnectionContext, CancellationToken) =>
+                UseProxy = false,
+                ConnectCallback = async (connectionContext, cancellationToken) =>
                 {
-                    IPAddress[] resolvedIPs = await Dns.GetHostAddressesAsync(ConnectionContext.DnsEndPoint.Host, CancellationToken);
+                    IPAddress[] resolvedIPs = await Dns.GetHostAddressesAsync(connectionContext.DnsEndPoint.Host, cancellationToken).ConfigureAwait(false);
                     if (resolvedIPs.Length == 0)
-                        throw new AntiSSRFException($"DNS lookup failed for {ConnectionContext.DnsEndPoint.Host}.");
+                        throw new AntiSSRFException($"DNS lookup failed for {connectionContext.DnsEndPoint.Host}.");
 
                     if (!policy.IsNetworkConnectionAllowed(resolvedIPs))
-                        throw new AntiSSRFException($"The connection to {ConnectionContext.DnsEndPoint.Host} is not allowed per policy.");
+                        throw new AntiSSRFException($"The connection to {connectionContext.DnsEndPoint.Host} is not allowed per policy.");
 
                     Socket socket = new(SocketType.Stream, ProtocolType.Tcp) { NoDelay = true };
                     try
                     {
-                        await socket.ConnectAsync(resolvedIPs, ConnectionContext.DnsEndPoint.Port, CancellationToken);
+                        await socket.ConnectAsync(resolvedIPs, connectionContext.DnsEndPoint.Port, cancellationToken).ConfigureAwait(false);
                         return new NetworkStream(socket, ownsSocket: true);
                     }
                     catch

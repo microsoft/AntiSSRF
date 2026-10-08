@@ -75,6 +75,46 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             Assert.False(URIValidator.InDomain(new Uri(url), trustedDomain));
         }
 
+        [Fact]
+        public void Should_ReturnFalse_ForIPv6HostAndScopeFormats()
+        {
+            const string trustedDomain = "trusted.com";
+            string[] ipv6Domains =
+            {
+                "2001:db8::1",
+                "[2001:db8::1]",
+                "fe80::1%eth0",
+                "[fe80::1%eth0]",
+                "0::0%trusted.com",
+                "[0::0%trusted.com]",
+                "0::0%.trusted.com",
+                "[0::0%.trusted.com]"
+            };
+
+            foreach (string domain in ipv6Domains)
+            {
+                Assert.False(
+                    URIValidator.InDomain(new UriBuilder("https", domain, 443, "/path").Uri, trustedDomain),
+                    $"Expected false for URI domain '{domain}'.");
+                Assert.False(
+                    URIValidator.InDomain($"https://{domain}/path", trustedDomain),
+                    $"Expected false for string domain '{domain}'.");
+            }
+        }
+
+        [Fact]
+        public void Should_ReturnFalse_ForIPv4AddressAndNumericTrustedDomain()
+        {
+            const string trustedDomain = "127.0.0.1";
+
+            Assert.False(
+                URIValidator.InDomain(new Uri("https://127.0.0.1/path"), trustedDomain),
+                "Expected false for URI domain '127.0.0.1'.");
+            Assert.False(
+                URIValidator.InDomain("https://127.0.0.1/path", trustedDomain),
+                "Expected false for string domain '127.0.0.1'.");
+        }
+
         [Theory]
         [InlineData("http://azure.com", new[] { "one.com", "office.com" })]
         [InlineData("https://office.com", new[] { "subdomain.office.com" })]

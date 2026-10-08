@@ -12,9 +12,18 @@ All notable changes to the AntiSSRF .NET Library will be documented in this file
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## v1.0.1
 
-Nothing yet.
+### Fixed
+
+* Fixed single-threaded sychronization context bug.
+* Set `UseProxy` to `false` on handlers to help prevent customers from unintentionally bypassing AntiSSRF protections by setting an underlying proxy on the system.
+* Enforced better consistency in `InDomain` to return `false` on IP address hosts.
+* Maintain context when throwing `InnerException`.
+
+### Security
+
+* Mitigates a vulnerability where an improperly parsed IPv6 address scope could be considered `InDomain` of a DNS host name.
 
 ## v1.0.0
 
@@ -31,7 +40,7 @@ We are deeply grateful to our original contributors. We truly couldn't have gott
 * [Emmie Teng](https://github.com/EmmieBunnie)
 * Kyndell Geddis
 * [Leah Restad](https://github.com/leah-restad)
-* Likhitesh S
+* [Likhitesh S](https://github.com/user007png)
 * [Michael Hendrickx](https://github.com/ndrix)
 * [Stephen Toub](https://github.com/stephentoub)
 * [Susan Krkasharian](https://github.com/susan-krkasharian)
