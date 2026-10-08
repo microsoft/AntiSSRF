@@ -68,9 +68,9 @@ namespace Microsoft.Security.AntiSSRF
         }
 #endif
 
-        internal async Task<HttpResponseMessage> SendAsyncWrapper(HttpRequestMessage request, CancellationToken cancellationToken)
+        internal Task<HttpResponseMessage> SendAsyncWrapper(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            return await SendAsync(request, cancellationToken);
+            return SendAsync(request, cancellationToken);
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
