@@ -12,7 +12,7 @@ All notable changes to the AntiSSRF .NET Library will be documented in this file
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## v1.0.1
 
 ### Fixed
 
@@ -40,7 +40,7 @@ We are deeply grateful to our original contributors. We truly couldn't have gott
 * [Emmie Teng](https://github.com/EmmieBunnie)
 * Kyndell Geddis
 * [Leah Restad](https://github.com/leah-restad)
-* Likhitesh S
+* [Likhitesh S](https://github.com/user007png)
 * [Michael Hendrickx](https://github.com/ndrix)
 * [Stephen Toub](https://github.com/stephentoub)
 * [Susan Krkasharian](https://github.com/susan-krkasharian)

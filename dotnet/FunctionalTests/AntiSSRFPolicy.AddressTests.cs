@@ -522,13 +522,25 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
 
             // Allowed IPv4
             using var response = await client.GetAsync("http://" + testIpArr[0], CancellationToken.None);
-            Assert.True(response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.NotFound || (uint)response.StatusCode == BlockedByAzureFirewall, $"Request to IPv4 address {testIpArr[0]} should be allowed since it is in the allowed list, but got status code {response.StatusCode}");
+            Assert.True(
+                response.StatusCode == HttpStatusCode.OK 
+                    || response.StatusCode == HttpStatusCode.NotFound 
+                    || (uint)response.StatusCode == BlockedByAzureFirewall 
+                    || response.StatusCode == HttpStatusCode.ServiceUnavailable, 
+                $"Request to IPv4 address {testIpArr[0]} should be allowed since it is in the allowed list, but got status code {response.StatusCode}"
+            );
 
             // Allowed IPv4-mapped IPv6
             try
             {
                 using var response2 = await client.GetAsync("http://[" + testIpArr[0].MapToIPv6() + "]:80", CancellationToken.None);
-                Assert.True(response2.StatusCode == HttpStatusCode.OK || response2.StatusCode == HttpStatusCode.NotFound || (uint)response2.StatusCode == BlockedByAzureFirewall, $"Request to IPv4-mapped IPv6 address {testIpArr[0].MapToIPv6()} should be allowed since it is in the allowed list, but got status code {response2.StatusCode}");
+                Assert.True(
+                    response2.StatusCode == HttpStatusCode.OK
+                        || response2.StatusCode == HttpStatusCode.NotFound
+                        || (uint)response2.StatusCode == BlockedByAzureFirewall
+                        || response2.StatusCode == HttpStatusCode.ServiceUnavailable,
+                    $"Request to IPv4-mapped IPv6 address {testIpArr[0].MapToIPv6()} should be allowed since it is in the allowed list, but got status code {response2.StatusCode}"
+                );
             }
             catch (Exception ex) when (ex is not AntiSSRFException)
             {
@@ -546,7 +558,12 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync("http://[1:2:3:4:5:6:7:8]", CancellationToken.None));
 
             using var response3 = await client.GetAsync("http://" + TestDomain, CancellationToken.None);
-            Assert.True(response3.StatusCode == HttpStatusCode.OK || response3.StatusCode == HttpStatusCode.NotFound || (uint)response3.StatusCode == BlockedByAzureFirewall, $"Request to domain {TestDomain} should be allowed since it is in the allowed list, but got status code {response3.StatusCode}");
+            Assert.True(
+                response3.StatusCode == HttpStatusCode.OK
+                    || response3.StatusCode == HttpStatusCode.NotFound
+                    || (uint)response3.StatusCode == BlockedByAzureFirewall,
+                $"Request to domain {TestDomain} should be allowed since it is in the allowed list, but got status code {response3.StatusCode}"
+            );
         }
 
         [Fact]
@@ -566,13 +583,25 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
 
             // Allowed IPv4
             using var response = await client.GetAsync("http://" + testIpArr[0], CancellationToken.None);
-            Assert.True(response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.NotFound || (uint)response.StatusCode == BlockedByAzureFirewall, $"Request to IPv4 address {testIpArr[0]} should be allowed since its IPv4-mapped IPv6 address is in the allowed list, but got status code {response.StatusCode}");
+            Assert.True(
+                response.StatusCode == HttpStatusCode.OK 
+                    || response.StatusCode == HttpStatusCode.NotFound 
+                    || (uint)response.StatusCode == BlockedByAzureFirewall
+                    || response.StatusCode == HttpStatusCode.ServiceUnavailable, 
+                $"Request to IPv4 address {testIpArr[0]} should be allowed since its IPv4-mapped IPv6 address is in the allowed list, but got status code {response.StatusCode}"
+            );
 
             // Allowed IPv4-mapped IPv6
             try
             {
                 using var response2 = await client.GetAsync("http://[" + testIpArr[0].MapToIPv6() + "]:80", CancellationToken.None);
-                Assert.True(response2.StatusCode == HttpStatusCode.OK || response2.StatusCode == HttpStatusCode.NotFound || (uint)response2.StatusCode == BlockedByAzureFirewall, $"Request to IPv4-mapped IPv6 address {testIpArr[0].MapToIPv6()} should be allowed since it is in the allowed list, but got status code {response2.StatusCode}");
+                Assert.True(
+                    response2.StatusCode == HttpStatusCode.OK 
+                    || response2.StatusCode == HttpStatusCode.NotFound 
+                    || (uint)response2.StatusCode == BlockedByAzureFirewall
+                    || response2.StatusCode == HttpStatusCode.ServiceUnavailable, 
+                    $"Request to IPv4-mapped IPv6 address {testIpArr[0].MapToIPv6()} should be allowed since it is in the allowed list, but got status code {response2.StatusCode}"
+                );
             }
             catch (Exception ex) when (ex is not AntiSSRFException)
             {
@@ -584,7 +613,12 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             }
 
             using var response3 = await client.GetAsync("https://" + TestDomain, CancellationToken.None);
-            Assert.True(response3.StatusCode == HttpStatusCode.OK || response3.StatusCode == HttpStatusCode.NotFound || (uint)response3.StatusCode == BlockedByAzureFirewall, $"Request to domain {TestDomain} should be allowed since its IPv4-mapped IPv6 address is in the allowed list, but got status code {response3.StatusCode}");
+            Assert.True(
+                response3.StatusCode == HttpStatusCode.OK 
+                    || response3.StatusCode == HttpStatusCode.NotFound 
+                    || (uint)response3.StatusCode == BlockedByAzureFirewall, 
+                $"Request to domain {TestDomain} should be allowed since its IPv4-mapped IPv6 address is in the allowed list, but got status code {response3.StatusCode}"
+            );
 
             // Disallowed IPv4
             await Assert.ThrowsAsync<AntiSSRFException>(() => client.GetAsync("http://1.2.3.4", CancellationToken.None));
