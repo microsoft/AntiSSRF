@@ -16,6 +16,7 @@ namespace Microsoft.Security.AntiSSRF
             return new SocketsHttpHandler()
             {
                 AllowAutoRedirect = false,
+                UseProxy = false,
                 ConnectCallback = async (connectionContext, cancellationToken) =>
                 {
                     IPAddress[] resolvedIPs = await Dns.GetHostAddressesAsync(connectionContext.DnsEndPoint.Host, cancellationToken).ConfigureAwait(false);

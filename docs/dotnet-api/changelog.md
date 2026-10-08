@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
 
 * Fixed single-threaded sychronization context bug.
+* Set `UseProxy` to `false` on handlers to help prevent customers from unintentionally bypassing AntiSSRF protections by setting an underlying proxy on the system.
 
 ## v1.0.0
 
