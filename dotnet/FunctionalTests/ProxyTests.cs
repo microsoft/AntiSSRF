@@ -79,7 +79,7 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
                         {
                             await upstreamStream.CopyToAsync(downstream).ConfigureAwait(false);
                         }
-                        catch (Exception)
+                        catch (IOException)
                         {
                             // Client closed socket while proxy was relaying response.
                         }
@@ -113,6 +113,10 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
                 {
                     // Expected when the listener is stopped during test cleanup.
                 }
+                finally
+                {
+                    target.Close();
+                }
             });
 
             return (target, targetTask);
@@ -130,7 +134,7 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             // Set up proxy
             const string proxyIp = "127.0.0.1";
             const int proxyPort = 18888;
-            var cts = new CancellationTokenSource();
+            using var cts = new CancellationTokenSource();
             var (proxy, proxyTask) = StartForwardingProxy(proxyIp, proxyPort, cts.Token);
 
             // Set up client with policy
@@ -191,7 +195,7 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
             // Set up proxy
             const string proxyIp = "127.0.0.2";
             const int proxyPort = 28888;
-            var cts = new CancellationTokenSource();
+            using var cts = new CancellationTokenSource();
             var (proxy, proxyTask) = StartForwardingProxy(proxyIp, proxyPort, cts.Token);
 
             // Set up client with policy
