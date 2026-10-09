@@ -124,6 +124,7 @@ namespace Microsoft.Security.AntiSSRF.FunctionalTests
                     }
                     catch (Exception ex)
                     {
+                        // Capture any worker failure so it can be reported by the test thread.
                         workerFailure = ex;
                     }
                     finally
