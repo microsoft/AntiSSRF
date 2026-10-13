@@ -28,6 +28,20 @@ Thank you for your interest in contributing to Microsoft AntiSSRF! This guide wi
 - Lint code: `npm run lint`
 - Format code: `npm run format`
 
+### AntiSSRF Python Library
+
+**Prerequisites:**
+- Python 3.11 or later
+- make sure you are in the `/python` folder
+
+**Useful Commands**
+- Install dependencies: `pip install .[dev]`
+- Build files only: `python -m build`
+- Force install package: `pip install --force-reinstall <wheel_file.whl>`
+- Build and install package locally `pip install .`
+- Run all tests: `pytest`
+
+
 ### Documentation
 
 **Prerequisites:**

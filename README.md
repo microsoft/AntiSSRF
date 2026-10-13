@@ -47,6 +47,13 @@ AntiSSRF helps mitigate these risks by:
 - **Quick Start**: [Getting Started Guide](https://microsoft.github.io/AntiSSRF/getting-started)
 - **Library README**: [Node.js README](nodejs/README.md)
 
+### Python
+
+- **PyPI Package**: Coming Soon
+- **Documentation**: [Complete Python API Documentation](https://microsoft.github.io/AntiSSRF/python-api)
+- **Quick Start**: [Getting Started Guide](https://microsoft.github.io/AntiSSRF/getting-started)
+- **Library README**: [Python README](python/README.md)
+
 ## Contributing
 
 We welcome contributions! Please see our contribution resources:
