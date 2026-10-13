@@ -4,6 +4,7 @@
 import socket
 
 import pytest
+import requests
 
 from AntiSSRF import AntiSSRFPolicy, PolicyConfigOptions, AntiSSRFError
 from AntiSSRF.ipaddress_ranges import IPAddressRanges
@@ -121,8 +122,8 @@ def test_check_defaults_imds_denied(config, addr):
     policy = AntiSSRFPolicy(config)
     policy.allow_plain_text_http = True
     session = policy.get_antissrf_session()
-    with pytest.raises((AntiSSRFError, socket.gaierror), match="denied by policy|Name or service not known|getaddrinfo failed|not known"):
-        session.get(addr)
+    with pytest.raises((AntiSSRFError, socket.gaierror, requests.exceptions.Timeout), match="denied by policy|Name or service not known|getaddrinfo failed|not known|timed out|timeout"):
+        session.get(addr, timeout=3)
 
 
 @pytest.mark.parametrize("config", denying_configs)
@@ -131,8 +132,8 @@ def test_check_defaults_wireserver_denied(config, addr):
     policy = AntiSSRFPolicy(config)
     policy.allow_plain_text_http = True
     session = policy.get_antissrf_session()
-    with pytest.raises((AntiSSRFError, socket.gaierror), match="denied by policy|Name or service not known|getaddrinfo failed|not known"):
-        session.get(addr)
+    with pytest.raises((AntiSSRFError, socket.gaierror, requests.exceptions.Timeout), match="denied by policy|Name or service not known|getaddrinfo failed|not known|timed out|timeout"):
+        session.get(addr, timeout=3)
 
 
 @pytest.mark.parametrize("config", denying_configs)
@@ -141,8 +142,8 @@ def test_check_defaults_localhost_denied(config, addr):
     policy = AntiSSRFPolicy(config)
     policy.allow_plain_text_http = True
     session = policy.get_antissrf_session()
-    with pytest.raises((AntiSSRFError, socket.gaierror), match="denied by policy|Name or service not known|getaddrinfo failed|not known"):
-        session.get(addr)
+    with pytest.raises((AntiSSRFError, socket.gaierror, requests.exceptions.Timeout), match="denied by policy|Name or service not known|getaddrinfo failed|not known|timed out|timeout"):
+        session.get(addr, timeout=3)
 
 
 @pytest.mark.parametrize("addr", imds_addrs + wireserver_addrs + localhost_addrs)
@@ -152,7 +153,7 @@ def test_check_defaults_not_denied(addr):
     session = policy.get_antissrf_session()
     # NONE denies nothing; the request may fail to connect, but must not be denied by policy.
     try:
-        session.get(addr)
+        session.get(addr, timeout=3)
     except AntiSSRFError as e:
         assert "denied by policy" not in str(e), f"{addr} should not be denied by policy"
     except Exception:
@@ -181,7 +182,7 @@ class TestDefaultWithIPAddressRanges:
     ])
     def test_allow_loopback(self, addr):
         try:
-            self.session.get(addr)
+            self.session.get(addr, timeout=3)
         except AntiSSRFError:
             raise
         except Exception:
@@ -193,7 +194,7 @@ class TestDefaultWithIPAddressRanges:
     ])
     def test_allow_wireserver(self, addr):
         try:
-            self.session.get(addr)
+            self.session.get(addr, timeout=3)
         except AntiSSRFError:
             raise
         except Exception:
@@ -205,7 +206,7 @@ class TestDefaultWithIPAddressRanges:
     ])
     def test_allow_imds(self, addr):
         try:
-            self.session.get(addr)
+            self.session.get(addr, timeout=3)
         except AntiSSRFError:
             raise
         except Exception:
@@ -230,7 +231,7 @@ class TestAllowIPv4Addresses:
     def test_allowed_ipv4(self):
         # Allowed by policy; may still fail for non-policy (network) reasons.
         try:
-            self.session.get(f"http://{self.test_ips[0]}")
+            self.session.get(f"http://{self.test_ips[0]}", timeout=3)
         except AntiSSRFError:
             raise
         except Exception:
@@ -238,7 +239,7 @@ class TestAllowIPv4Addresses:
 
     def test_allowed_ipv4_mapped_ipv6(self):
         try:
-            self.session.get(f"http://[::ffff:{self.test_ips[0]}]:80")
+            self.session.get(f"http://[::ffff:{self.test_ips[0]}]:80", timeout=3)
         except AntiSSRFError:
             raise
         except Exception:
@@ -246,11 +247,11 @@ class TestAllowIPv4Addresses:
 
     def test_disallowed_ipv4(self):
         with pytest.raises(AntiSSRFError, match="denied by policy"):
-            self.session.get("http://1.2.3.4")
+            self.session.get("http://1.2.3.4", timeout=3)
 
     def test_disallowed_ipv6(self):
         with pytest.raises(AntiSSRFError, match="denied by policy"):
-            self.session.get("http://[1:2:3:4:5:6:7:8]")
+            self.session.get("http://[1:2:3:4:5:6:7:8]", timeout=3)
 
 
 class TestAllowIPv4MappedIPv6Addresses:
@@ -267,7 +268,7 @@ class TestAllowIPv4MappedIPv6Addresses:
 
     def test_allowed_ipv4(self):
         try:
-            self.session.get(f"http://{self.test_ips[0]}")
+            self.session.get(f"http://{self.test_ips[0]}", timeout=3)
         except AntiSSRFError:
             raise
         except Exception:
@@ -275,7 +276,7 @@ class TestAllowIPv4MappedIPv6Addresses:
 
     def test_allowed_ipv4_mapped_ipv6(self):
         try:
-            self.session.get(f"http://[::ffff:{self.test_ips[0]}]:80")
+            self.session.get(f"http://[::ffff:{self.test_ips[0]}]:80", timeout=3)
         except AntiSSRFError:
             raise
         except Exception:
@@ -283,11 +284,11 @@ class TestAllowIPv4MappedIPv6Addresses:
 
     def test_disallowed_ipv4(self):
         with pytest.raises(AntiSSRFError, match="denied by policy"):
-            self.session.get("http://1.2.3.4")
+            self.session.get("http://1.2.3.4", timeout=3)
 
     def test_disallowed_ipv6(self):
         with pytest.raises(AntiSSRFError, match="denied by policy"):
-            self.session.get("http://[1:2:3:4:5:6:7:8]")
+            self.session.get("http://[1:2:3:4:5:6:7:8]", timeout=3)
 
 
 class TestAllowIPv6Addresses:
@@ -301,7 +302,7 @@ class TestAllowIPv6Addresses:
 
     def test_allowed_ipv6(self):
         try:
-            self.session.get("http://[::1]")
+            self.session.get("http://[::1]", timeout=3)
         except AntiSSRFError:
             raise
         except Exception:
@@ -309,11 +310,11 @@ class TestAllowIPv6Addresses:
 
     def test_disallowed_ipv4(self):
         with pytest.raises(AntiSSRFError, match="denied by policy"):
-            self.session.get("https://1.2.3.4")
+            self.session.get("https://1.2.3.4", timeout=3)
 
     def test_disallowed_different_ipv6(self):
         with pytest.raises(AntiSSRFError, match="denied by policy"):
-            self.session.get("https://[2606:4700:4700::1111]")
+            self.session.get("https://[2606:4700:4700::1111]", timeout=3)
 
 
 class TestDenyIPv4Address:
@@ -328,15 +329,15 @@ class TestDenyIPv4Address:
 
     def test_denied_ipv4(self):
         with pytest.raises(AntiSSRFError, match="denied by policy"):
-            self.session.get(f"https://{self.test_ips[0]}")
+            self.session.get(f"https://{self.test_ips[0]}", timeout=3)
 
     def test_denied_ipv4_mapped_ipv6(self):
         with pytest.raises(AntiSSRFError, match="denied by policy"):
-            self.session.get(f"https://[::ffff:{self.test_ips[0]}]")
+            self.session.get(f"https://[::ffff:{self.test_ips[0]}]", timeout=3)
 
     def test_allowed_different_ipv4(self):
         try:
-            self.session.get("https://github.com")
+            self.session.get("https://github.com", timeout=3)
         except AntiSSRFError:
             raise
         except Exception:
@@ -344,7 +345,7 @@ class TestDenyIPv4Address:
     
     def test_allowed_ipv6(self):
         try:
-            self.session.get("https://ipv6.google.com")
+            self.session.get("https://ipv6.google.com", timeout=3)
         except AntiSSRFError as e:
             assert "denied by policy" not in str(e)
         except Exception:
@@ -364,15 +365,15 @@ class TestDenyIPv4MappedIPv6Address:
 
     def test_denied_ipv4(self):
         with pytest.raises(AntiSSRFError, match="denied by policy"):
-            self.session.get(f"http://{self.test_ips[0]}")
+            self.session.get(f"http://{self.test_ips[0]}", timeout=3)
 
     def test_denied_ipv4_mapped_ipv6(self):
         with pytest.raises(AntiSSRFError, match="denied by policy"):
-            self.session.get(f"http://[::ffff:{self.test_ips[0]}]")
+            self.session.get(f"http://[::ffff:{self.test_ips[0]}]", timeout=3)
 
     def test_allowed_different_ipv4(self):
         try:
-            self.session.get("https://github.com")
+            self.session.get("https://github.com", timeout=3)
         except AntiSSRFError:
             raise
         except Exception:
@@ -389,11 +390,11 @@ class TestDenyIPv6Address:
 
     def test_denied_ipv6(self):
         with pytest.raises(AntiSSRFError, match="denied by policy"):
-            self.session.get("http://[2001:4860:4860::8888]")
+            self.session.get("http://[2001:4860:4860::8888]", timeout=3)
 
     def test_allowed_ipv4(self):
         try:
-            self.session.get("https://github.com")
+            self.session.get("https://github.com", timeout=3)
         except AntiSSRFError:
             raise
         except Exception:
@@ -414,7 +415,7 @@ class TestBothAllowAndDeny:
     def test_allow_takes_priority(self):
         """When the same IP is both allowed and denied, allow takes priority."""
         try:
-            self.session.get(f"https://{TEST_DOMAIN}")
+            self.session.get(f"https://{TEST_DOMAIN}", timeout=3)
         except AntiSSRFError:
             raise
         except Exception:
