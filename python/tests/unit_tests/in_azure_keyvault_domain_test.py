@@ -130,4 +130,16 @@ class TestInAzureKeyVaultDomain:
     ])
     def test_correctly_enforces_allowed_protocols(self, uri, expected):
         assert URIValidator.in_azure_keyvault_domain(uri) is expected
+
+    @pytest.mark.parametrize("uri", [
+        "https://[0::0%.vault.azure.net]/",
+        "https://[fe80::1%25eth0]/",
+        "https://[::1]/",
+        "https://[::ffff:127.0.0.1]/",
+        "https://169.254.169.254/",
+        "https://10.0.0.1/",
+        "https://127.0.0.1/vault.azure.net",
+    ])
+    def test_rejects_ip_literals_and_scope_smuggling(self, uri):
+        assert URIValidator.in_azure_keyvault_domain(uri) is False
     

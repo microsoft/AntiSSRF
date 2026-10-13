@@ -59,7 +59,7 @@ The domain name that `untrustedUri` will be compared against.
 `bool`
 
 * `true` if `untrustedUri` belongs to `trustedDomain`.
-* `false` if `untrustedUri` does not belong to `trustedDomain`, if `untrustedUri` is not a valid URI, if protocol is not HTTP/S or WS/S, or if either argument is `null`.
+* `false` if `untrustedUri` does not belong to `trustedDomain`, if `untrustedUri` is not a valid URI, if `untrustedUri` is an IP address, if protocol is not HTTP/S or WS/S, or if either argument is `null`.
 
 ## InDomain(string, string)
 

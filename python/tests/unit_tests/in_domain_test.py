@@ -172,3 +172,32 @@ class TestInDomain:
     ])
     def test_correctly_rejects_file_path_strings(self, url):
         assert URIValidator.in_domain(url, "somedomain.com") is False
+
+    @pytest.mark.parametrize("domain", [
+        "2001:db8::1",
+        "[2001:db8::1]",
+        "fe80::1%eth0",
+        "[fe80::1%eth0]",
+        "0::0%trusted.com",
+        "[0::0%trusted.com]",
+        "0::0%.trusted.com",
+        "[0::0%.trusted.com]",
+    ])
+    def test_should_return_false_for_ipv6_host_and_scope_formats(self, domain):
+        assert URIValidator.in_domain(f"https://{domain}/path", "trusted.com") is False
+        assert URIValidator.in_domain(f"https://{domain}/path", ["trusted.com"]) is False
+
+    def test_should_return_false_for_ipv4_host_and_numeric_trusted_domain(self):
+        assert URIValidator.in_domain("https://127.0.0.1/path", "127.0.0.1") is False
+        assert URIValidator.in_domain("https://127.0.0.1/path", ["127.0.0.1"]) is False
+
+    @pytest.mark.parametrize("url", [
+        "http://127.0.0.1/",
+        "https://169.254.169.254/",
+        "https://10.0.0.1/",
+        "https://[::1]/",
+        "https://[::ffff:127.0.0.1]/",
+    ])
+    def test_correctly_rejects_ip_literal_hosts(self, url):
+        assert URIValidator.in_domain(url, "trusted.com") is False
+        assert URIValidator.in_domain(url, ["one.com", "trusted.com"]) is False

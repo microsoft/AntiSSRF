@@ -6,6 +6,7 @@ from urllib3.exceptions import LocationParseError
 from urllib.parse import urlsplit
 import idna
 from AntiSSRF._domains import _KEYVAULT_DOMAIN_LIST, _STORAGE_DOMAIN_LIST
+from AntiSSRF._ipaddr import IPAddress
 
 
 """
@@ -142,6 +143,9 @@ class URIValidator:
         parsed_hostname = URIValidator._try_parse(url, ALLOWED_IN_DOMAIN_SCHEMES)
         if not parsed_hostname:
             return False
+
+        if URIValidator._is_ip_literal(parsed_hostname):
+            return False
         
         # Handle single domain string
         if isinstance(domains, str):
@@ -154,6 +158,16 @@ class URIValidator:
                     return True
                 
         return False
+
+
+    @staticmethod
+    def _is_ip_literal(hostname: str) -> bool:
+        """Return True if `hostname` is an IPv4 or IPv6 address literal."""
+        try:
+            IPAddress(hostname)
+            return True
+        except ValueError:
+            return False
 
 
     @staticmethod
