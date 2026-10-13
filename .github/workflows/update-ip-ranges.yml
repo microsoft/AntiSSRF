@@ -37,17 +37,21 @@ jobs:
     
     - name: Build C# version
       run: ./scripts/build-ip-ranges-dotnet.sh
+
+    - name: Build Python version
+      run: ./scripts/build-ip-ranges-python.sh
     
     - name: Verify generated files are up-to-date
       run: |
-        if ! git diff --exit-code nodejs/src/IPAddressRanges.ts dotnet/src/IPAddressRanges.cs; then
+        if ! git diff --exit-code nodejs/src/IPAddressRanges.ts dotnet/src/IPAddressRanges.cs python/src/AntiSSRF/IPAddressRanges.py; then
           echo "❌ Generated IP address range files are out of sync!"
           echo "The following files need to be regenerated:"
-          git diff --name-only nodejs/src/IPAddressRanges.ts dotnet/src/IPAddressRanges.cs
+          git diff --name-only nodejs/src/IPAddressRanges.ts dotnet/src/IPAddressRanges.cs python/src/AntiSSRF/IPAddressRanges.py
           echo ""
           echo "Please run the following commands locally and commit the results:"
           echo "  ./scripts/build-ip-ranges-nodejs.sh"
           echo "  ./scripts/build-ip-ranges-dotnet.sh"
+          echo "  ./scripts/build-ip-ranges-python.sh"
           exit 1
         else
           echo "✅ All generated files are up-to-date"

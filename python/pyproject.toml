@@ -1,0 +1,36 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "microsoft-antissrf"
+description = "Microsoft AntiSSRF Python Library"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "Microsoft" }]
+license = "MIT"
+license-files = ["LICENSE"]
+dependencies = [
+    "urllib3>=2.7.0",
+    "idna>=3.7",
+    "requests>=2.34.2",
+]
+# Version is injected at build time via the PACKAGE_VERSION env var (see setup.py).
+dynamic = ["version"]
+
+[project.optional-dependencies]
+dev = ["build", "pytest"]
+
+[project.urls]
+Homepage = "https://github.com/Microsoft/AntiSSRF"
+Repository = "https://github.com/Microsoft/AntiSSRF"
+Issues = "https://github.com/Microsoft/AntiSSRF/issues"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]

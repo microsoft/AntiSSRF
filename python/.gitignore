@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pycache/
+.pytest_cache/
+dist/
+build/
+microsoft_antissrf.egg-info/

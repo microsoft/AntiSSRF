@@ -7,3 +7,4 @@ paths-ignore:
   - "dotnet/UnitTests/**"
   - "dotnet/FunctionalTests/**"
   - "nodejs/tests/**"
+  - "python/tests/**"

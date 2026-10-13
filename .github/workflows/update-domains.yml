@@ -37,17 +37,21 @@ jobs:
     
     - name: Build C# version
       run: ./scripts/build-domains-dotnet.sh
+
+    - name: Build Python version
+      run: ./scripts/build-domains-python.sh
     
     - name: Verify generated files are up-to-date
       run: |
-        if ! git diff --exit-code nodejs/src/Helpers/Domains.ts dotnet/src/Helpers/Domains.cs; then
+        if ! git diff --exit-code nodejs/src/Helpers/Domains.ts dotnet/src/Helpers/Domains.cs python/src/AntiSSRF/_domains.py; then
           echo "❌ Generated domain files are out of sync!"
           echo "The following files need to be regenerated:"
-          git diff --name-only nodejs/src/Helpers/Domains.ts dotnet/src/Helpers/Domains.cs
+          git diff --name-only nodejs/src/Helpers/Domains.ts dotnet/src/Helpers/Domains.cs python/src/AntiSSRF/_domains.py
           echo ""
           echo "Please run the following commands locally and commit the results:"
           echo "  ./scripts/build-domains-nodejs.sh"
           echo "  ./scripts/build-domains-dotnet.sh"
+          echo "  ./scripts/build-domains-python.sh"
           exit 1
         else
           echo "✅ All generated files are up-to-date"

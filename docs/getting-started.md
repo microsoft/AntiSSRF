@@ -11,6 +11,9 @@ The Microsoft AntiSSRF library helps protect your applications from Server-Side 
 
 ## Installation
 
+{% tabs getting-started-installation %}
+
+{% tab getting-started-installation .NET %}
 ### .NET Framework and .NET Core (C#)
 
 Install the NuGet package:
@@ -18,7 +21,9 @@ Install the NuGet package:
 ```bash
 dotnet add package Microsoft.Security.AntiSSRF
 ```
+{% endtab %}
 
+{% tab getting-started-installation Node.js %}
 ### Node.js (JavaScript/TypeScript)
 
 Install the npm package:
@@ -26,11 +31,21 @@ Install the npm package:
 ```bash
 npm install @microsoft/antissrf
 ```
+{% endtab %}
+
+{% tab getting-started-installation Python %}
+### Python
+
+Install instructions coming soon.
+{% endtab %}
+
+{% endtabs %}
 
 ## Quick Start Examples
 
-### .NET Usage
+{% tabs getting-started-quickstart %}
 
+{% tab getting-started-quickstart .NET %}
 ```csharp
 using Microsoft.Security.AntiSSRF;
 using System.Net.Http;
@@ -47,9 +62,9 @@ using var client = new HttpClient(handler);
 // Make secure requests - internal IPs will be blocked
 var response = await client.GetAsync("https://api.example.com/data");
 ```
+{% endtab %}
 
-### Node.js Usage
-
+{% tab getting-started-quickstart Node.js %}
 ```javascript
 const { AntiSSRFPolicy, PolicyConfigOptions } = require('@microsoft/antissrf');
 const https = require('https');
@@ -71,6 +86,24 @@ https.get(options, (res) => {
   // Handle response
 });
 ```
+{% endtab %}
+
+{% tab getting-started-quickstart Python %}
+```python
+from AntiSSRF import AntiSSRFPolicy, PolicyConfigOptions
+
+# Create a policy for external-only requests
+policy = AntiSSRFPolicy(PolicyConfigOptions.EXTERNAL_ONLY_LATEST)
+
+# Get a secure requests session
+session = policy.get_antissrf_session()
+
+# Make secure requests - internal IPs will be blocked
+response = session.get("https://api.example.com/data")
+```
+{% endtab %}
+
+{% endtabs %}
 
 ## How to Use
 
