@@ -44,10 +44,7 @@ AntiSSRF helps mitigate these risks by:
 
 ## Supported Languages and Frameworks
 
-| Language | Documentation | Notes |
-| --- | --- | --- |
-| C# | [AntiSSRF .NET Library](dotnet-api/) | For web clients using `HttpClient` objects |
-| JavaScript/TypeScript | [AntiSSRF Node.js Library](nodejs-api/) | For requests using NodeJS HTTP(S) Agents |
+{% include supported_language.md %}
 
 {: .note }
 > Broader platform support is under development.

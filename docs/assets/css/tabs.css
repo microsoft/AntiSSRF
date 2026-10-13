@@ -1,0 +1,83 @@
+.tab {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -20px;
+    padding: 0;
+    list-style: none;
+    position: relative;
+}
+
+.tab > * {
+    flex: none;
+    padding-left: 20px;
+    position: relative;
+}
+
+.tab > * > a {
+    display: block;
+    text-align: center;
+    padding: 9px 20px;
+    color: #999;
+    border-bottom: 2px solid transparent;
+    border-bottom-color: transparent;
+    font-size: 12px;
+    text-transform: uppercase;
+    transition: color .1s ease-in-out;
+    line-height: 20px;
+}
+
+.tab > .active > a {
+    color:#222;
+    border-color: #1e87f0;
+}
+
+.tab > li > a {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.tab-content {
+    padding: 0;
+}
+
+.tab-content > li {
+    display: none;
+}
+.tab-content > li.active {
+    display: block;
+}
+
+/* just-the-docs renders list bullets via `.main-content ul > li::before`, which
+   `list-style: none` can't remove; cancel it for the tab lists. */
+.main-content ul.tab > li::before,
+.main-content ul.tab-content > li::before {
+    content: none;
+}
+
+/* The theme indents `.main-content ul/ol` by 1.5em; keep the tab lists flush. */
+.main-content ul.tab,
+.main-content ul.tab-content {
+    padding-left: 0;
+}
+
+/* The 2 following blocks can be removed if the script is not configured to show the toast message */
+#jekyll-tabs-copy-to-clipboard-message {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    right: 50%;
+    bottom: 30px;
+}
+
+#jekyll-tabs-copy-to-clipboard-message.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
