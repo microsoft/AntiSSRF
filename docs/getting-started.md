@@ -36,7 +36,10 @@ npm install @microsoft/antissrf
 {% tab getting-started-installation Python %}
 ### Python
 
-Install instructions coming soon.
+Install the PyPi package:
+```bash
+pip install microsoft-antissrf
+```
 {% endtab %}
 
 {% endtabs %}
@@ -111,10 +114,10 @@ The AntiSSRF library provides validation for different scenarios based on your t
 
 | Use Case | Description | Documentation Link |
 |----------|-------------|-------------------|
-| **General Case** | The untrusted URL can belong to **any domain** or an **untrusted domain**. | [.NET](dotnet-api/antissrfpolicy/) \| [Node.js](nodejs-api/antissrfpolicy/) |
-| **Azure Key Vault Domain** | The untrusted URL must be an **Azure Key Vault endpoint**. | [.NET](dotnet-api/urivalidator/inazurekeyvaultdomain) \| [Node.js](nodejs-api/urivalidator/inazurekeyvaultdomain) |
-| **Azure Storage Domain** | The untrusted URL must be an **Azure Storage endpoint**. | [.NET](dotnet-api/urivalidator/inazurestoragedomain) \| [Node.js](nodejs-api/urivalidator/inazurestoragedomain) |
-| **Allowlist of Trusted Domains** | The untrusted URL must belong to a **specific, trusted domain**. | [.NET](dotnet-api/urivalidator/indomain) \| [Node.js](nodejs-api/urivalidator/indomain) |
+| **General Case** | The untrusted URL can belong to **any domain** or an **untrusted domain**. | [.NET](dotnet-api/antissrfpolicy/) \| [Node.js](nodejs-api/antissrfpolicy/) \| [Python](python-api/antissrfpolicy/) |
+| **Azure Key Vault Domain** | The untrusted URL must be an **Azure Key Vault endpoint**. | [.NET](dotnet-api/urivalidator/inazurekeyvaultdomain) \| [Node.js](nodejs-api/urivalidator/inazurekeyvaultdomain) \| [Python](python-api/urivalidator/inazurekeyvaultdomain) |
+| **Azure Storage Domain** | The untrusted URL must be an **Azure Storage endpoint**. | [.NET](dotnet-api/urivalidator/inazurestoragedomain) \| [Node.js](nodejs-api/urivalidator/inazurestoragedomain) \| [Python](python-api/urivalidator/inazurestoragedomain) |
+| **Allowlist of Trusted Domains** | The untrusted URL must belong to a **specific, trusted domain**. | [.NET](dotnet-api/urivalidator/indomain) \| [Node.js](nodejs-api/urivalidator/indomain) \| [Python](python-api/urivalidator/indomain) |
 
 ## Best Practices
 
@@ -138,7 +141,7 @@ The AntiSSRF library provides validation for different scenarios based on your t
 ## Next Steps
 
 ### Learn More
-- 📖 **API Documentation**: [.NET API](dotnet-api/) \| [Node.js API](nodejs-api/)
+- 📖 **API Documentation**: [.NET API](dotnet-api/) \| [Node.js API](nodejs-api/) \| [Python API](python-api/)
 - ❓ **Common Questions**: [FAQ](faq)
 
 ### Get Support
