@@ -21,9 +21,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Thank you to all our new contributors!
 
+* Carl Sampson
 * Coby Allred
 * Dekel Meidan
-* Carl Sampson
+* Erik Donker
 
 ## [v1.0.0](https://github.com/microsoft/AntiSSRF/releases/tag/dotnet-1.0.0) (2026-05-06)
 
