@@ -25,7 +25,7 @@ dynamic = ["version"]
 dev = ["build", "pytest"]
 
 [project.urls]
-Homepage = "https://github.com/Microsoft/AntiSSRF"
+Homepage = "https://microsoft.github.io/AntiSSRF/"
 Repository = "https://github.com/Microsoft/AntiSSRF"
 Issues = "https://github.com/Microsoft/AntiSSRF/issues"
 
