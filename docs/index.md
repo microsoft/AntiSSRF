@@ -54,7 +54,7 @@ AntiSSRF helps mitigate these risks by:
 ### Learn More
 
 - 🚀 **Getting Started**: [Installation and Quick Start Guide](getting-started)
-- 📖 **API Documentation**: [.NET API](dotnet-api) \| [Node.js API](nodejs-api)
+- 📖 **API Documentation**: [.NET API](dotnet-api) \| [Node.js API](nodejs-api) \| [Python API](python-api)
 - ❓ **Common Questions**: [FAQ](faq)
 
 ### Get Support

@@ -49,7 +49,7 @@ AntiSSRF helps mitigate these risks by:
 
 ### Python
 
-- **PyPI Package**: Coming Soon
+- **PyPI Package**: [microsoft-antissrf](https://pypi.org/project/microsoft-antissrf/)
 - **Documentation**: [Complete Python API Documentation](https://microsoft.github.io/AntiSSRF/python-api)
 - **Quick Start**: [Getting Started Guide](https://microsoft.github.io/AntiSSRF/getting-started)
 - **Library README**: [Python README](python/README.md)
