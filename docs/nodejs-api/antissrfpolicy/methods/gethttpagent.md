@@ -14,11 +14,16 @@ description: "getHttpAgent method documentation"
 Builds an `http.Agent` that will enforce the policy on all outgoing requests.
 
 {: .warning }
-> **HTTP is insecure**: HTTP requests send data in plaintext over the network. Using this HTTP agent when your policy does not allow plaintext connections will cause all requests to fail. For secure communications, use [`getHttpsAgent()`](gethttpsagent) instead.
+> HTTP is insecure as it sends data in plaintext over the network. Using this HTTP agent when your policy does not allow plaintext connections will cause all requests to fail. For secure communications, use [`getHttpsAgent()`](gethttpsagent) instead.
 
 ```js
 getHttpAgent(options?: http.AgentOptions): http.Agent
 ```
+
+{: .note }
+> AntiSSRF enforces protections only on TCP connections.
+> * Unix domain socket connections using the `http.request` option `socketPath` are not supported. Using `socketPath` will bypass AntiSSRF protections.
+> * An HTTP/3 agent (QUIC over UDP) is not yet supported.
 
 ### Parameters
 

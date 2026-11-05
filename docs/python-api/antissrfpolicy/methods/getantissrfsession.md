@@ -13,6 +13,10 @@ description: "getantissrfsession method documentation"
 
 This method retrieves an `AntiSSRFSession`, which extends [requests.Session](https://docs.python-requests.org/en/latest/user/advanced/) and applies the existing `AntiSSRFPolicy` instance to all requests before sending them. If a request does not meet the requirements of the policy, attempting to make the request will raise an `AntiSSRFError`.
 
+{: .note }
+> AntiSSRF enforces protections only on TCP connections.
+> * HTTP/3 (QUIC over UDP) is not yet supported.
+
 ```python
 def get_antissrf_session(options: any) -> AntiSSRFSession
 ```
