@@ -37,13 +37,13 @@
     },
     "author": "Microsoft",
     "devDependencies": {
-        "@eslint/js": "^9.20.0",
+        "@eslint/js": "^10.0.1",
         "@types/follow-redirects": "^1.14.4",
         "@types/mocha": "^10.0.10",
         "@types/node-fetch": "^2.6.13",
         "axios": "^1.21.0",
-        "eslint": "^9.39.5",
-        "eslint-plugin-security": "^3.0.1",
+        "eslint": "^10.13.0",
+        "eslint-plugin-security": "^4.2.0",
         "follow-redirects": "^1.16.2",
         "mocha": "^12.0.3",
         "node-fetch": "^3.3.2",
@@ -52,5 +52,9 @@
         "ts-node": "^10.9.2",
         "typescript": "^5.9.3",
         "typescript-eslint": "^8.72.1"
+    },
+    "overrides": {
+        "glob": "14.0.2",
+        "minimatch": "11.0.1"
     }
 }
