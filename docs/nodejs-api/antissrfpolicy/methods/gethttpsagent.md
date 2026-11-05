@@ -17,6 +17,11 @@ Builds an `https.Agent` that will enforce the policy on all outgoing requests.
 getHttpsAgent(options?: https.AgentOptions): https.Agent
 ```
 
+{: .note }
+> AntiSSRF enforces protections only on TCP connections.
+> * Unix domain socket connections using the `https.request` option `socketPath` are not supported. Using `socketPath` will bypass AntiSSRF protections.
+> * An HTTP/3 agent (QUIC over UDP) is not yet supported.
+
 ### Parameters
 
 `options`: `https.AgentOptions`

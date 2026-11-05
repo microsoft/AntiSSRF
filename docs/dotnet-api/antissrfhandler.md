@@ -10,6 +10,10 @@ description: "HttpMessageHandler that enforces AntiSSRF policies"
 
 `AntiSSRFHandler` is the type of the object returned from `AntiSSRFPolicy.GetHandler`. The `AntiSSRFHandler` wraps `HttpClientHandler` or `SocketsHttpHandler` and implements `HttpMessageHandler` while exposing some properties on the inner handler. This handler performs DNS resolution validation, scheme enforcement, header checks, and redirect following according to the configured policy.
 
+{: .note }
+> AntiSSRF enforces protections only on TCP connections.
+> * HTTP/3 (QUIC over UDP) is not yet supported. Using `HttpRequestMessage` properties `Version` or `VersionPolicy` in a way that allows HTTP/3 connections may bypass AntiSSRF protections.
+
 ### .NET Core
 
 In .NET Core, the inner handler is a `SocketsHttpHandler`. The exposed properties below can be used exactly as they are used in the original `SocketsHttpHandler` type. Please see [SocketsHttpHandler](https://docs.microsoft.com/en-us/dotnet/api/system.net.http.socketshandler) for details.

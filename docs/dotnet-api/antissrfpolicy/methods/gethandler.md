@@ -18,6 +18,10 @@ public AntiSSRFHandler GetHandler()
 ```
 
 {: .note }
+> AntiSSRF enforces protections only on TCP connections.
+> * HTTP/3 (QUIC over UDP) is not yet supported. Using `HttpRequestMessage` properties `Version` or `VersionPolicy` in a way that allows HTTP/3 connections may bypass AntiSSRF protections.
+
+{: .note }
 > After calling `GetHandler()`, the policy becomes immutable. Any attempt to change properties or call customization methods will throw an `AntiSSRFException`.
 
 ### Returns
