@@ -24,11 +24,7 @@ describe("InAzureKeyVaultDomain Tests", () => {
         ];
 
         for (const url of urls) {
-            assert.strictEqual(
-                URIValidator.inAzureKeyVaultDomain(url),
-                true,
-                `Expected true for ${url}`
-            );
+            assert.strictEqual(URIValidator.inAzureKeyVaultDomain(url), true, `Expected true for ${url}`);
             assert.strictEqual(
                 URIValidator.inAzureKeyVaultDomain(new URL(url)),
                 true,
@@ -48,11 +44,7 @@ describe("InAzureKeyVaultDomain Tests", () => {
         ];
 
         for (const url of urls) {
-            assert.strictEqual(
-                URIValidator.inAzureKeyVaultDomain(url),
-                true,
-                `Expected true for ${url}`
-            );
+            assert.strictEqual(URIValidator.inAzureKeyVaultDomain(url), true, `Expected true for ${url}`);
             assert.strictEqual(
                 URIValidator.inAzureKeyVaultDomain(new URL(url)),
                 true,
@@ -79,11 +71,7 @@ describe("InAzureKeyVaultDomain Tests", () => {
         ];
 
         for (const url of urls) {
-            assert.strictEqual(
-                URIValidator.inAzureKeyVaultDomain(url),
-                false,
-                `Expected false for ${url}`
-            );
+            assert.strictEqual(URIValidator.inAzureKeyVaultDomain(url), false, `Expected false for ${url}`);
             assert.strictEqual(
                 URIValidator.inAzureKeyVaultDomain(new URL(url)),
                 false,
@@ -145,11 +133,7 @@ describe("InAzureKeyVaultDomain Tests", () => {
         ];
 
         for (const url of urls) {
-            assert.strictEqual(
-                URIValidator.inAzureKeyVaultDomain(url),
-                false,
-                `Expected false for ${url}`
-            );
+            assert.strictEqual(URIValidator.inAzureKeyVaultDomain(url), false, `Expected false for ${url}`);
 
             // Test URL overload if the string can be parsed as a URL
             try {
@@ -182,11 +166,7 @@ describe("InAzureKeyVaultDomain Tests", () => {
         ];
 
         for (const url of urls) {
-            assert.strictEqual(
-                URIValidator.inAzureKeyVaultDomain(url),
-                true,
-                `Expected true for ${url}`
-            );
+            assert.strictEqual(URIValidator.inAzureKeyVaultDomain(url), true, `Expected true for ${url}`);
             assert.strictEqual(
                 URIValidator.inAzureKeyVaultDomain(new URL(url)),
                 true,

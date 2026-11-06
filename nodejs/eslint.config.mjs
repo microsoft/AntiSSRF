@@ -15,6 +15,6 @@ export default tseslint.config({
         eslint: eslint
     },
     rules: {
-        "func-style": ["error", "declaration", { "allowArrowFunctions": true }]
+        "func-style": ["error", "declaration", { allowArrowFunctions: true }]
     }
 });

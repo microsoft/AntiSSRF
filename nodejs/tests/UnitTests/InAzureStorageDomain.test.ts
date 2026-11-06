@@ -41,11 +41,7 @@ describe("InAzureStorageDomain Tests", () => {
         ];
 
         for (const url of urls) {
-            assert.strictEqual(
-                URIValidator.inAzureStorageDomain(url),
-                true,
-                `Expected true for ${url}`
-            );
+            assert.strictEqual(URIValidator.inAzureStorageDomain(url), true, `Expected true for ${url}`);
             assert.strictEqual(
                 URIValidator.inAzureStorageDomain(new URL(url)),
                 true,
@@ -65,11 +61,7 @@ describe("InAzureStorageDomain Tests", () => {
         ];
 
         for (const url of urls) {
-            assert.strictEqual(
-                URIValidator.inAzureStorageDomain(url),
-                true,
-                `Expected true for ${url}`
-            );
+            assert.strictEqual(URIValidator.inAzureStorageDomain(url), true, `Expected true for ${url}`);
             assert.strictEqual(
                 URIValidator.inAzureStorageDomain(new URL(url)),
                 true,
@@ -89,11 +81,7 @@ describe("InAzureStorageDomain Tests", () => {
         ];
 
         for (const url of urls) {
-            assert.strictEqual(
-                URIValidator.inAzureStorageDomain(url),
-                true,
-                `Expected true for ${url}`
-            );
+            assert.strictEqual(URIValidator.inAzureStorageDomain(url), true, `Expected true for ${url}`);
             assert.strictEqual(
                 URIValidator.inAzureStorageDomain(new URL(url)),
                 true,
@@ -113,11 +101,7 @@ describe("InAzureStorageDomain Tests", () => {
         ];
 
         for (const url of urls) {
-            assert.strictEqual(
-                URIValidator.inAzureStorageDomain(url),
-                true,
-                `Expected true for ${url}`
-            );
+            assert.strictEqual(URIValidator.inAzureStorageDomain(url), true, `Expected true for ${url}`);
             assert.strictEqual(
                 URIValidator.inAzureStorageDomain(new URL(url)),
                 true,
@@ -152,11 +136,7 @@ describe("InAzureStorageDomain Tests", () => {
         ];
 
         for (const url of urls) {
-            assert.strictEqual(
-                URIValidator.inAzureStorageDomain(url),
-                false,
-                `Expected false for ${url}`
-            );
+            assert.strictEqual(URIValidator.inAzureStorageDomain(url), false, `Expected false for ${url}`);
             assert.strictEqual(
                 URIValidator.inAzureStorageDomain(new URL(url)),
                 false,
@@ -215,11 +195,7 @@ describe("InAzureStorageDomain Tests", () => {
         ];
 
         for (const url of urls) {
-            assert.strictEqual(
-                URIValidator.inAzureStorageDomain(url),
-                false,
-                `Expected false for ${url}`
-            );
+            assert.strictEqual(URIValidator.inAzureStorageDomain(url), false, `Expected false for ${url}`);
 
             // Test URL overload if the string can be parsed as a URL
             try {
@@ -249,11 +225,7 @@ describe("InAzureStorageDomain Tests", () => {
         ];
 
         for (const url of urls) {
-            assert.strictEqual(
-                URIValidator.inAzureStorageDomain(url),
-                true,
-                `Expected true for ${url}`
-            );
+            assert.strictEqual(URIValidator.inAzureStorageDomain(url), true, `Expected true for ${url}`);
             assert.strictEqual(
                 URIValidator.inAzureStorageDomain(new URL(url)),
                 true,

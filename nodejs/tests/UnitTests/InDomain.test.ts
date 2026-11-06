@@ -150,10 +150,7 @@ describe("InDomain Tests", () => {
     });
 
     it("correctly rejects invalid URL components", () => {
-        const urls = [
-            "http://bing.com:badPort",
-            "http://:bing.com"
-        ];
+        const urls = ["http://bing.com:badPort", "http://:bing.com"];
 
         for (const url of urls) {
             assert.strictEqual(
@@ -316,19 +313,10 @@ describe("InDomain Tests", () => {
     });
 
     it("correctly enforces allowed protocols", () => {
-        const urls = [
-            "http://bing.com",
-            "https://bing.com",
-            "ws://bing.com",
-            "wss://bing.com"
-        ];
+        const urls = ["http://bing.com", "https://bing.com", "ws://bing.com", "wss://bing.com"];
 
         for (const url of urls) {
-            assert.strictEqual(
-                URIValidator.inDomain(url, "bing.com"),
-                true,
-                `Expected true for ${url}`
-            );
+            assert.strictEqual(URIValidator.inDomain(url, "bing.com"), true, `Expected true for ${url}`);
             assert.strictEqual(
                 URIValidator.inDomain(new URL(url), "bing.com"),
                 true,
@@ -349,11 +337,7 @@ describe("InDomain Tests", () => {
         ];
 
         for (const url of urls) {
-            assert.strictEqual(
-                URIValidator.inDomain(url, "bing.com"),
-                false,
-                `Expected false for ${url}`
-            );
+            assert.strictEqual(URIValidator.inDomain(url, "bing.com"), false, `Expected false for ${url}`);
             assert.strictEqual(
                 URIValidator.inDomain(new URL(url), "bing.com"),
                 false,
@@ -374,11 +358,7 @@ describe("InDomain Tests", () => {
         ];
 
         for (const [url, trustedDomain] of testCases) {
-            assert.strictEqual(
-                URIValidator.inDomain(url, trustedDomain),
-                false,
-                `Expected false for file path ${url}`
-            );
+            assert.strictEqual(URIValidator.inDomain(url, trustedDomain), false, `Expected false for file path ${url}`);
         }
     });
 });
