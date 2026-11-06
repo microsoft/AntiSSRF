@@ -13,10 +13,12 @@
  * relative addresses that use the base URL feature.
  */
 
+import assert from "node:assert";
+import { promises } from "node:dns";
+import { createServer, Server } from "node:http";
+import { after, before, describe, it } from "node:test";
+
 import axios, { AxiosInstance } from "axios";
-import assert from "assert";
-import { createServer, Server } from "http";
-import { lookup, promises } from "dns";
 
 import { AntiSSRFPolicy, PolicyConfigOptions } from "../../src";
 
@@ -207,7 +209,7 @@ describe("Axios Instance tests", () => {
         try {
             await instance.get("https://github.com", {
                 headers: { "test-required-header": "true" },
-                lookup: lookup
+                lookup: async (hostname: string) => (await promises.lookup(hostname)).address
             });
             assert.fail("Expected error, but got response");
         } catch (err) {
@@ -233,7 +235,11 @@ describe("Axios Instance tests", () => {
             });
             assert.fail("Expected error, but got response");
         } catch (err) {
-            assert.equal((err as Error).message, "Request failed with status code 404", `Unexpected error message: ${(err as Error).message}\n${(err as Error).stack}`);
+            assert.equal(
+                (err as Error).message,
+                "Request failed with status code 404",
+                `Unexpected error message: ${(err as Error).message}\n${(err as Error).stack}`
+            );
         }
     });
 

@@ -1,11 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import assert from "assert";
+import assert from "node:assert";
+import { BlockList } from "node:net";
+import { describe, it } from "node:test";
 
-import { CIDRBlock } from "../../src/Helpers/CIDRBlock";
 import { AntiSSRFError } from "../../src";
-import { BlockList } from "net";
+import { CIDRBlock } from "../../src/Helpers/CIDRBlock";
 
 const toParsedAddress = (ip: string): string => CIDRBlock._parseIPAddress(ip)[0];
 

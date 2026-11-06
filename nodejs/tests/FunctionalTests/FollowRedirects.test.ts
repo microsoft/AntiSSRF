@@ -11,10 +11,12 @@
  * Notes: Used by Axios whenever maxRedirects != 0.
  */
 
-import assert from "assert";
-import { createServer, Server, Agent as NodeHttpAgent } from "http";
-import { Agent as NodeHttpsAgent } from "https";
-import { promises } from "dns";
+import assert from "node:assert";
+import { promises } from "node:dns";
+import { Agent as NodeHttpAgent, createServer, Server } from "node:http";
+import { Agent as NodeHttpsAgent } from "node:https";
+import { after, before, describe, it } from "node:test";
+
 import { http } from "follow-redirects";
 
 import { AntiSSRFPolicy, PolicyConfigOptions } from "../../src";
@@ -62,7 +64,7 @@ describe("Follow-Redirects Library Tests", () => {
             "http://localhost:3000/?redirectTo=https://google.com/"
         ];
         allowedRedirects.forEach((url) => {
-            it(`GET http://localhost:3000/?redirectTo=${url}`, (done) => {
+            it(`GET http://localhost:3000/?redirectTo=${url}`, (_context, done) => {
                 const req = http.get(
                     `http://localhost:3000/?redirectTo=${url}`,
                     { agents: { http: httpAgent, https: httpsAgent } },
@@ -86,14 +88,14 @@ describe("Follow-Redirects Library Tests", () => {
 
         const disallowedRedirects = ["https://apple.com/", "https://cmu.edu/", "https://www.bing.com/"];
         disallowedRedirects.forEach((url) => {
-            it(`GET http://localhost:3000/?redirectTo=${url}`, (done) => {
+            it(`GET http://localhost:3000/?redirectTo=${url}`, (_context, done) => {
                 const req = http.get(
                     `http://localhost:3000/?redirectTo=${url}`,
                     { trackRedirects: true, agents: { http: httpAgent, https: httpsAgent } },
                     (res) => {
                         res.on("data", () => {});
                         res.on("end", () => {
-                            done("Expected error, but got response");
+                            done(new Error("Expected error, but got response"));
                         });
                     }
                 );
