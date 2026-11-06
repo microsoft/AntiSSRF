@@ -30,31 +30,28 @@
         "build": "tsc --project ./tsconfig.json",
         "format": "prettier --write .",
         "lint": "eslint src",
-        "test": "mocha --recursive --timeout 15000 --require ts-node/register --no-strip-types \"tests/{UnitTests,FunctionalTests}/**/*.test.ts\"",
-        "test:unit": "mocha --recursive --timeout 15000 --require ts-node/register --no-strip-types tests/UnitTests/**/*.test.ts",
-        "test:functional": "mocha --recursive --timeout 15000 --require ts-node/register --no-strip-types tests/FunctionalTests/**/*.test.ts",
-        "test:prepublish": "mocha --recursive --timeout 15000 tests/PrePublishTests/**/*.test.js"
+        "test": "npm run build && cd out/tests && node --test --test-concurrency=1",
+        "test:unit": "npm run build && cd out/tests/UnitTests && node --test",
+        "test:functional": "npm run build && cd out/tests/FunctionalTests && node --test --test-concurrency=1",
+        "test:prepublish": "npm run build && npm pack && cd tests/PrePublishTests && node --test"
     },
     "author": "Microsoft",
     "devDependencies": {
         "@eslint/js": "^10.0.1",
         "@types/follow-redirects": "^1.14.4",
-        "@types/mocha": "^10.0.10",
+        "@types/node": ">=20.0.0",
         "@types/node-fetch": "^2.6.13",
         "axios": "^1.21.0",
         "eslint": "^10.13.0",
         "eslint-plugin-security": "^4.2.0",
         "follow-redirects": "^1.16.2",
-        "mocha": "^12.0.3",
         "node-fetch": "^3.3.2",
         "prettier": "^3.9.10",
         "tar": "^7.5.22",
-        "ts-node": "^10.9.2",
         "typescript": "^5.9.3",
         "typescript-eslint": "^8.72.1"
     },
     "overrides": {
-        "glob": "14.0.2",
         "minimatch": "11.0.1"
     }
 }

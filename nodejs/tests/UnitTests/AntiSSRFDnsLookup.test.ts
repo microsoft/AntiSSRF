@@ -1,13 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import assert from "assert";
-import { ADDRCONFIG, ALL, lookup, LookupAddress, LookupOptions, V4MAPPED } from "dns";
-import { isIP, isIPv4, isIPv6, LookupFunction } from "net";
-import { promisify } from "util";
+import assert from "node:assert";
+import { ADDRCONFIG, ALL, lookup, LookupAddress, LookupOptions, V4MAPPED } from "node:dns";
+import { isIP, isIPv4, isIPv6, LookupFunction } from "node:net";
+import { describe, it } from "node:test";
+import { promisify } from "node:util";
 
+import { AntiSSRFError, AntiSSRFPolicy, PolicyConfigOptions } from "../../src";
 import { antiSSRFDnsLookup } from "../../src/Helpers/AntiSSRFDnsLookup";
-import { AntiSSRFPolicy, AntiSSRFError, PolicyConfigOptions } from "../../src";
 
 /**
  * Converts a callback-based lookup function to a promise-based lookup function
