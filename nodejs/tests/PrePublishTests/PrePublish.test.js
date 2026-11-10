@@ -1,12 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-const fs = require("fs");
-const path = require("path");
+const assert = require("node:assert");
+const dns = require("node:dns");
+const fs = require("node:fs");
+const https = require("node:https");
+const path = require("node:path");
+const { after, before, describe, it } = require("node:test");
+
 const tar = require("tar");
-const assert = require("assert");
-const dns = require("dns");
-const https = require("https");
 
 describe("Tests for most recent .tgz package", function () {
     const baseDir = path.join(__dirname, "../..");
@@ -66,7 +68,7 @@ describe("Tests for most recent .tgz package", function () {
             antiSSRFHttpsAgent = policy.getHttpsAgent();
         });
 
-        it("Allow valid IP", (done) => {
+        it("Allow valid IP", (_context, done) => {
             const req = https.get(
                 "https://www.bing.com",
                 {
@@ -90,7 +92,7 @@ describe("Tests for most recent .tgz package", function () {
             req.end();
         });
 
-        it("Deny blocked IP", (done) => {
+        it("Deny blocked IP", (_context, done) => {
             const req = https.get(
                 "https://apple.com",
                 {
@@ -101,7 +103,7 @@ describe("Tests for most recent .tgz package", function () {
                 (res) => {
                     res.on("data", (data) => {});
                     res.on("end", () => {
-                        done("Expected error, but got response");
+                        done(new Error("Expected error, but got response"));
                     });
                 }
             );

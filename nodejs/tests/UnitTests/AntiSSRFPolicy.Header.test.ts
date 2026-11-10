@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import assert from "assert";
+import assert from "node:assert";
+import { describe, it } from "node:test";
+
 import axios from "axios";
 
 import { AntiSSRFError, AntiSSRFPolicy, PolicyConfigOptions } from "../../src";

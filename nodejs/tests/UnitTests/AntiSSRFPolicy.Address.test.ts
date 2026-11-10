@@ -1,14 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import assert from "assert";
+import assert from "node:assert";
+import { promises } from "node:dns";
+import { before, describe, it } from "node:test";
+
 import axios from "axios";
-import { promises } from "dns";
 
 import { AntiSSRFError, AntiSSRFPolicy, IPAddressRanges, PolicyConfigOptions } from "../../src";
 
 describe("AntiSSRFPolicy Address Tests", function () {
-    this.timeout(30000);
     const BAD_IP_MESSAGE = "IP address disallowed by policy";
     const TEST_DOMAIN = "ambitious-flower-0611c910f.2.azurestaticapps.net";
 

@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import assert from "assert";
-import https from "https";
-import { lookup, LookupAddress, promises } from "dns";
+import assert from "node:assert";
+import { lookup, LookupAddress, promises } from "node:dns";
+import https from "node:https";
+import { after, before, describe, it } from "node:test";
 
 import { AntiSSRFPolicy, PolicyConfigOptions } from "../../src";
 
@@ -18,7 +19,7 @@ describe("HttpsAgent Tests - default policy", () => {
         microsoftIP = await promises.lookup("microsoft.com", { family: 4 }).then((address) => address.address);
     });
 
-    it("Successful lookup - get, URL", (done) => {
+    it("Successful lookup - get, URL", (_context, done) => {
         const req = https.get("https://www.apple.com/", { agent: antiSSRFHttpsAgent, family: 4 }, (res) => {
             res.on("data", (data) => {});
             res.on("end", () => {
@@ -32,7 +33,7 @@ describe("HttpsAgent Tests - default policy", () => {
         req.end();
     });
 
-    it("Successful lookup - get, options", (done) => {
+    it("Successful lookup - get, options", (_context, done) => {
         const req = https.get(
             {
                 agent: antiSSRFHttpsAgent,
@@ -54,7 +55,7 @@ describe("HttpsAgent Tests - default policy", () => {
         req.end();
     });
 
-    it("Successful lookup - request, URL", (done) => {
+    it("Successful lookup - request, URL", (_context, done) => {
         const req = https.request(
             "https://twin-cities.umn.edu/academics-admissions/majors-programs",
             { agent: antiSSRFHttpsAgent },
@@ -72,7 +73,7 @@ describe("HttpsAgent Tests - default policy", () => {
         req.end();
     });
 
-    it("Successful lookup - request, options", (done) => {
+    it("Successful lookup - request, options", (_context, done) => {
         const req = https.request(
             {
                 agent: antiSSRFHttpsAgent,
@@ -93,11 +94,11 @@ describe("HttpsAgent Tests - default policy", () => {
         req.end();
     });
 
-    it("Reject lookup - get, URL", (done) => {
+    it("Reject lookup - get, URL", (_context, done) => {
         const req = https.get("https://[0::1]/", { agent: antiSSRFHttpsAgent }, (res) => {
             res.on("data", (data) => {});
             res.on("end", () => {
-                done("Expected error, but got response");
+                done(new Error("Expected error, but got response"));
             });
         });
 
@@ -109,11 +110,11 @@ describe("HttpsAgent Tests - default policy", () => {
         req.end();
     });
 
-    it("Reject lookup - get, options", (done) => {
+    it("Reject lookup - get, options", (_context, done) => {
         const req = https.get({ agent: antiSSRFHttpsAgent, hostname: "127.0.0.3", host: "google.com" }, (res) => {
             res.on("data", (data) => {});
             res.on("end", () => {
-                done("Expected error, but got response");
+                done(new Error("Expected error, but got response"));
             });
         });
 
@@ -125,7 +126,7 @@ describe("HttpsAgent Tests - default policy", () => {
         req.end();
     });
 
-    it("Reject lookup - request, URL", (done) => {
+    it("Reject lookup - request, URL", (_context, done) => {
         const req = https.request(
             "https://169.254.169.254:443",
             {
@@ -135,7 +136,7 @@ describe("HttpsAgent Tests - default policy", () => {
             (res) => {
                 res.on("data", (data) => {});
                 res.on("end", () => {
-                    done("Expected error, but got response");
+                    done(new Error("Expected error, but got response"));
                 });
             }
         );
@@ -148,7 +149,7 @@ describe("HttpsAgent Tests - default policy", () => {
         req.end();
     });
 
-    it("Reject lookup - request, options", (done) => {
+    it("Reject lookup - request, options", (_context, done) => {
         const req = https.request(
             {
                 agent: antiSSRFHttpsAgent,
@@ -157,7 +158,7 @@ describe("HttpsAgent Tests - default policy", () => {
             (res) => {
                 res.on("data", (data) => {});
                 res.on("end", () => {
-                    done("Expected error, but got response");
+                    done(new Error("Expected error, but got response"));
                 });
             }
         );
@@ -170,7 +171,7 @@ describe("HttpsAgent Tests - default policy", () => {
         req.end();
     });
 
-    it("Successful lookup - any, ensure XFF is added", (done) => {
+    it("Successful lookup - any, ensure XFF is added", (_context, done) => {
         const req = https.request("https://www.apple.com/", { agent: antiSSRFHttpsAgent }, (res) => {
             res.on("data", (data) => {});
             res.on("end", () => {
@@ -186,7 +187,7 @@ describe("HttpsAgent Tests - default policy", () => {
         });
     });
 
-    it("Successful lookup - any, ensure XFF is not overwritten", (done) => {
+    it("Successful lookup - any, ensure XFF is not overwritten", (_context, done) => {
         const req = https.request(
             "https://www.apple.com/",
             { agent: antiSSRFHttpsAgent, headers: { "X-Forwarded-For": "127.0.0.1" } },
@@ -206,11 +207,11 @@ describe("HttpsAgent Tests - default policy", () => {
         });
     });
 
-    it("Reject lookup - tried to add lookup to request", (done) => {
+    it("Reject lookup - tried to add lookup to request", (_context, done) => {
         const req = https.get("https://google.com", { agent: antiSSRFHttpsAgent, lookup: lookup }, (res) => {
             res.on("data", (data) => {});
             res.on("end", () => {
-                done("Expected error, but got response");
+                done(new Error("Expected error, but got response"));
             });
         });
 
@@ -244,7 +245,7 @@ describe("HttpsAgent Tests - custom policy", () => {
         antiSSRFHttpsAgent = policy.getHttpsAgent();
     });
 
-    it("Successful lookup - get, URL", (done) => {
+    it("Successful lookup - get, URL", (_context, done) => {
         const req = https.get(
             "https://www.bing.com/",
             { agent: antiSSRFHttpsAgent, port: 443, headers: { "test-required-header": 25 } },
@@ -262,7 +263,7 @@ describe("HttpsAgent Tests - custom policy", () => {
         req.end();
     });
 
-    it("Successful lookup - get, options", (done) => {
+    it("Successful lookup - get, options", (_context, done) => {
         const req = https.get(
             { agent: antiSSRFHttpsAgent, hostname: "github.com", headers: { "test-required-header": 25 } },
             (res) => {
@@ -282,7 +283,7 @@ describe("HttpsAgent Tests - custom policy", () => {
         req.end();
     });
 
-    it("Successful lookup - request, URL", (done) => {
+    it("Successful lookup - request, URL", (_context, done) => {
         const req = https.get(
             "https://www.cmu.edu/",
             { agent: antiSSRFHttpsAgent, headers: { "test-required-header": 25 } },
@@ -300,7 +301,7 @@ describe("HttpsAgent Tests - custom policy", () => {
         req.end();
     });
 
-    it("Successful lookup - request, options", (done) => {
+    it("Successful lookup - request, options", (_context, done) => {
         const req = https.request(
             {
                 agent: antiSSRFHttpsAgent,
@@ -322,7 +323,7 @@ describe("HttpsAgent Tests - custom policy", () => {
         req.end();
     });
 
-    it("Reject lookup - get, URL", (done) => {
+    it("Reject lookup - get, URL", (_context, done) => {
         const req = https.get(
             "https://apple.com",
             {
@@ -333,7 +334,7 @@ describe("HttpsAgent Tests - custom policy", () => {
             (res) => {
                 res.on("data", () => {});
                 res.on("end", () => {
-                    done("Expected error, but got response");
+                    done(new Error("Expected error, but got response"));
                 });
             }
         );
@@ -346,7 +347,7 @@ describe("HttpsAgent Tests - custom policy", () => {
         req.end();
     });
 
-    it("Reject lookup - get, options", (done) => {
+    it("Reject lookup - get, options", (_context, done) => {
         const req = https.get(
             {
                 agent: antiSSRFHttpsAgent,
@@ -357,7 +358,7 @@ describe("HttpsAgent Tests - custom policy", () => {
             (res) => {
                 res.on("data", () => {});
                 res.on("end", () => {
-                    done("Expected error, but got response");
+                    done(new Error("Expected error, but got response"));
                 });
             }
         );
@@ -370,7 +371,7 @@ describe("HttpsAgent Tests - custom policy", () => {
         req.end();
     });
 
-    it("Reject lookup - request, options", (done) => {
+    it("Reject lookup - request, options", (_context, done) => {
         const req = https.request(
             {
                 agent: antiSSRFHttpsAgent,
@@ -381,7 +382,7 @@ describe("HttpsAgent Tests - custom policy", () => {
             (res) => {
                 res.on("data", () => {});
                 res.on("end", () => {
-                    done("Expected error, but got response");
+                    done(new Error("Expected error, but got response"));
                 });
             }
         );
@@ -394,11 +395,11 @@ describe("HttpsAgent Tests - custom policy", () => {
         req.end();
     });
 
-    it("Reject lookup - any, missing required header", (done) => {
+    it("Reject lookup - any, missing required header", (_context, done) => {
         const req = https.get("https://www.google.com/", { agent: antiSSRFHttpsAgent }, (res) => {
             res.on("data", () => {});
             res.on("end", () => {
-                done("Expected error, but got response");
+                done(new Error("Expected error, but got response"));
             });
         });
 
@@ -410,14 +411,14 @@ describe("HttpsAgent Tests - custom policy", () => {
         req.end();
     });
 
-    it("Reject lookup - any, include denied header", (done) => {
+    it("Reject lookup - any, include denied header", (_context, done) => {
         const req = https.get(
             "https://www.bing.com/",
             { agent: antiSSRFHttpsAgent, headers: { "test-required-header": "true", "test-denied-header": "false" } },
             (res) => {
                 res.on("data", () => {});
                 res.on("end", () => {
-                    done("Expected error, but got response");
+                    done(new Error("Expected error, but got response"));
                 });
             }
         );
@@ -430,7 +431,7 @@ describe("HttpsAgent Tests - custom policy", () => {
         req.end();
     });
 
-    it("Reject lookup - any, tried to overwrite lookup", (done) => {
+    it("Reject lookup - any, tried to overwrite lookup", (_context, done) => {
         // @ts-expect-error - trying to overwrite lookup should cause error
         antiSSRFHttpsAgent.lookup = lookup;
 
@@ -444,7 +445,7 @@ describe("HttpsAgent Tests - custom policy", () => {
             (res) => {
                 res.on("data", () => {});
                 res.on("end", () => {
-                    done("Expected error, but got response");
+                    done(new Error("Expected error, but got response"));
                 });
             }
         );
@@ -486,7 +487,7 @@ describe("HttpsAgent Tests - other methods", () => {
 
     const methods = ["GET", "POST", "PUT", "DELETE", "HEAD", "PATCH", "OPTIONS"];
     methods.map((method) => {
-        it(`${method} allowed`, (done) => {
+        it(`${method} allowed`, (_context, done) => {
             const req = https.request(testUrl, { method, agent: allowAgent }, (res) => {
                 let responseData = "";
                 res.on("data", (chunk) => {
@@ -514,11 +515,11 @@ describe("HttpsAgent Tests - other methods", () => {
             req.end();
         });
 
-        it(`${method} disallowed`, (done) => {
+        it(`${method} disallowed`, (_context, done) => {
             const req = https.request(testUrl, { method, agent: disallowAgent }, (res) => {
                 res.on("data", () => {});
                 res.on("end", () => {
-                    done("Expected error, but got response");
+                    done(new Error("Expected error, but got response"));
                 });
             });
 
@@ -545,7 +546,7 @@ describe("HttpsAgent Tests - certificates", () => {
     });
 
     describe("Valid Certificate Tests", () => {
-        it("Valid certificate should succeed", (done) => {
+        it("Valid certificate should succeed", (_context, done) => {
             const req = https.get("https://www.google.com", { agent: antiSSRFHttpsAgent }, (res) => {
                 res.on("data", () => {});
                 res.on("end", () => {
@@ -561,7 +562,7 @@ describe("HttpsAgent Tests - certificates", () => {
     });
 
     describe("Expired Certificate Tests", () => {
-        it("Expired certificate should fail with certificate verification enabled", (done) => {
+        it("Expired certificate should fail with certificate verification enabled", (_context, done) => {
             const req = https.get("https://expired.badssl.com/", { agent: antiSSRFHttpsAgent }, (res) => {
                 res.on("data", () => {});
                 res.on("end", () => {
@@ -577,7 +578,7 @@ describe("HttpsAgent Tests - certificates", () => {
             req.end();
         });
 
-        it("Expired certificate should succeed with certificate verification disabled", (done) => {
+        it("Expired certificate should succeed with certificate verification disabled", (_context, done) => {
             const req = https.get(
                 "https://expired.badssl.com/",
                 { agent: antiSSRFHttpsAgent, rejectUnauthorized: false },
@@ -597,7 +598,7 @@ describe("HttpsAgent Tests - certificates", () => {
     });
 
     describe("Wrong Host Certificate Tests", () => {
-        it("Wrong host certificate should fail with certificate verification enabled", (done) => {
+        it("Wrong host certificate should fail with certificate verification enabled", (_context, done) => {
             const req = https.get("https://wrong.host.badssl.com/", { agent: antiSSRFHttpsAgent }, (res) => {
                 res.on("data", () => {});
                 res.on("end", () => {
@@ -617,7 +618,7 @@ describe("HttpsAgent Tests - certificates", () => {
             req.end();
         });
 
-        it("Wrong host certificate should succeed with certificate verification disabled", (done) => {
+        it("Wrong host certificate should succeed with certificate verification disabled", (_context, done) => {
             const req = https.get(
                 "https://wrong.host.badssl.com/",
                 { agent: antiSSRFHttpsAgent, rejectUnauthorized: false },
@@ -637,7 +638,7 @@ describe("HttpsAgent Tests - certificates", () => {
     });
 
     describe("Self-Signed Certificate Tests", () => {
-        it("Self-signed certificate should fail with certificate verification enabled", (done) => {
+        it("Self-signed certificate should fail with certificate verification enabled", (_context, done) => {
             const req = https.get("https://self-signed.badssl.com/", { agent: antiSSRFHttpsAgent }, (res) => {
                 res.on("data", () => {});
                 res.on("end", () => {
@@ -657,7 +658,7 @@ describe("HttpsAgent Tests - certificates", () => {
             req.end();
         });
 
-        it("Self-signed certificate should succeed with certificate verification disabled", (done) => {
+        it("Self-signed certificate should succeed with certificate verification disabled", (_context, done) => {
             const req = https.get(
                 "https://self-signed.badssl.com/",
                 { agent: antiSSRFHttpsAgent, rejectUnauthorized: false },
@@ -677,7 +678,7 @@ describe("HttpsAgent Tests - certificates", () => {
     });
 
     describe("Untrusted Root Certificate Tests", () => {
-        it("Untrusted root certificate should fail with certificate verification enabled", (done) => {
+        it("Untrusted root certificate should fail with certificate verification enabled", (_context, done) => {
             const req = https.get("https://untrusted-root.badssl.com/", { agent: antiSSRFHttpsAgent }, (res) => {
                 res.on("data", () => {});
                 res.on("end", () => {
@@ -697,7 +698,7 @@ describe("HttpsAgent Tests - certificates", () => {
             req.end();
         });
 
-        it("Untrusted root certificate should succeed with certificate verification disabled", (done) => {
+        it("Untrusted root certificate should succeed with certificate verification disabled", (_context, done) => {
             const req = https.get(
                 "https://untrusted-root.badssl.com/",
                 { agent: antiSSRFHttpsAgent, rejectUnauthorized: false },

@@ -9,10 +9,12 @@
  * and absolute addresses that are redirected through a local HTTP server.
  */
 
+import assert from "node:assert";
+import { lookup, promises } from "node:dns";
+import { createServer, Server } from "node:http";
+import { after, before, describe, it } from "node:test";
+
 import axios from "axios";
-import assert from "assert";
-import { createServer, Server } from "http";
-import { lookup, promises } from "dns";
 
 import { AntiSSRFPolicy, PolicyConfigOptions } from "../../src";
 

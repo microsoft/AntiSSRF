@@ -10,10 +10,12 @@
  * choose the agent for the correct protocol automatically.
  */
 
-import assert from "assert";
-import http, { createServer, Server } from "http";
-import https from "https";
-import { promises } from "dns";
+import assert from "node:assert";
+import { promises } from "node:dns";
+import http, { createServer, Server } from "node:http";
+import https from "node:https";
+import { after, before, describe, it } from "node:test";
+
 const fetch = require("node-fetch").default;
 
 import { AntiSSRFPolicy, PolicyConfigOptions } from "../../src";

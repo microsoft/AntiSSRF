@@ -8,4 +8,5 @@ out/**
 **/*.json
 **/*.tgz
 temp-lib
+src/Helpers/Domains.ts
 src/IPAddressRanges.ts
