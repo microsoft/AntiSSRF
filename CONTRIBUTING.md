@@ -25,7 +25,7 @@ To contribute bug fixes, features, or documentation improvements, follow the ste
 
 ### Before Implementation
 
-Discussion with maintainers is required for all changes except trivial documentation or comment changes, such as fixing broken links or typos. Code changes, including test cases, require maintainer approval before implementation.
+Discussion with maintainers is required for all changes except trivial documentation or comment changes, such as fixing broken links or typos. All code changes, including test cases, require maintainer approval in an issue before implementation. When required, PRs opened without a linked issue may be closed.
 
 1. Open a new issue or reopen an existing issue.
 2. Describe the intended change and discuss it with maintainers.
