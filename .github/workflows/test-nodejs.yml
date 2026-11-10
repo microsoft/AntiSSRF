@@ -10,6 +10,7 @@ on:
     paths:
       - "nodejs/**"
       - ".github/workflows/test-nodejs.yml"
+      - "!**/*.md"
   workflow_dispatch:
 
 permissions:

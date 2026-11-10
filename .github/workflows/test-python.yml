@@ -10,6 +10,7 @@ on:
     paths:
       - "python/**"
       - ".github/workflows/test-python.yml"
+      - "!**/*.md"
   workflow_dispatch:
 
 permissions:

@@ -2,92 +2,47 @@
 
 Thank you for your interest in contributing to Microsoft AntiSSRF! This guide will help you get started with contributing to our security library.
 
-## Development Setup
-
-### AntiSSRF .NET Library
-
-**Prerequisites:**
-- .NET 8.0 SDK
-- Make sure you are in the `/dotnet` folder
-
-**Useful Commands:**
-- Restore dependencies: `dotnet restore`
-- Build solution: `dotnet build`
-- Run all tests: `dotnet test`
-
-### AntiSSRF Node.js Library
-
-**Prerequisites:**
-- Node.js 20.0 or later
-- Make sure you are in the `/nodejs` folder
-
-**Useful Commands:**
-- Install dependencies: `npm install`
-- Build TypeScript: `npm run build`
-- Run all tests: `npm test`
-- Lint code: `npm run lint`
-- Format code: `npm run format`
-
-### AntiSSRF Python Library
-
-**Prerequisites:**
-- Python 3.11 or later
-- make sure you are in the `/python` folder
-
-**Useful Commands**
-- Install dependencies: `pip install .[dev]`
-- Build files only: `python -m build`
-- Force install package: `pip install --force-reinstall <wheel_file.whl>`
-- Build and install package locally `pip install .`
-- Run all tests: `pytest`
-
-
-### Documentation
-
-**Prerequisites:**
-- Jekyll (for GitHub Pages)
-- Ruby 3.4 or later
-- Bundler (`gem install bundler`)
-- Make sure you are in the `/docs` folder
-
-**Useful Commands:**
-- Install dependencies: `bundle install`
-- Test locally: `bundle exec jekyll serve`
-
 ## Submitting Issues
 
-We welcome bug reports and feature requests! Please use our issue templates to provide the information we need:
+We welcome all bug reports and feature requests. Please use our issue templates to ensure we have all the information we need.
 
 ### Bug Reports
-- Report in our [GitHub Issues](https://github.com/microsoft/AntiSSRF/issues)
-- Please search existing issues first to avoid duplicates
-- Provide clear reproduction steps and expected behavior
-- Include relevant version information and environment details
+
+- Report bugs through [GitHub Issues](https://github.com/microsoft/AntiSSRF/issues).
+- Provide clear steps to reproduce the issue and describe the expected behavior.
+- Include relevant version information and environment details.
 
 ### Feature Requests
-- Report in our [GitHub Issues](https://github.com/microsoft/AntiSSRF/issues)
-- Clearly describe the problem your feature would solve
-- Explain your proposed solution and any alternatives considered
-- Specify which library (or both) the feature applies to
 
-## Contributing Code
+- Submit feature requests through [GitHub Issues](https://github.com/microsoft/AntiSSRF/issues).
+- Clearly describe the problem your feature would solve.
+- Explain your proposed solution and any alternatives you have considered.
+- Specify which libraries the feature applies to.
 
-We welcome pull requests for bug fixes, features, and documentation improvements:
+## Contributing PRs
 
-### Before Submitting
-- Verify that all existing tests pass without failures
-- Add appropriate test coverage for your changes
-- Ensure there are no breaking changes (in rare cases where unavoidable, discuss with maintainers in an issue first)
-- Documentation updates are optional but very appreciated
+To contribute bug fixes, features, or documentation improvements, follow the steps below.
 
-### When Discussion is Required
+### Before Implementation
 
-Before submitting a PR, you must create an issue and discuss with maintainers if your changes involve:
+Discussion with maintainers is required for all changes except trivial documentation or comment changes, such as fixing broken links or typos. All code changes, including test cases, require maintainer approval in an issue before implementation. When required, PRs opened without a linked issue may be closed.
 
-- Breaking changes - Any modification that could break existing functionality. All other possibilities must be considered before introducing a breaking change.
-- New API additions - Adding new public methods, classes, or interfaces.
-- Configuration file changes - Modifications to IP address ranges or domains configuration files. These changes will almost always be rejected unless there is an exceptional reason.
+1. Open a new issue or reopen an existing issue.
+2. Describe the intended change and discuss it with maintainers.
+3. Wait for a maintainer to confirm that the proposed change is ready for implementation.
 
-### Pull Request Process
-- Be detailed in your description and reproduction steps
-- Reference any related issues, bugs, or feature requests
+### Before Publishing a PR
+
+- Provide a detailed description of your changes in the PR summary.
+- Link to the issue where a maintainer approved the proposed change, except in the case of trivial changes.
+- If your PR includes code changes:
+  - Ensure there are no breaking changes unless maintainers have explicitly approved them.
+  - Add appropriate test coverage for the changes.
+  - Documentation updates are optional but greatly appreciated.
+
+## General Considerations
+
+- Breaking changes - All other possibilities must be considered before introducing a change that could break existing functionality.
+- Configuration file changes - Modifications to IP address ranges or domains configuration files will almost always be rejected unless there is an exceptional reason.
+
+We appreciate the time and care you put into your contributions! Unfortunately, all the maintainers balance reviews with other commitments, so it may take a little while before someone is available to review your issue or pull request. Thank you for your patience and understanding.

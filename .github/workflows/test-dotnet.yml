@@ -10,6 +10,7 @@ on:
     paths:
       - "dotnet/**"
       - ".github/workflows/test-dotnet.yml"
+      - "!**/*.md"
   workflow_dispatch:
 
 permissions:
